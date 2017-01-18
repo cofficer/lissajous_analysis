@@ -24,16 +24,15 @@ go_cue              = 31;   %response horizontal right
 off_cue             = 32;   %response horizontal left
 signal_off          = 33;   %end of signal ??? 
 self_occlusion      = 10;   %response vertical left
-resp_leftL          = 41;   %41 1st button from left
-resp_leftL2         = 225;  %from uppt002
+resp_leftL          = 41;   %1st button from left
+resp_leftL2         = 225;  %1st button from left from uppt002
 resp_leftR          = 42;   %2nd button from left
-resp_leftR2         = 226;   %2nd button from left
-resp_rightL         = 45;   %1st button from left
-resp_rightL2        = 228;   %1st button from left
-resp_rightR         = 46;   %46 2nd button from left
-resp_rightR2        = 232;   %46 2nd button from left
-resp_bad            = 43;   %2nd button from left
-
+resp_leftR2         = 226;  %2nd button from left
+resp_rightL         = 45;   %3rd button from left
+resp_rightL2        = 228;  %3rd button from left
+resp_rightR         = 46;   %4th button from left
+resp_rightR2        = 232;  %4th button from left
+resp_bad            = 43;   %
 
 trial_end           = 61; %New block onset
 block_end           = 90; %Not currenlty in use. 
@@ -72,8 +71,19 @@ trgval=double(trgval);
 trlN=1;
 
 
+%Change the code for participant 3 so that the events start at the start of
+%the first complete trial. Start the loop at 7th event, 11.
+if numP==3
+    
+    starti=7;
+else
+    starti=1;
+    
+end
 
-for i=1:length(trgvalIndex)
+for i=starti:length(trgvalIndex)
+
+    
     
     %Start of a new trial. 
     switch event(trgvalIndex(i)).value

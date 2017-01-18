@@ -59,9 +59,9 @@ subplot(2,1,1)
 plot(trlT.responseValue(trlT.responseValue~=0))
 ylim([220 236])
 
-subplot(2,1,2)
-plot(trlT2.responseValue(trlT2.responseValue~=0))
-ylim([220 236])
+%subplot(2,1,2)
+%plot(trlT2.responseValue(trlT2.responseValue~=0))
+%ylim([220 236])
 
 %Plotting the streaks of same choice. 
 plot((diff(trlT.responseValue(trlT.responseValue~=0))~=0))
@@ -71,19 +71,19 @@ subplot(2,1,1)
 plot((diff(trlT.responseValue(trlT.responseValue~=0))~=0))
 ylim([-1 2])
 
-subplot(2,1,2)
-plot((diff(trlT2.responseValue(trlT2.responseValue~=0))~=0))
-ylim([-1 2])
+%subplot(2,1,2)
+%plot((diff(trlT2.responseValue(trlT2.responseValue~=0))~=0))
+%ylim([-1 2])
 
 %Plot barplots of left vs right choices
 
 %The propensity for left or right choices. 
-leftBP1 = sum(trlT1.responseValue(1:end-1)==225);
-rightBP1 = sum(trlT1.responseValue(1:end-1)==232);
+leftBP1 = sum(trlT.responseValue(1:end-1)==225);
+rightBP1 = sum(trlT.responseValue(1:end-1)==232);
 
 %The propensity for left or right choices. 
-leftBP2 = sum(trlT2.responseValue(1:end-1)==225);
-rightBP2 = sum(trlT2.responseValue(1:end-1)==232);
+%leftBP2 = sum(trlT2.responseValue(1:end-1)==225);
+%rightBP2 = sum(trlT2.responseValue(1:end-1)==232);
 
 figure(3),clf
 hold on;
@@ -93,14 +93,14 @@ set(gca,'XtickLabel',{'Left','Right'})
 
 title('Choice bias, left vs right')
 
-subplot(2,1,2)
-bar([leftBP2 rightBP2])
-set(gca,'XtickLabel',{'Left','Right'})
+%subplot(2,1,2)
+%bar([leftBP2 rightBP2])
+%set(gca,'XtickLabel',{'Left','Right'})
 
 %Plot the sequences of identical choices. Number of repetitios
 runlength1=diff(find(diff(trlT.responseValue(trlT.responseValue~=0))~=0));
 
-runlength2=diff(find(diff(trlT2.responseValue(trlT2.responseValue~=0))~=0));
+%runlength2=diff(find(diff(trlT2.responseValue(trlT2.responseValue~=0))~=0));
 
 
 figure(4),clf
@@ -110,8 +110,8 @@ subplot(2,1,1)
 
 hist(runlength1)
 title('Histogram of perceptual dominance for run of self-occlusions')
-subplot(2,1,2)
-hist(runlength2)
+%subplot(2,1,2)
+%hist(runlength2)
 
 
 %
@@ -119,12 +119,12 @@ figure(5),clf
 hold on;
 plot(sort(runlength1'))
 
-plot(sort(runlength2'))
+%plot(sort(runlength2'))
 
 %calculate the occurenece of the sequences
 diffSequence1 = unique(runlength1);
 
-diffSequence2 = unique(runlength2);
+%diffSequence2 = unique(runlength2);
 
 for idiffseq=1:numel(diffSequence1)
 
@@ -133,20 +133,20 @@ for idiffseq=1:numel(diffSequence1)
 
 end
 
-
-for idiffseq=1:numel(diffSequence2)
-
-    sequenceOccurence2(idiffseq) = sum(runlength2==diffSequence2(idiffseq));
-    
-
-end
+% 
+% for idiffseq=1:numel(diffSequence2)
+% 
+%     sequenceOccurence2(idiffseq) = sum(runlength2==diffSequence2(idiffseq));
+%     
+% 
+% end
 
 
 continuousSeq=zeros(1,31);
 
-continuousSeq2=continuousSeq;
+%continuousSeq2=continuousSeq;
 
-continuousSeq2(diffSequence2)=sequenceOccurence2;
+%continuousSeq2(diffSequence2)=sequenceOccurence2;
 
 continuousSeq1=continuousSeq;
 
@@ -156,7 +156,7 @@ continuousSeq1(diffSequence1)=sequenceOccurence1;
 %Create a cumulative plot
 figure(6),clf
 hold on;
-bar([log(continuousSeq1);log(continuousSeq2)]','stacked')
+bar([(continuousSeq1)]','stacked')
 title('Stacked bar plot of perceptual dominance for run of self-occlusions')
 
 %bar(diffSequence1,sequenceOccurence1)
@@ -169,7 +169,7 @@ figure(7),clf
 hold on
 plot(log2(1:31),log2(continuousSeq1),'o')
 
-plot(log2(1:31),log2(continuousSeq2),'o')
+%plot(log2(1:31),log2(continuousSeq2),'o')
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -183,7 +183,7 @@ allResponses = [225;226;228;232];
 %loop over participants
 figure(1)
 title('Tom and Chris Trial-based block responses')
-for numP = 1:2
+for numP = 3
 
 trlT=check_lissajousTRIAL(numP);
 
