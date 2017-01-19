@@ -183,7 +183,6 @@ allResponses = [225;226;228;232];
 %loop over participants
 figure(1)
 title('Tom and Chris Trial-based block responses')
-for numP = 3
 
 trlT=check_lissajousTRIAL(numP);
 
@@ -215,8 +214,6 @@ totalResp(missingResponse)=0;
 %Plot the bars
 figure(1)
 
-subplot(2,1,numP)
-
 bar(totalResp)
 if numP==1
     title('Frequency for every type of stimulus response')
@@ -224,7 +221,7 @@ end
 
 set(gca,'XTickLabel',buttons)
 
-end
+
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -235,7 +232,7 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
 %load('tomTableP01.mat')
 %load('chrisTableP02.mat')
 figure(2)
-for numP=1:2
+numP=3;
 
 trlT=check_lissajousCONT(numP);
 
@@ -248,6 +245,9 @@ leftR =0;
 rightL=0;
 rightR=0;
 
+%Change the responsevalues for P03
+trlT.responseValue(trlT.responseValue==226)=225;
+trlT.responseValue(trlT.responseValue==228)=232;
 
 for itrl=1:length(trlT.responseValue)
 
@@ -284,14 +284,94 @@ if itrl>1
             
     end
 end    
-subplot(2,1,numP)
 bar([leftL leftR rightL rightR])
 buttons = {'Left to left','Left to right','Right to left','Right to right'};
 set(gca,'XTickLabel',buttons)
 
 end
-end
+
+
+%%
+
+%Plot the self-occlusion accurately in time, together with all the
+%response. Start with the first 100
+
+numP=3;
+trlT=check_lissajousCONT(numP);
+
+%Get all the samples on an equal increasing range. Could just plot each
+%block individually. 
+%Storing the self oclusion samples. 
+selfOcclusionSamples = (trlT.selfocclusion2sample(1:120,:)/1200);
+
+selfOcclusionSamples = selfOcclusionSamples-selfOcclusionSamples(1)+1;
+
+
+%Storing the button reponses:
+
+responseSamples = (trlT.responseSample(1:120,:)/1200);
+
+responseSamples = responseSamples-responseSamples(1)+1;
+
+%Store the go cues:
+gocueSamples = (trlT.go_cuesample(1:120,:)/1200);
+
+gocueSamples = gocueSamples-gocueSamples(1)+1;
+
+
+close all
+%plotting the self occlusions
+line([selfOcclusionSamples(1:20),selfOcclusionSamples(1:20)],[0 0.5],'Color',[0.5 0.1 0.8])
+hold on;
+line([responseSamples(1:20),responseSamples(1:20)],[0 1],'Color',[0.3 0.5 0.4])
+line([gocueSamples(20:40),gocueSamples(1:20)],[0 0.25],'Color',[0.9 0.1 0.4])
+
+ylim([-1 2])
+
+%%
+%Checking the discrepancy of the button presses when comparing the UPPT
+%channels. 
+
+disc=trlT.responseScriptSample(trlT.responseScriptSample>0)-trlT.responseSample(trlT.responseScriptSample>0);
+
+disc=mean(disc(abs(disc)<1000));
+
+%%
+%Checking the discrepancy of self-occlusions and button presses. 
+%Get the average of all three self-occlusions and the responses. 
+
+selfOcclusion1Samples = (trlT.selfocclusion1sample(1:120,:)/1200);
+
+%selfOcclusion1Samples = selfOcclusion1Samples-selfOcclusion1Samples(1)+1;
+
+
+selfOcclusion2Samples = (trlT.selfocclusion2sample(1:120,:)/1200);
+
+selfOcclusion2Samples = mean(selfOcclusion2Samples-selfOcclusion1Samples)-2.25;
+
+
+selfOcclusion3Samples = (trlT.selfocclusion3sample(1:120,:)/1200);
+
+selfOcclusion3Samples = mean(selfOcclusion3Samples-selfOcclusion1Samples)-2.25;
 
 
 
+responseSamples = (trlT.responseSample(1:120,:)/1200)-selfOcclusion1Samples;
 
+responseSamples = mean(responseSamples(responseSamples>1));
+
+selfOcclusion1Samples = mean(selfOcclusion1Samples-selfOcclusion1Samples)-2.25;
+
+%goCue:
+cuetime=trlT.go_cuesample(trlT.go_cuesample>0)-(trlT.selfocclusion1sample(trlT.go_cuesample>0));
+
+close all
+%plotting the self occlusions
+line([selfOcclusion1Samples,selfOcclusion1Samples],[0 0.25],'Color',[0.9 0.1 0.4])
+hold on;
+line([responseSamples,responseSamples],[0 1],'Color',[0.3 0.5 0.4])
+line([selfOcclusion2Samples,selfOcclusion2Samples],[0 0.25],'Color',[0.9 0.1 0.4])
+line([selfOcclusion3Samples,selfOcclusion3Samples],[0 0.25],'Color',[0.9 0.1 0.4])
+
+ylim([-1 2])
+xlim([-4 16])

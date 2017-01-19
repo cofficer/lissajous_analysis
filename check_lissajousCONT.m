@@ -163,7 +163,7 @@ for i=1:length(trgvalIndex)
                 %trial.
                 trlN=trlN+1;
                 %iter_selfocclusion = 1;
-                trlT=table(starttrl,endtrl,selfocclusion1sample,selfocclusion2sample,selfocclusion3sample,go_cuesample,go_cuevalue,responseSample,responseValue,trlN);
+                trlT=table(starttrl,endtrl,selfocclusion1sample,selfocclusion2sample,selfocclusion3sample,go_cuesample,go_cuevalue,responseSample,responseValue,responseScriptValue,responseScriptSample,trlN);
                 
             else
                 
@@ -201,11 +201,11 @@ for i=1:length(trgvalIndex)
                 
 
                 %take the cue from the previous trial
-                trlT.go_cuesample(trlN,1)=go_cuesample;
-                trlT.go_cuevalue(trlN,1)=go_cuevalue;
+                trlT.go_cuesample(trlN,1)=fullevent(trgvalIndex(i)).sample;
+                trlT.go_cuevalue(trlN,1)=fullevent(trgvalIndex(i)).value;
                 
-                go_cuesample = fullevent(trgvalIndex(i)).sample;
-                go_cuevalue = fullevent(trgvalIndex(i)).value;
+                %go_cuesample = fullevent(trgvalIndex(i)).sample;
+                %go_cuevalue = fullevent(trgvalIndex(i)).value;
                 
             end
 
@@ -216,7 +216,8 @@ for i=1:length(trgvalIndex)
             
                 responseValue = fullevent(trgvalIndex(i)).value;
                 responseSample = fullevent(trgvalIndex(i)).sample;
-                
+                responseScriptValue=NaN;
+                responseScriptSample=NaN;
             else
                 
                 trlT.responseSample(trlN,1)=fullevent(trgvalIndex(i)).sample;
@@ -224,6 +225,24 @@ for i=1:length(trgvalIndex)
                 
             
             end
+            
+        %temporary case
+        
+         case {resp_leftL,resp_leftR,resp_rightL,resp_rightR}
+            
+            if trlN==1
+            
+                responseScriptValue = fullevent(trgvalIndex(i)).value;
+                responseScriptSample = fullevent(trgvalIndex(i)).sample;
+                
+            else
+                
+                trlT.responseScriptSample(trlN,1)=fullevent(trgvalIndex(i)).sample;
+                trlT.responseScriptValue(trlN,1)=fullevent(trgvalIndex(i)).value;
+                
+            
+            end
+        
         
         case {off_cue}
             trl(trlN,11)=fullevent(trgvalIndex(i)).sample;
