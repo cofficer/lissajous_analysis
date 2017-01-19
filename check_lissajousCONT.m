@@ -102,7 +102,8 @@ trlN=1;
 trloff=0;
 
 iter_selfocclusion = 1;
-
+%number of self-occlusions
+nselfO=0;
 
 for i=1:length(trgvalIndex)
     
@@ -137,56 +138,39 @@ for i=1:length(trgvalIndex)
         
         case {self_occlusion}
             
-            %each trial includes 3 self-occlusions. 
-            if iter_selfocclusion==1 && trlN==1
+              %Start the go cue var for table insertion. 
+            %if trlN==1
             
-                selfocclusion1sample(1,trlN)=fullevent(trgvalIndex(i)).sample;
-                iter_selfocclusion=iter_selfocclusion+1;
+            nselfO = nselfO+1;
+            trlN   = nselfO;
+            
+            %Create the table only one after the first trial
+            if trlN==2
                 
-                %start the trial at the sample of the first selfO
-                starttrl(trlN) = fullevent(trgvalIndex(i)).sample;
+                trlT=table(starttrl,selfocclusion1sample,go_cuesample,go_cuevalue,responseSample,responseValue,responseScriptValue,responseScriptSample,trlN);
                 
-            elseif iter_selfocclusion==2 && trlN==1
-                
-                selfocclusion2sample(trlN)=fullevent(trgvalIndex(i)).sample;
-                iter_selfocclusion=iter_selfocclusion+1;
-                
-            elseif iter_selfocclusion==3 && trlN==1
-                
-                selfocclusion3sample(trlN)=fullevent(trgvalIndex(i)).sample;
-                iter_selfocclusion=iter_selfocclusion+1;
-                
-                %End the trial at the sample of the third selfO
-                endtrl(trlN) = fullevent(trgvalIndex(i)).sample;
-                
-                %After definin the third selfO, we can move to the next
-                %trial.
-                trlN=trlN+1;
-                %iter_selfocclusion = 1;
-                trlT=table(starttrl,endtrl,selfocclusion1sample,selfocclusion2sample,selfocclusion3sample,go_cuesample,go_cuevalue,responseSample,responseValue,responseScriptValue,responseScriptSample,trlN);
-                
-            else
-                
-                %The start of the trial becomes the last trials second selO
-                trlT.selfocclusion1sample(trlN,1)=trlT.selfocclusion2sample(trlN-1,1);%event(trgvalIndex(i)).sample;
-                trlT.starttrl(trlN,1) = trlT.selfocclusion2sample(trlN-1,1);
-                
-                %The main seflO become the last trial last selfO
-                trlT.selfocclusion2sample(trlN,1)=trlT.selfocclusion3sample(trlN-1,1);%event(trgvalIndex(i)).sample;
-                
-                %The last selfO is the current trigger and the end of the
-                %trial
-                trlT.selfocclusion3sample(trlN,1)=fullevent(trgvalIndex(i)).sample;%event(trgvalIndex(i)).sample;
-                trlT.endtrl(trlN,1) = fullevent(trgvalIndex(i)).sample;
-                trlN=trlN+1;
-                trlT.trlN(trlN,1) = trlN;
             end
             
-            %trl(trlN,1)=trlbeg;
-            trl(trlN,3)=fullevent(trgvalIndex(i)).sample;
-            trl(trlN,4)=trial_start;
-            trl(trlN,14)=trlN;
-            trloff=0;
+            if trlN==1
+            selfocclusion1sample = fullevent(trgvalIndex(i)).sample;
+                
+                %On all subsequent trials, insert values to table
+            
+             starttrl = fullevent(trgvalIndex(i)).sample;
+
+          
+            else
+                
+                
+                trlT.selfocclusion1sample(trlN,1)=fullevent(trgvalIndex(i)).sample;
+                trlT.starttrl(trlN,1) = fullevent(trgvalIndex(i)).sample;
+                trlT.trlN(trlN,1)=trlN;
+                if trlN==8
+                a=1;
+                end
+            end
+            
+
            
         case go_cue
             
