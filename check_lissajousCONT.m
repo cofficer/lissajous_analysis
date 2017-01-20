@@ -12,24 +12,24 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P0%i',nu
 
 ds_files = dir('*.ds');
 for inames=2:length(ds_files)
-name     =  ds_files(2).name;
-
-event = ft_read_event(name);
-
-%create the fullevent containing all the trials. 
-if inames==2
+    name     =  ds_files(inames).name;
     
-    fullevent=event;
-
-else
+    event = ft_read_event(name);
     
-%add all datasets together.    
-fullevent=[fullevent;event];
-
-end
-
-
-
+    %create the fullevent containing all the trials.
+    if inames==2
+        
+        fullevent=event;
+        
+    else
+        
+        %add all datasets together.
+        fullevent=[fullevent;event];
+        
+    end
+    
+    
+    
 end
 
 
@@ -92,18 +92,13 @@ trgval=double(trgval);
   end
 
 
-%Create a matrix with all the relevant trigger columns + offsets etc.
-trl=zeros(sum(trgval==block_start),numel(trigAll)+1); %A few more than it should be which should be looked into. 
-
-%Establish point of reference after each trigger==64. Counting trials. 
-trlN=1;
-%Define trloff (trial offset). Need to be a running value during each
-%trial. 
-trloff=0;
-
-iter_selfocclusion = 1;
-%number of self-occlusions
-nselfO=0;
+%Create variables for all events. 
+offcueN      = 1;
+selfN        = 1;
+go_cueN      = 1;
+responseN    = 1;
+responseScN  = 1;
+block_startN = 1;
 
 for i=1:length(trgvalIndex)
     
@@ -137,118 +132,120 @@ for i=1:length(trgvalIndex)
     switch fullevent(trgvalIndex(i)).value
         
         case {self_occlusion}
-            
-              %Start the go cue var for table insertion. 
-            %if trlN==1
-            
-            nselfO = nselfO+1;
-            trlN   = nselfO;
-            
-            %Create the table only one after the first trial
-            if trlN==2
-                
-                trlT=table(starttrl,selfocclusion1sample,go_cuesample,go_cuevalue,responseSample,responseValue,responseScriptValue,responseScriptSample,trlN);
-                
-            end
-            
-            if trlN==1
-            selfocclusion1sample = fullevent(trgvalIndex(i)).sample;
-                
-                %On all subsequent trials, insert values to table
-            
-             starttrl = fullevent(trgvalIndex(i)).sample;
 
-          
-            else
-                
-                
-                trlT.selfocclusion1sample(trlN,1)=fullevent(trgvalIndex(i)).sample;
-                trlT.starttrl(trlN,1) = fullevent(trgvalIndex(i)).sample;
-                trlT.trlN(trlN,1)=trlN;
-                if trlN==8
-                a=1;
-                end
-            end
-            
-
-           
+            selfocclusion1sample(selfN) = fullevent(trgvalIndex(i)).sample;
+            selfN=selfN+1;
+ 
         case go_cue
-            
-            %Start the go cue var for table insertion. 
-            if trlN==1
-            
-                go_cuesample = fullevent(trgvalIndex(i)).sample;
-                go_cuevalue = fullevent(trgvalIndex(i)).value;
-                
-                %On all subsequent trials, insert values to table
-            else
-                
+ 
+            go_cuesample(go_cueN) = fullevent(trgvalIndex(i)).sample;
+            go_cuevalue(go_cueN)  = fullevent(trgvalIndex(i)).value;
+            go_cueN = go_cueN + 1; 
 
-                %take the cue from the previous trial
-                trlT.go_cuesample(trlN,1)=fullevent(trgvalIndex(i)).sample;
-                trlT.go_cuevalue(trlN,1)=fullevent(trgvalIndex(i)).value;
-                
-                %go_cuesample = fullevent(trgvalIndex(i)).sample;
-                %go_cuevalue = fullevent(trgvalIndex(i)).value;
-                
-            end
-
-            
         case {resp_leftL2,resp_leftR2,resp_rightL2,resp_rightR2}
             
-            if trlN==1
-            
-                responseValue = fullevent(trgvalIndex(i)).value;
-                responseSample = fullevent(trgvalIndex(i)).sample;
-                responseScriptValue=NaN;
-                responseScriptSample=NaN;
-            else
-                
-                trlT.responseSample(trlN,1)=fullevent(trgvalIndex(i)).sample;
-                trlT.responseValue(trlN,1)=fullevent(trgvalIndex(i)).value;
-                
-            
-            end
-            
-        %temporary case
+                 responseValue(responseN)  = fullevent(trgvalIndex(i)).value;
+                 responseSample(responseN) = fullevent(trgvalIndex(i)).sample;
+                 responseN      = responseN+1;       
         
          case {resp_leftL,resp_leftR,resp_rightL,resp_rightR}
-            
-            if trlN==1
-            
-                responseScriptValue = fullevent(trgvalIndex(i)).value;
-                responseScriptSample = fullevent(trgvalIndex(i)).sample;
-                
-            else
-                
-                trlT.responseScriptSample(trlN,1)=fullevent(trgvalIndex(i)).sample;
-                trlT.responseScriptValue(trlN,1)=fullevent(trgvalIndex(i)).value;
-                
-            
-            end
-        
+%             
+
+            responseScriptValue(responseScN)  = fullevent(trgvalIndex(i)).value;
+            responseScriptSample(responseScN) = fullevent(trgvalIndex(i)).sample;
+            responseScN = responseScN+1;
+
         
         case {off_cue}
-            trl(trlN,11)=fullevent(trgvalIndex(i)).sample;
-            trl(trlN,12)=fullevent(trgvalIndex(i)).value;
-            %Adding 2.4s to include more data after feedback. 36963-36863
-            trl(trlN,2)=fullevent(trgvalIndex(i)).sample+4800;
+            
+            off_cueSample( offcueN) = fullevent(trgvalIndex(i)).sample;
+            off_cueValue( offcueN) = fullevent(trgvalIndex(i)).value;
+            offcueN = offcueN+1;
    
             
         case {block_start}
-            %trl(trlN,13)=event(trgvalIndex(i)).sample;
             
-            if trlN==1
-               
-                
-                
-            end
+            block_startSample( block_startN) = fullevent(trgvalIndex(i)).sample;
+            block_startValue( block_startN) = fullevent(trgvalIndex(i)).value;
+            block_startN = block_startN+1;
             
-            trl(trlN,13)=fullevent(trgvalIndex(i)).value;
+
     
     end
 
 end
+
+%%
+%Use the arrays for all events to construct a table: 
+
+selfocclusion1sample = selfocclusion1sample-(1200*2.25); %Remove the added 2.25s from poor triggers
+
+trialStart = selfocclusion1sample-2; %Trial starts two seconds before self-occl.
+
+
+%collect all relevant samples in one structure.
+samples.go_cuesample=go_cuesample ;         %
+samples.responseScriptSample=responseScriptSample;
+samples.responseSample=responseSample;
+samples.off_cueSample=off_cueSample;
+samples.block_startSample=block_startSample; %Use to restrict button presses. 
+samples.selfocclusion1sample=selfocclusion1sample; %Use to restrict button presses. 
+
+
+%Call function to create a neat table of samples. 
+trlT = megsampletable(samples);
+
+%Capture all legitimite buttonpresses.
+%Remove all samples that lie outside of the block starts. 
+
+%the index of a new dataset attachment.  
+indRespBlock = find(diff(responseSample)<0==1);
+
+%the index of each new dataset attachment.  
+indselfOcclBlock = find(diff(selfocclusion1sample)<0==1);
+
+%Loop every self-occlusion and only include the next arriving response. 
+%The question is how to account for correct response timings. Would need a
+%way to know when someone made a double press. 
+
+currentBlock = 1;
+responseSampleIndex = 1;
+
+for numSO = 1:length(selfocclusion1sample)
+    
+    %If we reach the end of self-occlusions in the first dataset, we need
+    %to index the possible response samples in such way that only the
+    %trials from the second dataset are considerred. And then again for the
+    %third dataset. 
+    if numSO == indselfOcclBlock(currentBlock)
+        currentBlock = 2;
+        responseSampleIndex = indRespBlock(1);
+    elseif numSO == indselfOcclBlock(currentBlock)
+        currentBlock = 2;
+        responseSampleIndex = indRespBlock(1);
+    end
+    
+    %Finding the index of the first response larger than the self-occlusion
+    indexRespS = find((responseSample(responseSampleIndex:indRespBlock(currentBlock))>selfocclusion1sample(numSO))==1,1);
+    
+    adjustedResponseSample(numSO)=responseSample(indexRespS);
+   
+    
+    
+    
+end
+%Create table
+%store variables as the tranvers?
+trialStart=trialStart';
+selfocclusion1sample=selfocclusion1sample';
+go_cuesample=go_cuesample';
+adjustedResponseSample=adjustedResponseSample';
+
+
+
+
+trlT=table(trialStart,selfocclusion1sample,go_cuesample,adjustedResponseSample);
+
 
 
 end
