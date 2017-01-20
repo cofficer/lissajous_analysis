@@ -57,7 +57,7 @@ for idat = 1:3
         if ~isempty(indcurrentBP)   
             %Store all the samples of button presses. 
             responseCellArray{iSOAll}= responseSample(indcurrentBP); 
-            valueCellArray{iSOAll}   = responseValue(indcurrentBP); 
+            valueCellArray{iSOAll}   = responseValue(indcurrentBP(1)); 
             
         end
         
@@ -83,19 +83,32 @@ for idat = 1:3
 end
 
 
-
+%Rotate all the variable for easier oversight. 
 valueCellArray=valueCellArray';
 responseCellArray=responseCellArray';
 cueoffCellArray=cueoffCellArray';
 SelfOcclusionSample=SelfOcclusionSample';
 CueOnsetSample=CueOnsetSample';
 
+%Define auxilliary variables
 StartTrial = SelfOcclusionSample-2400;
 EndTrial   = SelfOcclusionSample+7200; %Time per trial epoch i 6,5 since first self-occlusion. Total 8,5. 
 trlN       = [1:length(StartTrial)]';
 
 
-trlT = table(StartTrial,EndTrial,SelfOcclusionSample,CueOnsetSample,responseCellArray,valueCellArray,cueoffCellArray,trlN);
+%Replace empty cells with a 0
+emptyIndex = cellfun(@isempty,valueCellArray);
+valueCellArray(emptyIndex)={0};
+
+%Simple converion if same dimensions. 
+responseValue = cell2mat(valueCellArray);
+
+
+
+
+
+%Create the table
+trlT = table(StartTrial,EndTrial,SelfOcclusionSample,CueOnsetSample,responseCellArray,responseValue,cueoffCellArray,trlN);
 
 
 
