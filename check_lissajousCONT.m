@@ -191,60 +191,13 @@ samples.off_cueSample=off_cueSample;
 samples.block_startSample=block_startSample; %Use to restrict button presses. 
 samples.selfocclusion1sample=selfocclusion1sample; %Use to restrict button presses. 
 
+%collect all relevant values in one structure.
+values.response = responseValue;
+
 
 %Call function to create a neat table of samples. 
-trlT = megsampletable(samples);
+trlT = megsampletable(samples,values);
 
-%Capture all legitimite buttonpresses.
-%Remove all samples that lie outside of the block starts. 
-
-%the index of a new dataset attachment.  
-indRespBlock = find(diff(responseSample)<0==1);
-
-%the index of each new dataset attachment.  
-indselfOcclBlock = find(diff(selfocclusion1sample)<0==1);
-
-%Loop every self-occlusion and only include the next arriving response. 
-%The question is how to account for correct response timings. Would need a
-%way to know when someone made a double press. 
-
-currentBlock = 1;
-responseSampleIndex = 1;
-
-for numSO = 1:length(selfocclusion1sample)
-    
-    %If we reach the end of self-occlusions in the first dataset, we need
-    %to index the possible response samples in such way that only the
-    %trials from the second dataset are considerred. And then again for the
-    %third dataset. 
-    if numSO == indselfOcclBlock(currentBlock)
-        currentBlock = 2;
-        responseSampleIndex = indRespBlock(1);
-    elseif numSO == indselfOcclBlock(currentBlock)
-        currentBlock = 2;
-        responseSampleIndex = indRespBlock(1);
-    end
-    
-    %Finding the index of the first response larger than the self-occlusion
-    indexRespS = find((responseSample(responseSampleIndex:indRespBlock(currentBlock))>selfocclusion1sample(numSO))==1,1);
-    
-    adjustedResponseSample(numSO)=responseSample(indexRespS);
-   
-    
-    
-    
-end
-%Create table
-%store variables as the tranvers?
-trialStart=trialStart';
-selfocclusion1sample=selfocclusion1sample';
-go_cuesample=go_cuesample';
-adjustedResponseSample=adjustedResponseSample';
-
-
-
-
-trlT=table(trialStart,selfocclusion1sample,go_cuesample,adjustedResponseSample);
 
 
 
