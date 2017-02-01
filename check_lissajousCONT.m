@@ -59,7 +59,7 @@ block_end           = 90; %Not currenlty in use.
 trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,232,225];
 
 %Change the buttons used for P03:;;;
-if numP==3
+if sum(numP==[3,4,5])
 
     trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,226,228];
 
@@ -177,10 +177,10 @@ end
 
 %%
 %Use the arrays for all events to construct a table: 
-
+if numP<4
 selfocclusion1sample = selfocclusion1sample-(1200*2.25); %Remove the added 2.25s from poor triggers
-
-trialStart = selfocclusion1sample-2; %Trial starts two seconds before self-occl.
+end
+%trialStart = selfocclusion1sample-2; %Trial starts two seconds before self-occl.
 
 
 %collect all relevant samples in one structure.
@@ -193,7 +193,7 @@ samples.selfocclusion1sample=selfocclusion1sample; %Use to restrict button press
 
 %collect all relevant values in one structure.
 values.response = responseValue;
-
+samples.numP    = numP;
 
 %Call function to create a neat table of samples. 
 trlT = megsampletable(samples,values);

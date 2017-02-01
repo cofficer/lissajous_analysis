@@ -40,16 +40,16 @@ trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,232,225];
 %%%%Continuous trials, mainly plotting.                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Plot the mean switch rate, self occlusion. 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
-load('tomTableP01.mat')
-load('chrisTableP02.mat')
-
-%loaded at trlT
-load('TableP03CONT.mat')
-
-%Change the responsevalues for P03
-trlT.responseValue(trlT.responseValue==226)=225;
-trlT.responseValue(trlT.responseValue==228)=232;
+% cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
+% load('tomTableP01.mat')
+% load('chrisTableP02.mat')
+% 
+% %loaded at trlT
+% load('TableP03CONT.mat')
+% 
+% %Change the responsevalues for P03
+% trlT.responseValue(trlT.responseValue==226)=225;
+% trlT.responseValue(trlT.responseValue==228)=232;
 
 
 %Plotting the raw choices:
@@ -157,11 +157,11 @@ continuousSeq1(diffSequence1)=sequenceOccurence1;
 figure(6),clf
 hold on;
 bar([(continuousSeq1)]','stacked')
-title('Stacked bar plot of perceptual dominance for run of self-occlusions')
+title('Perceptual dominance for run of self-occlusions')
 
 %bar(diffSequence1,sequenceOccurence1)
 
-legend Tom Chris
+legend off
 
 %Plotting in log log, to see the linear decay better
 figure(7),clf
@@ -227,14 +227,12 @@ set(gca,'XTickLabel',buttons)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Plot all response types for the continuous blocks.                  %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-clear
+
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
 %load('tomTableP01.mat')
 %load('chrisTableP02.mat')
-figure(2)
-numP=3;
 
-trlT=check_lissajousCONT(numP);
+%trlT=check_lissajousCONT(numP);
 
 %Calulate the occuarance for each response pair. 
 allResponses = [225;232];
@@ -245,51 +243,86 @@ leftR =0;
 rightL=0;
 rightR=0;
 
-%Change the responsevalues for P03
-trlT.responseValue(trlT.responseValue==226)=225;
-trlT.responseValue(trlT.responseValue==228)=232;
+%Change the responsevalues for P03, should already be done in
+%concatenatetables.
+%trlT.responseValue(trlT.responseValue==226)=225;
+%trlT.responseValue(trlT.responseValue==228)=232;
 
-for itrl=1:length(trlT.responseValue)
 
-if itrl>1
+uniqueP = unique(trlTA.participant);
+
+%loop over participants to get the std
+for inumP = 1:length(uniqueP)
     
-    %Compare the last and the current response
-    lastTrl = trlT.responseValue(itrl-1);
-
-    currentTrl = trlT.responseValue(itrl);
-
-    bothTrl = [lastTrl,currentTrl];
+    trlT = trlTA(trlTA.participant==inumP,:);
     
-    switch int2str(bothTrl)
+    for itrl=1:length(trlT.responseValue)
         
-        %Left to left
-        case int2str([allResponses(1) allResponses(1)])
+        if itrl>1
             
-            leftL = leftL+1;
+            %Compare the last and the current response
+            lastTrl = trlT.responseValue(itrl-1);
             
-        %Left to right    
-        case int2str([allResponses(1) allResponses(2)])
-                        
-            leftR = leftR+1;
+            currentTrl = trlT.responseValue(itrl);
             
-        %Right to left
-        case int2str([allResponses(2) allResponses(1)])
-                        
-            rightL = rightL+1;
+            bothTrl = [lastTrl,currentTrl];
             
-        %Right to right
-        case int2str([allResponses(2) allResponses(2)])
-                        
-            rightR = rightR+1;
-            
+            switch int2str(bothTrl)
+                
+                %Left to left
+                case int2str([allResponses(1) allResponses(1)])
+                    
+                    leftL = leftL+1;
+                    
+                    %Left to right
+                case int2str([allResponses(1) allResponses(2)])
+                    
+                    leftR = leftR+1;
+                    
+                    %Right to left
+                case int2str([allResponses(2) allResponses(1)])
+                    
+                    rightL = rightL+1;
+                    
+                    %Right to right
+                case int2str([allResponses(2) allResponses(2)])
+                    
+                    rightR = rightR+1;
+                    
+            end
+        end
     end
-end    
-bar([leftL leftR rightL rightR])
-buttons = {'Left to left','Left to right','Right to left','Right to right'};
-set(gca,'XTickLabel',buttons)
-
+    
+    disp(inumP)
+    perceptsAll(:,inumP) = [leftL leftR rightL rightR];
+    
+    leftL =0;
+leftR =0;
+rightL=0;
+rightR=0;
+%     bar([leftL leftR rightL rightR])
+%     buttons = {'Left to left','Left to right','Right to left','Right to right'};
+%     set(gca,'XTickLabel',buttons)
+%     
+%     
+    
+    
+    
 end
 
+SE=std(perceptsAll')/sqrt(inumP);
+
+meanpercepts = mean(perceptsAll,2);
+
+bar(meanpercepts')
+hold on;
+e=errorbar(meanpercepts',SE);
+
+e.LineStyle='none'; 
+
+  buttons = {'CW to CW','CW to CCW','CCW to CW','CCW to CCW'};
+  set(gca,'XTickLabel',buttons)
+title('Average number of occurances of each perception')
 
 %%
 
