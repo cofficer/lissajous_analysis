@@ -4,8 +4,11 @@ function trlT=check_lissajousCONT(numP)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Read events from the lissajous raw data, for continuous blocks.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if numP<10
 cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P0%i',numP))
-
+else
+    cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P%i',numP))
+end
 %The first data set is for trialbased in this condition. 
 %Take the script from trialfun. Create a trialdefinition. 
 %Pre-selfocclusion + button press. 
@@ -198,7 +201,7 @@ samples.numP    = numP;
 %Call function to create a neat table of samples. 
 trlT = megsampletable(samples,values);
 
-
+aaa=111; %Somewhere for a break point.
 
 
 end

@@ -408,3 +408,60 @@ line([selfOcclusion3Samples,selfOcclusion3Samples],[0 0.25],'Color',[0.9 0.1 0.4
 
 ylim([-1 2])
 xlim([-4 16])
+
+
+%%
+%After running the seven plots from second cell, investigate coefficient of
+%variance. 
+
+%Get the mean perceptual duration. In order for this to be possible, I need
+%to multiply each position with the number of seconds that duration was. 
+%So poition 1 is 2000 x 4,5 and pos 2 is 1000 x 2 x 4,5 for instance. 
+
+
+
+runlength1=diff(find(diff(trlT.responseValue(trlT.responseValue~=0))~=0));
+
+diffSequence1 = unique(runlength1);
+
+for idiffseq=1:numel(diffSequence1)
+
+    sequenceOccurence1(idiffseq) = sum(runlength1==diffSequence1(idiffseq));
+    
+
+end
+
+
+continuousSeq=zeros(1,31);
+
+%continuousSeq2=continuousSeq;
+
+%continuousSeq2(diffSequence2)=sequenceOccurence2;
+
+continuousSeq1=continuousSeq;
+
+continuousSeq1(diffSequence1)=sequenceOccurence1;
+
+
+
+reversetime=[];
+
+
+for ireversals = 1:length(continuousSeq1)
+    
+    
+    reversetime=[reversetime,repmat(ireversals*4.5,1,continuousSeq1(ireversals))];
+    
+    %reversetime(ireversals)=continuousSeq1(ireversals)*ireversals*4,5;
+    
+
+end
+
+
+coV(nump) = std(reversetime)/mean(reversetime);
+
+
+
+
+
+

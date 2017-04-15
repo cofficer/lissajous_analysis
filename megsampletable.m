@@ -67,7 +67,7 @@ trlNumber = 0;
 
 
 %loop datasets
-for idat = 1:3
+for idat = 1:length(SOblockind)-1
     
     %get the events  from the current dataset
     currentSelfOcclusions = samples.selfocclusion1sample(SOblockind(idat)+1:SOblockind(idat+1));
