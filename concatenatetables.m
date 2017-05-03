@@ -5,6 +5,8 @@
 clear
 trlTA = [];
 
+
+
 %So far six participants.
 for inumP = 1:29
     
