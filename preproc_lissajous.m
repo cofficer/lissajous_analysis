@@ -1,7 +1,9 @@
 
-%Preprocessing continuous data - Lissajous project
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Preprocessing trl-based data - Lissajous project%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function data=preproc_lissajous
+function data = preproc_lissajous
 %The key here is to use the already defined tables for samples when calling
 %trialfun function which I should define next. 
 clear
@@ -13,8 +15,8 @@ cfg.dataset                 = dsfile;
 cfg.trialfun                = 'ft_trialfun_general'; % this is the default
 cfg.trialdef.eventtype      = 'UPPT001';
 cfg.trialdef.eventvalue     = 10; % the value of the stimulus trigger for fully incongruent (FIC).
-cfg.trialdef.prestim        = 1; % in seconds
-cfg.trialdef.poststim       = 2; % in seconds
+cfg.trialdef.prestim        = 2.25; % in seconds
+cfg.trialdef.poststim       = 2.25; % in seconds
 
 cfg = ft_definetrial(cfg);
 
@@ -27,21 +29,6 @@ cfg.continuous = 'yes';
 data = ft_preprocessing(cfg);
 
 %%
-%Get the eyelink data
-
-
-idx_eye=strcmp(data.label,'UADC004');
-
-
-check_trl = data.trial{30};
-
-check_trl = check_trl(idx_eye,:);
-
-figure(2),clf
-plot(check_trl)
-
-
-%%
 %From Anne, Donner git example
 
 %Current subplot
@@ -51,7 +38,7 @@ cnt = 1;
 cc_rel = computeHeadRotation(data);
 
 % plot the rotation of the head
-subplot(4,4,cnt); cnt = cnt + 1;
+subplot(2,3,cnt); cnt = cnt + 1;
 plot(cc_rel); ylabel('HeadM');
 axis tight; box off;
 
@@ -75,7 +62,7 @@ cfg.trials(unique(t))   = false; % remove these trials
 data                    = ft_selectdata(cfg, data);
 fprintf('removing %d excessive head motion trials \n', length(find(cfg.trials == 0)));
 
-subplot(4,4,cnt); cnt = cnt + 1;
+subplot(2,3,cnt); cnt = cnt + 1;
 if isempty(t),
     title('No motion'); axis off;
 else
@@ -99,7 +86,7 @@ cfgfreq.keeptrials  = 'no';
 freq                = ft_freqanalysis(cfgfreq, data);
 
 % plot those data and save for visual inspection
-subplot(4,4,cnt); cnt = cnt + 1;
+subplot(2,3,cnt); cnt = cnt + 1;
 loglog(freq.freq, freq.powspctrm, 'linewidth', 0.1); hold on;
 loglog(freq.freq, mean(freq.powspctrm), 'k', 'linewidth', 1);
 axis tight; axis square; box off;
@@ -220,7 +207,7 @@ end
 
 % detect jumps as outliers
 [~, idx] = deleteoutliers(intercept(:));
-subplot(4,4,cnt); cnt = cnt + 1;
+subplot(2,3,cnt); cnt = cnt + 1;
 if isempty(idx),
     fprintf('no squid jump trials found \n');
     title('No jumps'); axis off;
@@ -255,7 +242,7 @@ data            = ft_preprocessing(cfg, data);
 
 % plot power spectrum
 freq            = ft_freqanalysis(cfgfreq, data);
-subplot(4,4,cnt); cnt = cnt + 1;
+subplot(2,3,cnt); cnt = cnt + 1;
 %loglog(freq.freq, freq.powspctrm, 'linewidth', 0.5); hold on;
 loglog(freq.freq, (squeeze(mean(freq.powspctrm))), 'k', 'linewidth', 1);
 axis tight;  axis square; box off;%ylim(ylims);
@@ -329,61 +316,25 @@ data                            = ft_rejectartifact(cfg, data);
 
 % plot final power spectrum
 freq            = ft_freqanalysis(cfgfreq, data);
-subplot(4,4,cnt); 
+subplot(2,3,cnt); 
 %loglog(freq.freq, freq.powspctrm, 'linewidth', 0.5); hold on;
 loglog(freq.freq, squeeze(mean(freq.powspctrm)), 'k', 'linewidth', 1);
 axis tight; axis square; box off; %ylim(ylims);
 set(gca, 'xtick', [10 50 100], 'tickdir', 'out');
 
-% ==================================================================
-% OPTIONAL: ICA TO REMOVE CARDIAC ARTEFACT
-% ICA components can be automatically selected by computing the coherence 
-% between the component and the ECG signal. Based on a threshold value (t.b.d.) 
-% 1-3 components should be selected and rejected from the data. This is not yet 
-% properly tested or implemented by anyone in the lab. Some code starting
-% points below.
-%
-% see also http://www.fieldtriptoolbox.org/example/use_independent_component_analysis_ica_to_remove_ecg_artifacts
-% ==================================================================
-% 
-% % 1. get components (you'll want to do this in a separate script on the cluster)
-% cfg                 = [];
-% cfg.method          = 'runica';
-% cfg.channel         = 'MEG'; % run only on MEG chans, correlate with EKG later
-% comp                = ft_componentanalysis(cfg, data);
-% 
-% % 2. select components automatically based on the coherence with EKG
-% 
-% % get only the ECG signal
-% ekgchan = find(~cellfun(@isempty, strfind(data.label, 'EKG')));
-% ekgdat  = cat(2, data.trial{:});
-% ekgdat  = ekgdat(ekgchan, :);
-% 
-% % concatenate component activity
-% icadat  = cat(2, comp.trial{:});
-% 
-% % compute coherence between data and component
-% Cxy     = mscohere(ekgdat, icadat', hamming(100), 80, 100, data.fsample);
-% 
-% % find the two largest
-% [~, idx] = sort(mean(Cxy));
-% compidx = idx(1:2); 
-% 
-% % here, you might want to plot the topography and timecourse
-% cfg                 = [];
-% cfg.viewmode        = 'component';
-% cfg.channel         = compidx;
-% cfg.layout          = 'CTF275.lay';
-% cfg.style           = 'straight';
-% ft_databrowser(cfg, comp);
-% 
-% % project those out of the data
-% cfg             = [];
-% cfg.component   = idx;
-% data            = ft_rejectcomponent(cfg, comp, data);
+%%
+%Finally resample the data
+cfg3.resample = 'yes';
+cfg3.fsample = 1200;
+cfg3.resamplefs = 400;
+cfg3.detrend = 'no';
 
-% and... you're done! 
+data = ft_resampledata(cfg3,data);
 
+%%
+%save figure of the resulting preprocessing
+cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/figures')
+saveas(gca,'preprocess04trial.png')
 
 end
 

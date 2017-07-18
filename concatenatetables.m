@@ -66,7 +66,7 @@ for inumP = 1:29
     
     
     
-    %trlTA = [trlTA;trlT];
+    trlTA = [trlTA;trlT];
     
     disp(inumP)
     
