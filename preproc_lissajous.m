@@ -5,7 +5,7 @@
 
 function data = preproc_lissajous
 %The key here is to use the already defined tables for samples when calling
-%trialfun function which I should define next. 
+%trialfun function which I should define next.
 clear
 %define ds file, this is actually from the trial-based data
 dsfile = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P04/p04_lissajous_20170121_01.ds';
@@ -21,8 +21,9 @@ cfg.trialdef.poststim       = 2.25; % in seconds
 cfg = ft_definetrial(cfg);
 
 %%
-%run, epoching. 
-cfg.channel    ={'all'}; %{'MEG', 'EOG','EEG', 'HLC0011','HLC0012','HLC0013', ...
+%run, epoching.
+cfg.channel    ={'all'};
+%%{'MEG', 'EOG','EEG', 'HLC0011','HLC0012','HLC0013', ...
                  % 'HLC0021','HLC0022','HLC0023', ...
                  % 'HLC0031','HLC0032','HLC0033'};
 cfg.continuous = 'yes';
@@ -68,7 +69,7 @@ if isempty(t),
 else
     % show head motion without those removed
     cc_rel = computeHeadRotation(data);
-    
+
     % plot the rotation of the head
     plot(cc_rel); ylabel('Motion resid');
     axis tight; box off;
@@ -94,11 +95,11 @@ set(gca, 'xtick', [10 50 100], 'tickdir', 'out', 'xticklabel', []);
 
 % ==================================================================
 % 2. REMOVE TRIALS WITH EYEBLINKS (only during beginning of trial)
-% Bandpass filter the vertical EOG channel between 1-15 Hz and z-transform 
-% this filtered time course. Select complete trials that exceed a threshold of  
-% z =4 (alternatively you can set the z-threshold per data file or per subject 
-% with the ?interactive? mode in ft_artifact_zvalue function). Reject trials 
-% that contain blink artifacts before going on to the next step. For monitoring 
+% Bandpass filter the vertical EOG channel between 1-15 Hz and z-transform
+% this filtered time course. Select complete trials that exceed a threshold of
+% z =4 (alternatively you can set the z-threshold per data file or per subject
+% with the ?interactive? mode in ft_artifact_zvalue function). Reject trials
+% that contain blink artifacts before going on to the next step. For monitoring
 % purposes, plot the time courses of your trials before and after blink rejection.
 % ==================================================================
 
@@ -137,8 +138,8 @@ data                            = ft_rejectartifact(cfg, data);
 
 % ==================================================================
 % 3. REMOVE TRIALS WITH SACCADES (only during beginning of trial)
-% Remove trials with (horizontal) saccades (EOGH). Use the same settings as 
-% for the EOGV-based blinks detection. The z-threshold can be set a bit higher 
+% Remove trials with (horizontal) saccades (EOGH). Use the same settings as
+% for the EOGV-based blinks detection. The z-threshold can be set a bit higher
 % (z = [4 6]). Reject all trials that contain saccades before going further.
 % ==================================================================
 
@@ -178,8 +179,8 @@ data                            = ft_rejectartifact(cfg, data);
 % ==================================================================
 % 4. REMOVE TRIALS WITH JUMPS
 % Compute the power spectrum of all trials and a linear line on the loglog-
-% transformed power spectrum. Jumps cause broad range increase in the power 
-% spectrum so trials containing jumps can be selected by detecting outliers 
+% transformed power spectrum. Jumps cause broad range increase in the power
+% spectrum so trials containing jumps can be selected by detecting outliers
 % in the intercepts of the fitted lines (using Grubb?s test for outliers).
 % ==================================================================
 
@@ -214,13 +215,13 @@ if isempty(idx),
 else
     fprintf('removing %d squid jump trials \n', length(unique(t)));
     [t,~] = ind2sub(size(intercept),idx);
-    
+
     % remove those trials
     cfg                 = [];
     cfg.trials          = true(1, length(data.trial));
     cfg.trials(unique(t)) = false; % remove these trials
     data                = ft_selectdata(cfg, data);
-    
+
     % plot the spectrum again
     cfgfreq.keeptrials = 'no';
     freq            = ft_freqanalysis(cfgfreq, data);
@@ -251,13 +252,13 @@ set(gca, 'xtick', [10 50 100], 'tickdir', 'out', 'xticklabel', []);
 
 % ==================================================================
 % 6. REMOVE CARS BASED ON THRESHOLD
-% Cars moving past the MEG lab cause big slow signal changes. Trials 
-% containing these artifacts can be selected and removed by computing 
-% the maximum range of the data for every trial. Trials with a larger 
-% range than a threshold (standard = 0.75e-11) can be rejected (the standard 
+% Cars moving past the MEG lab cause big slow signal changes. Trials
+% containing these artifacts can be selected and removed by computing
+% the maximum range of the data for every trial. Trials with a larger
+% range than a threshold (standard = 0.75e-11) can be rejected (the standard
 % threshold might be low if you have long trials).
 % ==================================================================
-% 
+%
 % disp('Looking for CAR artifacts...');
 % cfg = [];
 % cfg.trials = true(1, length(data.trial));
@@ -268,10 +269,10 @@ set(gca, 'xtick', [10 50 100], 'tickdir', 'out', 'xticklabel', []);
 %     % determine range and index of 'worst' channel
 %     worstChanRange(t) = max(ptpval);
 % end
-% 
+%
 % % default range for peak-to-peak
 % artfctdef.range           = 0.75e-11;
-% 
+%
 % % decide whether to reject this trial
 % cfg.trials = (worstChanRange < artfctdef.range);
 % fprintf('removing %d CAR trials \n', length(find(cfg.trials == 0)));
@@ -279,7 +280,7 @@ set(gca, 'xtick', [10 50 100], 'tickdir', 'out', 'xticklabel', []);
 
 % ==================================================================
 % 7. REMOVE TRIALS WITH MUSCLE BURSTS BEFORE RESPONSE
-% Remove muscle using the same z-value-based approach as for the eye 
+% Remove muscle using the same z-value-based approach as for the eye
 % channels. Filter the data between 110-140 Hz and use a z-value threshold of 10.
 % ==================================================================
 
@@ -316,7 +317,7 @@ data                            = ft_rejectartifact(cfg, data);
 
 % plot final power spectrum
 freq            = ft_freqanalysis(cfgfreq, data);
-subplot(2,3,cnt); 
+subplot(2,3,cnt);
 %loglog(freq.freq, freq.powspctrm, 'linewidth', 0.5); hold on;
 loglog(freq.freq, squeeze(mean(freq.powspctrm)), 'k', 'linewidth', 1);
 axis tight; axis square; box off; %ylim(ylims);
@@ -337,4 +338,3 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/figures')
 saveas(gca,'preprocess04trial.png')
 
 end
-
