@@ -20,7 +20,7 @@ for icfg = 1:length(restingpaths)
     %Define which blocks to run.
     cfgin{icfg}.blocktype               = 'trial'; % trial or continuous.
 
-    %cfgin=cfgin{199}
+    %cfgin=cfgin{23}
 end
 
 

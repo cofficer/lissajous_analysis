@@ -49,10 +49,11 @@ data = ft_resampledata(cfg3,data);
 %Highpass filter to get rid of all frequencies below 2Hz
 cfg          = [];
 cfg.hpfilter = 'yes';
-fg.channel   ={'MEG'};
+cfg.channel   ={'MEG'};
 cfg.hpfreq   = 2;
 data = ft_preprocessing(cfg,data);
 
+%%
 % plot a quick power spectrum
 % save those cfgs for later plotting
 cfgfreq             = [];
@@ -92,24 +93,17 @@ axis tight; box off;
 % for the EOGV-based blinks detection. The z-threshold can be set a bit higher
 % (z = [4 6]). Reject all trials that contain saccades before going further.
 % ==================================================================
-cfg                              = [];
-cfg.channel                      = {'UADC003'};
-datUADC                          = ft_selectdata(cfg,data)
 
-%Identify blinks... problematic using the function. Maybe not though if doing the absolut on all the trials..
-%I only need the timestamps.
-datUADC.trial = cellfun(@abs,datUADC.trial,'UniformOutput', false);
+%find pupil index.
+idx_blink = find(ismember(data.label,{'UADC003'})==1);
 
-figure(1),clf
-for currT = 200:200
-  subplot(2,1,1)
-  hold on
-  plot(datUADC.trial{currT})
-  subplot(2,1,2)
-  hold on
-  plot(abs(datUADC.trial{currT}))
+%Identify blinks... succumed to a for loop...
+for itrials = 1:length(data.trial)
+ 
+    data.trial{itrials}(idx_blink,:) = abs(data.trial{itrials}(idx_blink,:));
+    
 end
-saveas(gca,'testUADC.png','png')
+
 
 cfg                              = [];
 cfg.continuous                   = 'yes'; % data has been epoched
@@ -120,19 +114,15 @@ cfg.artfctdef.zvalue.channel     = {'UADC003'}; %UADC003 UADC004s
 % 001, 006, 0012 and 0018 are the vertical and horizontal eog chans
 cfg.artfctdef.zvalue.trlpadding  = 0; % padding doesnt work for data thats already on disk
 cfg.artfctdef.zvalue.fltpadding  = 0; % 0.2; this crashes the artifact func!
-cfg.artfctdef.zvalue.artpadding  = 0.05; % go a bit to the sides of blinks
+cfg.artfctdef.zvalue.artpadding  = 0.1; % go a bit to the sides of blinks
 
 % algorithmic parameters
 cfg.artfctdef.zvalue.bpfilter   = 'no';
-% cfg.artfctdef.zvalue.bpfilttype = 'but';
-% cfg.artfctdef.zvalue.bpfreq     = [1 15];
-% cfg.artfctdef.zvalue.bpfiltord  = 2;
-% cfg.artfctdef.zvalue.hilbert    = 'yes';
 
 % set cutoff
 cfg.artfctdef.zvalue.cutoff     = 4;
-cfg.artfctdef.zvalue.interactive = 'no';
-[~, artifact_eog]               = ft_artifact_zvalue(cfg, data);
+cfg.artfctdef.zvalue.interactive = 'yes';
+[cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, data);
 
 artifact_eogHorizontal = artifact_eog;
 
@@ -151,13 +141,24 @@ cfg=[];
 cfg.channel = 'UADC003'; %UADC003 UADC004 if eyelink is present
 blinks = ft_selectdata(cfg,data);
 
-%If there is no variance in the data then it is probably because the
-%eyelink was not working for that session
-% if var(blinks.trial{:})<0.01 %No eyelink
-% 	cfg=[];
-%     cfg.channel = 'EEG057';
-%     blinks = ft_selectdata(cfg,data);
-% end
+%Could reduce blinks data to only trials with blinks. 
+%Identify blinks... succumed to a for loop...
+iart = 1;
+for itrials = 1:length(data.trial)
+ 
+    %Compare the samples identified by the artifact detection and the 
+    %samples of each trial to identify the trial with artifact. 
+    data.cfg
+    cfgart.artfctdef.zvalue.artifact
+    
+    data_sample = cfgart.artfctdef.zvalue.trl(itrials,1:2);
+    arti_sample = cfgart.artfctdef.zvalue.artifact(iart);
+    
+    
+    
+    
+end
+
 subplot(2,3,cnt); cnt = cnt + 1;
 plot(blinks.trial{:})
 axis tight; axis square; box off;
