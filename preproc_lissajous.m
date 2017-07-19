@@ -6,7 +6,7 @@
 function data = preproc_lissajous(cfgin)
 %The key here is to use the already defined tables for samples when calling
 %trialfun function which I should define next.
-clear
+
 %define ds file, this is actually from the trial-based data
 dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/%s/',cfgin.restingfile);
 cd(dsfile)
@@ -15,9 +15,9 @@ cd(dsfile)
 datasets = dir('*ds');
 
 
-if cfgin.blockype == 'trial'
+if cfgin.blocktype == 'trial'
   dsfile=datasets(1).name;
-elseif cfgin.blockype == 'trial'
+elseif cfgin.blocktype == 'trial'
   %Choosing the second dataset is arbitrary.
   dsfile=datasets(2).name;
 end
