@@ -18,6 +18,7 @@ datasets = dir('*ds');
 if cfgin.blockype == 'trial'
   dsfile=datasets(1).name;
 elseif cfgin.blockype == 'trial'
+  %Choosing the second dataset is arbitrary.
   dsfile=datasets(2).name;
 end
 
@@ -95,12 +96,9 @@ cfg                              = [];
 cfg.channel                      = {'UADC003'};
 datUADC                          = ft_selectdata(cfg,data)
 
-cfg          = [];
-cfg.hpfilter = 'yes';
-cfg.channel   ={'UADC003'};
-cfg.hpfreq   = 2;
-filtereddatUADC = ft_preprocessing(cfg,datUADC);
-
+%Identify blinks... problematic using the function. Maybe not though if doing the absolut on all the trials..
+%I only need the timestamps.
+datUADC.trial = cellfun(@abs,datUADC.trial,'UniformOutput', false);
 
 figure(1),clf
 for currT = 200:200
@@ -109,7 +107,7 @@ for currT = 200:200
   plot(datUADC.trial{currT})
   subplot(2,1,2)
   hold on
-  plot(filtereddatUADC.trial{currT})
+  plot(abs(datUADC.trial{currT}))
 end
 saveas(gca,'testUADC.png','png')
 
