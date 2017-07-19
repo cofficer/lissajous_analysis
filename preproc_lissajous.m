@@ -9,7 +9,6 @@ function data = preproc_lissajous(cfgin)
 clear
 %define ds file, this is actually from the trial-based data
 dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/%s/',cfgin.restingfile);
-
 cd(dsfile)
 
 %Identify datasets, and load correct block.
@@ -34,6 +33,24 @@ cfg = ft_definetrial(cfg);
 cfg.channel    ={'all'};
 cfg.continuous = 'yes';
 data = ft_preprocessing(cfg);
+
+
+%Resample the data
+cfg3.resample = 'yes';
+cfg3.fsample = 1200;
+cfg3.resamplefs = 500;
+cfg3.detrend = 'no';
+
+data = ft_resampledata(cfg3,data);
+
+
+%%
+%Highpass filter to get rid of all frequencies below 2Hz
+cfg          = [];
+cfg.hpfilter = 'yes';
+fg.channel   ={'MEG'};
+cfg.hpfreq   = 2;
+data = ft_preprocessing(cfg,data);
 
 % plot a quick power spectrum
 % save those cfgs for later plotting
@@ -68,78 +85,33 @@ subplot(2,3,cnt); cnt = cnt + 1;
 plot(cc_rel); ylabel('HeadM');
 axis tight; box off;
 
-%%
 % ==================================================================
-% 2. REMOVE TRIALS WITH EYEBLINKS (only during beginning of trial)
-% Bandpass filter the vertical EOG channel between 1-15 Hz and z-transform
-% this filtered time course. Select complete trials that exceed a threshold of
-% z =4 (alternatively you can set the z-threshold per data file or per subject
-% with the ?interactive? mode in ft_artifact_zvalue function). Reject trials
-% that contain blink artifacts before going on to the next step. For monitoring
-% purposes, plot the time courses of your trials before and after blink rejection.
-% ==================================================================
-
-cfg                              = [];
-cfg.continuous                   = 'yes'; % data has been epoched
-
-% channel selection, cutoff and padding
-%The channel '4' is the appended eyelink.
-cfg.artfctdef.zvalue.channel     = {'UADC004'}; %UADC004 UADC003
-
-% 001, 006, 0012 and 0018 are the vertical and horizontal eog chans
-cfg.artfctdef.zvalue.trlpadding  = 0; % avoid filter edge artefacts by setting to negative
-cfg.artfctdef.zvalue.fltpadding  = 0;
-cfg.artfctdef.zvalue.artpadding  = 0.05; % go a bit to the sides of blinks
-
-% algorithmic parameters
-cfg.artfctdef.zvalue.bpfilter   = 'no';
-% cfg.artfctdef.zvalue.bpfilttype = 'but';
-% cfg.artfctdef.zvalue.bpfreq     = [1 15];
-% cfg.artfctdef.zvalue.bpfiltord  = 2;
-% cfg.artfctdef.zvalue.hilbert    = 'yes';
-
-% set cutoff
-cfg.artfctdef.zvalue.cutoff     = 4; % to detect all blinks, be strict
-cfg.artfctdef.zvalue.interactive = 'no';
-[~, artifact_eog]               = ft_artifact_zvalue(cfg, data);
-artifact_eogVertical = artifact_eog;
-
-
-
-cfg                             = [];
-cfg.artfctdef.reject            = 'partial';
-cfg.artfctdef.eog.artifact      = artifact_eogVertical;
-
-%plot the blink rate vertical??
-cfg=[];
-cfg.channel = 'UADC004'; % UADC004 if eyelink is present
-blinks = ft_selectdata(cfg,data);
-
-
-
-%If there is no variance in the data then it is probably because the
-%eyelink was not working for that session.
-if var(blinks.trial{:})<0.01 %No eyelink
-  %raise error
-  msg='There is no Eylink data';
-  error(msg);
-end
-subplot(2,3,cnt); cnt = cnt + 1;
-plot(blinks.trial{:})
-axis tight; axis square; box off;
-title('Blink rate 4')
-% reject blinks only when they occur between fix and stim offset
-%crittoilim = [ data.trialinfo(:,2) - data.trialinfo(:,1) - 0.4*data.fsample ...
-%    data.trialinfo(:,5) - data.trialinfo(:,1) + 0.8*data.fsample]  / data.fsample;
-%cfg.artfctdef.crittoilim        = crittoilim;
-%data                            = ft_rejectartifact(cfg, data);
-%%
-% ==================================================================
-% 3. REMOVE TRIALS WITH SACCADES (only during beginning of trial)
+% 3. Identify blinks (only during beginning of trial)
 % Remove trials with (horizontal) saccades (EOGH). Use the same settings as
 % for the EOGV-based blinks detection. The z-threshold can be set a bit higher
 % (z = [4 6]). Reject all trials that contain saccades before going further.
 % ==================================================================
+cfg                              = [];
+cfg.channel                      = {'UADC003'};
+datUADC                          = ft_selectdata(cfg,data)
+
+cfg          = [];
+cfg.hpfilter = 'yes';
+cfg.channel   ={'UADC003'};
+cfg.hpfreq   = 2;
+filtereddatUADC = ft_preprocessing(cfg,datUADC);
+
+
+figure(1),clf
+for currT = 200:200
+  subplot(2,1,1)
+  hold on
+  plot(datUADC.trial{currT})
+  subplot(2,1,2)
+  hold on
+  plot(filtereddatUADC.trial{currT})
+end
+saveas(gca,'testUADC.png','png')
 
 cfg                              = [];
 cfg.continuous                   = 'yes'; % data has been epoched
@@ -301,24 +273,6 @@ set(gca, 'xtick', [10 50 100], 'tickdir', 'out');
 %sampleinfo=sampleinfo-sampleinfo;
 sampleinfo = data.sampleinfo
 [ data ] = delete_artifact_Numbers(artifact_Muscle, data, sampleinfo);
-
-
-%%
-%Finally resample the data
-cfg3.resample = 'yes';
-cfg3.fsample = 1200;
-cfg3.resamplefs = 500;
-cfg3.detrend = 'no';
-
-data = ft_resampledata(cfg3,data);
-
-
-%%
-%Do a highpass filter go get rid of all frequencies below 2Hz
-cfg          = [];
-cfg.hpfilter = 'yes';
-cfg.hpfreq   = 2;
-data = ft_preprocessing(cfg,data);
 
 %%
 %Change folder and save approapriate data + figures
