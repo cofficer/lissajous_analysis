@@ -49,9 +49,9 @@ data = ft_resampledata(cfg3,data);
 %Highpass filter to get rid of all frequencies below 2Hz
 cfg          = [];
 cfg.hpfilter = 'yes';
-cfg.channel   ={'MEG'};
+cfg.channel  = {'MEG'};
 cfg.hpfreq   = 2;
-data = ft_preprocessing(cfg,data);
+data         = ft_preprocessing(cfg,data);
 
 %%
 % plot a quick power spectrum
@@ -99,11 +99,16 @@ idx_blink = find(ismember(data.label,{'UADC003'})==1);
 
 %Identify blinks... succumed to a for loop...
 for itrials = 1:length(data.trial)
- 
+
     data.trial{itrials}(idx_blink,:) = abs(data.trial{itrials}(idx_blink,:));
-    
+
 end
 
+%plot one eyelink trial to check for weird filter artifacts.
+cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/')
+figure(1),clf
+plot(data.trial{200}(idx_blink,:))
+saveas(gca,'testing.png','png')
 
 cfg                              = [];
 cfg.continuous                   = 'yes'; % data has been epoched
@@ -141,22 +146,22 @@ cfg=[];
 cfg.channel = 'UADC003'; %UADC003 UADC004 if eyelink is present
 blinks = ft_selectdata(cfg,data);
 
-%Could reduce blinks data to only trials with blinks. 
+%Could reduce blinks data to only trials with blinks.
 %Identify blinks... succumed to a for loop...
 iart = 1;
 for itrials = 1:length(data.trial)
- 
-    %Compare the samples identified by the artifact detection and the 
-    %samples of each trial to identify the trial with artifact. 
+
+    %Compare the samples identified by the artifact detection and the
+    %samples of each trial to identify the trial with artifact.
     data.cfg
     cfgart.artfctdef.zvalue.artifact
-    
+
     data_sample = cfgart.artfctdef.zvalue.trl(itrials,1:2);
     arti_sample = cfgart.artfctdef.zvalue.artifact(iart);
-    
-    
-    
-    
+
+
+
+
 end
 
 subplot(2,3,cnt); cnt = cnt + 1;
