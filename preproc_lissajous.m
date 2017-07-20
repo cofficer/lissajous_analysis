@@ -44,6 +44,10 @@ cfg3.detrend = 'no';
 
 data = ft_resampledata(cfg3,data);
 
+%Get all data except for the MEG.
+cfg          = [];
+cfg.channel  = {'all','-MEG'};
+dataNoMEG    = ft_selectdata(cfg,data);
 
 %%
 %Highpass filter to get rid of all frequencies below 2Hz
@@ -95,19 +99,19 @@ axis tight; box off;
 % ==================================================================
 
 %find pupil index.
-idx_blink = find(ismember(data.label,{'UADC003'})==1);
+idx_blink = find(ismember(dataNoMEG.label,{'UADC003'})==1);
 
 %Identify blinks... succumed to a for loop...
-for itrials = 1:length(data.trial)
+for itrials = 1:length(dataNoMEG.trial)
 
-    data.trial{itrials}(idx_blink,:) = abs(data.trial{itrials}(idx_blink,:));
+    dataNoMEG.trial{itrials}(idx_blink,:) = abs(dataNoMEG.trial{itrials}(idx_blink,:));
 
 end
 
 %plot one eyelink trial to check for weird filter artifacts.
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/')
 figure(1),clf
-plot(data.trial{200}(idx_blink,:))
+plot(dataNoMEG.trial{200}(idx_blink,:))
 saveas(gca,'testing.png','png')
 
 cfg                              = [];
@@ -126,8 +130,8 @@ cfg.artfctdef.zvalue.bpfilter   = 'no';
 
 % set cutoff
 cfg.artfctdef.zvalue.cutoff     = 4;
-cfg.artfctdef.zvalue.interactive = 'yes';
-[cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, data);
+cfg.artfctdef.zvalue.interactive = 'no';
+[cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, dataNoMEG);
 
 artifact_eogHorizontal = artifact_eog;
 
@@ -144,31 +148,31 @@ cfg.artfctdef.eog.artifact      = artifact_eogHorizontal;
 %plot the blink rate horizontal??
 cfg=[];
 cfg.channel = 'UADC003'; %UADC003 UADC004 if eyelink is present
-blinks = ft_selectdata(cfg,data);
+blinks = ft_selectdata(cfg,dataNoMEG);
 
 %Could reduce blinks data to only trials with blinks.
 %Identify blinks... succumed to a for loop...
-iart = 1;
-for itrials = 1:length(data.trial)
+for iart = 1:length(cfgart.artfctdef.zvalue.artifact)
 
     %Compare the samples identified by the artifact detection and the
     %samples of each trial to identify the trial with artifact.
-    data.cfg
-    cfgart.artfctdef.zvalue.artifact
 
-    data_sample = cfgart.artfctdef.zvalue.trl(itrials,1:2);
-    arti_sample = cfgart.artfctdef.zvalue.artifact(iart);
+    artifactTrl(iart) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2250);
 
-
-
+    %There should be some kind of modulus to use here to find in which interval of 2250
+    %the artifact sample is contained within
+    avgBlinks(iart,:) = blinks.trial{artifactTrl(iart)};
 
 end
 
 subplot(2,3,cnt); cnt = cnt + 1;
-plot(blinks.trial{:})
+
+figure(1),clf
+%plot(mean(avgBlinks,1))
+plot((avgBlinks(10,:)))
 axis tight; axis square; box off;
 title('Blink rate 3')
-
+saveas(gca,'testing.png','png')
 %%
 % ==================================================================
 % 4. REMOVE TRIALS WITH JUMPS
