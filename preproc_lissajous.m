@@ -108,12 +108,6 @@ for itrials = 1:length(dataNoMEG.trial)
 
 end
 
-%plot one eyelink trial to check for weird filter artifacts.
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/')
-figure(1),clf
-plot(dataNoMEG.trial{200}(idx_blink,:))
-saveas(gca,'testing.png','png')
-
 cfg                              = [];
 cfg.continuous                   = 'yes'; % data has been epoched
 
@@ -157,7 +151,7 @@ for iart = 1:length(cfgart.artfctdef.zvalue.artifact)
     %Compare the samples identified by the artifact detection and the
     %samples of each trial to identify the trial with artifact.
 
-    artifactTrl(iart) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2250);
+    artifactTrl(iart) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2250)+1;
 
     %There should be some kind of modulus to use here to find in which interval of 2250
     %the artifact sample is contained within
@@ -166,10 +160,9 @@ for iart = 1:length(cfgart.artfctdef.zvalue.artifact)
 end
 
 subplot(2,3,cnt); cnt = cnt + 1;
-
-figure(1),clf
-%plot(mean(avgBlinks,1))
-plot((avgBlinks(10,:)))
+%figure(1),clf
+plot(mean(avgBlinks,1))
+%plot(avgBlinks(:,:)')
 axis tight; axis square; box off;
 title('Blink rate 3')
 saveas(gca,'testing.png','png')
