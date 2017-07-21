@@ -29,7 +29,6 @@ runcfg.execute         = 'preproc'; %preproc, parallel, findsquid, check_nSensor
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos/resting')
 
 
 %Execute jobs on the torque

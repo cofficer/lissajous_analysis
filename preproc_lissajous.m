@@ -49,13 +49,11 @@ cfg          = [];
 cfg.channel  = {'all','-MEG'};
 dataNoMEG    = ft_selectdata(cfg,data);
 
-%%
-%Highpass filter to get rid of all frequencies below 2Hz
+%Get all MEG.
 cfg          = [];
-cfg.hpfilter = 'yes';
 cfg.channel  = {'MEG'};
-cfg.hpfreq   = 2;
-data         = ft_preprocessing(cfg,data);
+data    = ft_selectdata(cfg,data);
+%%
 
 %%
 % plot a quick power spectrum
@@ -85,7 +83,7 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos/resting/preprocessed'
 
 
 % compute head rotation wrt first trial
-cc_rel = computeHeadRotation(data);
+cc_rel = computeHeadRotation(dataNoMEG);
 % plot the rotation of the head
 subplot(2,3,cnt); cnt = cnt + 1;
 plot(cc_rel); ylabel('HeadM');
@@ -101,7 +99,7 @@ axis tight; box off;
 %find pupil index.
 idx_blink = find(ismember(dataNoMEG.label,{'UADC003'})==1);
 
-%Identify blinks... succumed to a for loop...
+%Take the absolute of the blinks to make identification easier with zscoring.
 for itrials = 1:length(dataNoMEG.trial)
 
     dataNoMEG.trial{itrials}(idx_blink,:) = abs(dataNoMEG.trial{itrials}(idx_blink,:));
@@ -165,7 +163,7 @@ plot(mean(avgBlinks,1))
 %plot(avgBlinks(:,:)')
 axis tight; axis square; box off;
 title('Blink rate 3')
-saveas(gca,'testing.png','png')
+%saveas(gca,'testing.png','png')
 %%
 % ==================================================================
 % 4. REMOVE TRIALS WITH JUMPS
@@ -175,8 +173,9 @@ saveas(gca,'testing.png','png')
 % in the intercepts of the fitted lines (using Grubb?s test for outliers).
 % ==================================================================
 
-%call function which calculates all jumps
-channelJump=findSquidJumps(data,dsfile(61:63));
+%call function which calculates all jumps. Instead of only the channel I also need the
+%trial...
+[channelJump,trialnum]=findSquidJumps(data,dsfile(1:3));
 artifact_Jump = channelJump;
 subplot(2,3,cnt); cnt = cnt + 1;
 
@@ -184,7 +183,7 @@ subplot(2,3,cnt); cnt = cnt + 1;
 if ~isempty(channelJump)
   %subplot...
   for ijump = 1:length(channelJump)
-    plot(data.trial{1}( ismember(data.label,channelJump{ijump}),:))
+    plot(data.trial{trialnum(ijump)}( ismember(data.label,channelJump{ijump}),:))
     hold on
   end
 else
@@ -275,11 +274,18 @@ set(gca, 'xtick', [10 50 100], 'tickdir', 'out');
 sampleinfo = data.sampleinfo
 [ data ] = delete_artifact_Numbers(artifact_Muscle, data, sampleinfo);
 
+%Highpass filter to get rid of all frequencies below 2Hz
+cfg          = [];
+cfg.hpfilter = 'yes';
+cfg.channel  = {'MEG'};
+cfg.hpfreq   = 2;
+data         = ft_preprocessing(cfg,data);
+
 %%
 %Change folder and save approapriate data + figures
 lisdir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/';
 cd(lisdir)
-name = sprintf('%sP%s/',lisdir,dsfile(62:63));
+name = sprintf('%sP%s/',lisdir,dsfile(1:3));
 
 %If the folder does not already exist, create it.
 if 7==exist(name,'dir')
@@ -289,16 +295,16 @@ else
   cd(name)
 end
 
-filestore=sprintf('preproc%s.mat',dsfile(end-8:end-4));
+filestore=sprintf('preproc%s.mat',dsfile(1:3));
 save(filestore,'data')
 
 %Save the artifacts
-artstore=sprintf('artifacts%s.mat',dsfile(end-8:end-4));
+artstore=sprintf('artifacts%s.mat',dsfile(1:3));
 
 save(artstore,'artifact_eogVertical','artifact_eogHorizontal','artifact_Muscle','artifact_Jump') %Jumpos?
 
 %save the invisible figure
-figurestore=sprintf('Overview%s.png',dsfile(end-8:end-4));
+figurestore=sprintf('Overview%s.png',dsfile(1:3));
 saveas(gca,figurestore,'png')
 
 end
