@@ -122,7 +122,7 @@ cfg.artfctdef.zvalue.bpfilter   = 'no';
 
 % set cutoff
 cfg.artfctdef.zvalue.cutoff     = 4;
-cfg.artfctdef.zvalue.interactive = 'no';
+cfg.artfctdef.zvalue.interactive = 'yes';
 [cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, dataNoMEG);
 
 artifact_eogHorizontal = artifact_eog;
@@ -236,7 +236,7 @@ cfg.artfctdef.zvalue.channel     = {'MEG'}; % make sure there are no NaNs
 cfg.artfctdef.zvalue.trlpadding  = 0;
 cfg.artfctdef.zvalue.fltpadding  = 0; % 0.2; - this crashes ft_artifact_zvalue!
 cfg.artfctdef.zvalue.artpadding  = 0.1;
-cfg.artfctdef.zvalue.interactive = 'no';
+cfg.artfctdef.zvalue.interactive = 'yes';
 
 % algorithmic parameters
 cfg.artfctdef.zvalue.bpfilter    = 'yes';
@@ -251,7 +251,7 @@ cfg.artfctdef.zvalue.cutoff      = 30;
 [~, artifact_Muscle]             = ft_artifact_zvalue(cfg, data);
 
 cfg                              = [];
-cfg.artfctdef.reject             = 'partial';
+cfg.artfctdef.reject             = 'complete';
 cfg.artfctdef.muscle.artifact    = artifact_Muscle;
 
 %
@@ -271,7 +271,7 @@ set(gca, 'xtick', [10 50 100], 'tickdir', 'out');
 %Make sampleinfo 0 because then artifacts are no longer added by the
 %sampleinfo from before
 %sampleinfo=sampleinfo-sampleinfo;
-sampleinfo = data.sampleinfo
+sampleinfo = data.sampleinfo;
 [ data ] = delete_artifact_Numbers(artifact_Muscle, data, sampleinfo);
 
 %Highpass filter to get rid of all frequencies below 2Hz
@@ -301,7 +301,7 @@ save(filestore,'data')
 %Save the artifacts
 artstore=sprintf('artifacts%s.mat',dsfile(1:3));
 
-save(artstore,'artifact_eogVertical','artifact_eogHorizontal','artifact_Muscle','artifact_Jump') %Jumpos?
+save(artstore,'artifact_eogHorizontal','artifact_Muscle','artifact_Jump') %Jumpos?
 
 %save the invisible figure
 figurestore=sprintf('Overview%s.png',dsfile(1:3));
