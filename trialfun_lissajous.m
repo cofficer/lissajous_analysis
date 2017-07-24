@@ -98,9 +98,9 @@ for i=1:length(trgvalIndex)
             trl(trlN,9)=event(trgvalIndex(i)).value;
             trl(trlN,2)=event(trgvalIndex(i)).sample;
             trlN=trlN+1;
-        case {trigger.block_start}
-            trl(trlN,12)=event(trgvalIndex(i)).sample-stimSample;
-            trl(trlN,11)=event(trgvalIndex(i)).value;
+  %      case {trigger.block_start}
+  %          trl(trlN,12)=event(trgvalIndex(i)).sample-stimSample;
+  %          trl(trlN,11)=event(trgvalIndex(i)).value;
             %Adding 2.4s to include more data after feedback.
             %trl(trlN,2)=event(trgvalIndex(i)).sample+endtrl*fsr;
 
