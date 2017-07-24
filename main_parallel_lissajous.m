@@ -6,7 +6,8 @@
 clear all
 %%
 %Change the folder to where eyelink data is contained
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/')
+mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/';
+cd(mainDir)
 
 %Store all the seperate data files
 restingpaths = dir('P*');
@@ -16,7 +17,8 @@ restingpaths = dir('P*');
 for icfg = 1:length(restingpaths)
 
     cfgin{icfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
-
+    fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
+    cfgin{icfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
     cfgin{icfg}.blocktype               = 'trial'; % trial or continuous.
 

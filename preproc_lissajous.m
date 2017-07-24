@@ -25,7 +25,7 @@ end
 %Load data into trial-based format.
 cfg                         = [];
 cfg.dataset                 = dsfile;
-cfg.trialfun                = 'ft_trialfun_general'; % this is the default
+cfg.trialfun                = 'trialfun_lissajous'; % this is the default
 cfg.trialdef.eventtype      = 'UPPT001';
 cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
 cfg.trialdef.prestim        = 2.25; % in seconds
@@ -122,7 +122,7 @@ cfg.artfctdef.zvalue.bpfilter   = 'no';
 
 % set cutoff
 cfg.artfctdef.zvalue.cutoff     = 4;
-cfg.artfctdef.zvalue.interactive = 'yes';
+cfg.artfctdef.zvalue.interactive = 'no';
 [cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, dataNoMEG);
 
 artifact_eogHorizontal = artifact_eog;
@@ -149,13 +149,22 @@ for iart = 1:length(cfgart.artfctdef.zvalue.artifact)
     %Compare the samples identified by the artifact detection and the
     %samples of each trial to identify the trial with artifact.
 
-    artifactTrl(iart) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2250)+1;
+    artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2250)+1;
+
+    artifactTrl(iart,2) = floor(cfgart.artfctdef.zvalue.artifact(iart,2)/2250)+1;
 
     %There should be some kind of modulus to use here to find in which interval of 2250
     %the artifact sample is contained within
     avgBlinks(iart,:) = blinks.trial{artifactTrl(iart)};
 
 end
+
+%Add the samples info to the trial numbers.
+artifactTrl(:,3:4) = cfgart.artfctdef.zvalue.artifact;
+
+%Remove the blinks but inserting the average values of current trial or NaNs
+sampleinfo = data.sampleinfo;
+[ data ] = delete_artifact_Lissajous(artifactTrl, data);
 
 subplot(2,3,cnt); cnt = cnt + 1;
 %figure(1),clf
@@ -271,8 +280,6 @@ set(gca, 'xtick', [10 50 100], 'tickdir', 'out');
 %Make sampleinfo 0 because then artifacts are no longer added by the
 %sampleinfo from before
 %sampleinfo=sampleinfo-sampleinfo;
-sampleinfo = data.sampleinfo;
-[ data ] = delete_artifact_Numbers(artifact_Muscle, data, sampleinfo);
 
 %Highpass filter to get rid of all frequencies below 2Hz
 cfg          = [];
@@ -285,7 +292,7 @@ data         = ft_preprocessing(cfg,data);
 %Change folder and save approapriate data + figures
 lisdir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/';
 cd(lisdir)
-name = sprintf('%sP%s/',lisdir,dsfile(1:3));
+name = sprintf('%s%s/',lisdir,dsfile(1:3));
 
 %If the folder does not already exist, create it.
 if 7==exist(name,'dir')
