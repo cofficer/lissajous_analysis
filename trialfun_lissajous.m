@@ -28,7 +28,7 @@ trigger.RS_end         = 3;        % end of resting state block
 %All triggers
 trigAll     =[64,48,52,40,32,23,21,22,20,18,16,11,10];
 
-hdr    = cfgin.fullpath; %cfg.headerfile;
+hdr    = cfgin.headerfile; %cfg.headerfile;
 fsr    = '1200'; %cfg.fsample;         % in Hz
 begtrl = 1; % in seconds cfg.trialdef.prestim
 endtrl = 2; % in seconds cfg.trialdef.poststim
