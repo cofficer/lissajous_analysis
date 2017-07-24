@@ -75,7 +75,7 @@ for i=1:length(trgvalIndex)
         case trigger.stim_start ;
             %trl(trlN,1)=trlbeg;
             stimSample = event(trgvalIndex(i)).sample;
-            trl(trlN,4)=event(trgvalIndex(i)).sample;
+            trl(trlN,4)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,3)=trigger.stim_start;
             trl(trlN,13)=trlN;
             trloff=0;
