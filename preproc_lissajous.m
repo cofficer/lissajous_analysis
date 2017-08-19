@@ -17,7 +17,7 @@ datasets = dir('*ds');
 
 if cfgin.blocktype == 'trial'
   dsfile=datasets(1).name;
-elseif cfgin.blocktype == 'trial'
+elseif cfgin.blocktype == 'continuous'
   %Choosing the second dataset is arbitrary.
   dsfile=datasets(2).name;
 end
@@ -35,6 +35,15 @@ cfg.channel    ={'all'};
 cfg.continuous = 'yes';
 data = ft_preprocessing(cfg);
 
+
+%select the data around the self-occlusions
+cfg              = [];
+begsample        = 1;
+endsample        = 4.5*1200;
+cfg.begsample = ones(1,length(data.trial))';
+cfg.endsample = ones(1,length(data.trial))'*endsample;
+
+data = ft_redefinetrial(cfg,data);
 
 %Resample the data
 cfg3.resample = 'yes';
@@ -77,7 +86,7 @@ loglog(freq.freq, mean(freq.powspctrm), 'k', 'linewidth', 1);
 axis tight; axis square; box off;
 set(gca, 'xtick', [10 50 100], 'tickdir', 'out', 'xticklabel', []);
 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos/resting/preprocessed')
+cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/')
 
 %%
 
@@ -143,7 +152,7 @@ cfg.channel = 'UADC003'; %UADC003 UADC004 if eyelink is present
 blinks = ft_selectdata(cfg,dataNoMEG);
 
 %Could reduce blinks data to only trials with blinks.
-%Identify blinks... succumed to a for loop...
+%Identify blinks... 
 for iart = 1:length(cfgart.artfctdef.zvalue.artifact)
 
     %Compare the samples identified by the artifact detection and the
@@ -160,11 +169,23 @@ for iart = 1:length(cfgart.artfctdef.zvalue.artifact)
 end
 
 %Add the samples info to the trial numbers.
-artifactTrl(:,3:4) = cfgart.artfctdef.zvalue.artifact;
+%artifactTrl(:,3:4) = cfgart.artfctdef.zvalue.artifact;
 
-%Remove the blinks but inserting the average values of current trial or NaNs
-sampleinfo = data.sampleinfo;
-[ data ] = delete_artifact_Lissajous(artifactTrl, data);
+%Remove the blinks but inserting NaNs
+artfctdef.eog.artifact=cfgart.artfctdef.zvalue.artifact;
+data.sampleinfo = data.cfg.previous.previous.previous.trl(:,1:2);
+%data = insertNan(artfctdef,data);
+
+%reject trial with blinks
+cfg          = [];
+removeTrials = unique([artifactTrl(:,1);artifactTrl(:,2)]);
+allTrials    = ones(1,length(data.trial));
+allTrials(removeTrials)    = 0; 
+cfg.trials   = logical(allTrials');
+data         = ft_redefinetrial(cfg, data);
+
+
+
 
 subplot(2,3,cnt); cnt = cnt + 1;
 %figure(1),clf
@@ -184,20 +205,20 @@ title('Blink rate 3')
 
 %call function which calculates all jumps. Instead of only the channel I also need the
 %trial...
-[channelJump,trialnum]=findSquidJumps(data,dsfile(1:3));
-artifact_Jump = channelJump;
-subplot(2,3,cnt); cnt = cnt + 1;
-
-%If there are jumps, plot them.
-if ~isempty(channelJump)
-  %subplot...
-  for ijump = 1:length(channelJump)
-    plot(data.trial{trialnum(ijump)}( ismember(data.label,channelJump{ijump}),:))
-    hold on
-  end
-else
-  title('No jumps')
-end
+%[channelJump,trialnum]=findSquidJumps(data,dsfile(1:3));
+% artifact_Jump = channelJump;
+% subplot(2,3,cnt); cnt = cnt + 1;
+% 
+% %If there are jumps, plot them.
+% if ~isempty(channelJump)
+%   %subplot...
+%   for ijump = 1:length(channelJump)
+%     plot(data.trial{trialnum(ijump)}( ismember(data.label,channelJump{ijump}),:))
+%     hold on
+%   end
+% else
+%   title('No jumps')
+% end
 
 % if ~isempty(idx_jump)
 
@@ -245,7 +266,7 @@ cfg.artfctdef.zvalue.channel     = {'MEG'}; % make sure there are no NaNs
 cfg.artfctdef.zvalue.trlpadding  = 0;
 cfg.artfctdef.zvalue.fltpadding  = 0; % 0.2; - this crashes ft_artifact_zvalue!
 cfg.artfctdef.zvalue.artpadding  = 0.1;
-cfg.artfctdef.zvalue.interactive = 'yes';
+cfg.artfctdef.zvalue.interactive = 'no';
 
 % algorithmic parameters
 cfg.artfctdef.zvalue.bpfilter    = 'yes';
@@ -262,7 +283,7 @@ cfg.artfctdef.zvalue.cutoff      = 30;
 cfg                              = [];
 cfg.artfctdef.reject             = 'complete';
 cfg.artfctdef.muscle.artifact    = artifact_Muscle;
-
+data                             = ft_rejectartifact(cfg,data);
 %
 % % plot final power spectrum
 freq            = ft_freqanalysis(cfgfreq, data);
@@ -290,7 +311,7 @@ data         = ft_preprocessing(cfg,data);
 
 %%
 %Change folder and save approapriate data + figures
-lisdir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/';
+lisdir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/';
 cd(lisdir)
 name = sprintf('%s%s/',lisdir,dsfile(1:3));
 
@@ -308,7 +329,7 @@ save(filestore,'data')
 %Save the artifacts
 artstore=sprintf('artifacts%s.mat',dsfile(1:3));
 
-save(artstore,'artifact_eogHorizontal','artifact_Muscle','artifact_Jump') %Jumpos?
+save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
 
 %save the invisible figure
 figurestore=sprintf('Overview%s.png',dsfile(1:3));
