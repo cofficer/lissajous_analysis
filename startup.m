@@ -4,7 +4,7 @@
 %Set paths
 warning off
 
-whichFieldtrip = '2017-2';
+whichFieldtrip = '2017-3';%'2017-2';
 
 
 if strcmp(whichFieldtrip,'2015')
@@ -42,6 +42,16 @@ elseif strcmp(whichFieldtrip,'2017-2')
     addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/code/analysis'))
     addpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/fieldtrip-20170528/')
     addpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/fieldtrip-20170528/qsub')
+    addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous'))
+    addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos'))
+    ft_defaults
+    
+elseif strcmp(whichFieldtrip,'2017-3')
+
+    
+    addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/code/analysis'))
+    addpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/fieldtrip-20170802/')
+    addpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/fieldtrip-20170802/qsub')
     addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous'))
     addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos'))
     ft_defaults

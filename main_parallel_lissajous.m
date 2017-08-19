@@ -11,7 +11,7 @@ cd(mainDir)
 
 %Store all the seperate data files
 restingpaths = dir('P*');
-
+restingpaths = restingpaths(1:end);
 %Loop all data files into seperate jobs
 
 for icfg = 1:length(restingpaths)
@@ -22,12 +22,12 @@ for icfg = 1:length(restingpaths)
     %Define which blocks to run.
     cfgin{icfg}.blocktype               = 'trial'; % trial or continuous.
 
-    %cfgin=cfgin{23}
+    %cfgin=cfgin{21}
 end
 
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'preproc'; %preproc, parallel, findsquid, check_nSensors
+runcfg.execute         = 'freq'; %preproc, parallel, findsquid, check_nSensors
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -44,10 +44,17 @@ switch runcfg.execute
         stack = 1;%round(length(cfg1)/nnodes);
         qsubcellfun(@preproc_lissajous, cfgin, 'compile', 'no', ...
             'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+    case 'freq'
+        %restingPreprocNumbers(cfgin{1})
+        %cellfun(@restingPreprocNumbers, cfgin);
+        nnodes = 1;%64; % how many licenses?
+        stack = 1;%round(length(cfg1)/nnodes);
+        qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
+            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
 
 
 
-
+end
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
