@@ -5,7 +5,7 @@
 warning off
 
 whichFieldtrip = '2017-3';%'2017-2';
-
+ft_hastoolbox('brewermap', 1);
 
 if strcmp(whichFieldtrip,'2015')
 
@@ -45,7 +45,7 @@ elseif strcmp(whichFieldtrip,'2017-2')
     addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous'))
     addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos'))
     ft_defaults
-    
+
 elseif strcmp(whichFieldtrip,'2017-3')
 
 

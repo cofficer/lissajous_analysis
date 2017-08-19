@@ -3,9 +3,9 @@ function [avgFreq] = freq_average(cfgin)
 
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/')
 
-freqrange  = 'high';
+freqrange  = 'low';
 doplot     = 1;
-compSwitch = 0;
+compSwitch = 1;
 freqpath   = dir(sprintf('*%s*',freqrange));
 
 
@@ -38,11 +38,11 @@ for ipart = 1:length(freqpath)
       cfg.trials = logical(allnoswch);
       freq  = ft_selectdata(cfg,freq);
       %baseline before substraction
-      cfg = [];
-      cfg.baseline = [0.5 1];
-      cfg.baselinetype = 'relative';
-      freq = ft_freqbaseline(cfg,freq);
-      freqS = ft_freqbaseline(cfg,freqS);
+      %cfg = [];
+      %cfg.baseline = [0.5 1];
+      %cfg.baselinetype = 'relative';
+      %freq = ft_freqbaseline(cfg,freq);
+      %freqS = ft_freqbaseline(cfg,freqS);
       freq.powspctrm = (freqS.powspctrm-freq.powspctrm);
     else
 
@@ -87,7 +87,7 @@ if doplot
   cfg.baselinetype = 'relative';
   cfg.masktype     = 'saturation';
   cfg.zlim         = [0.9 1.1];
-  cfg.ylim         = [36 120];
+  cfg.ylim         = [12 35];
   cfg.layout       = 'CTF275_helmet.lay';
   cfg.xlim         = [0.5 4];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
   cfg.channel      = freq.label(idx_occ);
@@ -100,14 +100,14 @@ if doplot
 end
 
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures')
-saveas(gca,'gammaMultiTopo24-4.png','png')
+saveas(gca,'alphaMultiTopo24-2.png','png')
 
 %%
 % for the multiple plots also
 cfg = [];
 cfg.xlim = [0.6:0.35:4];
-cfg.ylim = [64 100];
-cfg.zlim = [0.95 1.05];
+cfg.ylim = [7 12];
+cfg.zlim = [0.7 1.3];
 cfg.baseline = [0.5 1];
 cfg.baselinetype = 'relative';
 cfg.masktype     = 'saturation';
