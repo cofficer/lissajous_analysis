@@ -33,14 +33,14 @@ cfg.pad         = 7;
 cfg.method      = 'mtmconvol';
 cfg.trigger     = 'selfoccl';
 cfg.channel     ='MEG'; %
-cfg.trials      = 'all'; 
+cfg.trials      = 'all';
 cfg.freqanalysistype = 'high';
 
 
 switch cfg.freqanalysistype
         case 'high'
             cfg.taper = 'dpss'; % high frequency-optimized analysis (smooth)
-            cfg.keeptrials  = 'no';
+            cfg.keeptrials  = 'yes';
             cfg.foi = 36:2:150;
             cfg.t_ftimwin = ones(length(cfg.foi),1) .* 0.5;
             cfg.tapsmofrq = ones(length(cfg.foi),1) .* 8;
@@ -61,23 +61,23 @@ switch cfg.freqanalysistype
 end
 
 
-%Select the step sizes. 
+%Select the step sizes.
 if strcmp(cfg.trigger,'baseline')
-    
+
     cfg.toi = -0.50:0.05:0;
-    
+
 elseif strcmp(cfg.trigger,'selfoccl')
-    
+
     cfg.toi = 0.5:0.05:4;
-    
+
 elseif strcmp(cfg.trigger,'resp')
-    
+
     cfg.toi = -0.60:0.05:0;            %still to figure
-    
+
 elseif strcmp(cfg.trigger,'cue')
-    
+
     cfg.toi = -0.5:0.05:0.5;            %still to figure
-    
+
 end
 
 
@@ -93,7 +93,7 @@ cfgC.combinemethod='sum';
 freq=ft_combineplanar(cfgC,freq);
 
 
-% % 
+% %
 % %plot TFR
 %  cfg = [];
 %  cfg.baseline = [0.5 1];
