@@ -41,4 +41,4 @@ runlength=diff(find(diff(resp_all)~=0));
 
 saveas(gca,'hist.png','png')
 
-compute_distmoments(runlength)
+[co_var,skew_var]=compute_distmoments(runlength)

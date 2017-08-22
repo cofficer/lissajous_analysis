@@ -17,7 +17,9 @@ end
 
 co_variance = (std(dist_gam)/mean(dist_gam))
 
-skewness_var = skewness(dist_gam)
+skewns = @(x) (sum((x-mean(x)).^3)./length(x)) ./ (var(x,1).^1.5);
+
+skewness_var = skewns(dist_gam);
 
 
 end
