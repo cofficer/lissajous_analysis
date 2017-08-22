@@ -86,8 +86,8 @@ if doplot
   cfg.baseline = [0.5 1];
   cfg.baselinetype = 'relative';
   cfg.masktype     = 'saturation';
-  cfg.zlim         = [0.9 1.1];
-  cfg.ylim         = [12 35];
+  cfg.zlim         = [0.95 1.05];
+  cfg.ylim         = [64 120];
   cfg.layout       = 'CTF275_helmet.lay';
   cfg.xlim         = [0.5 4];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
   cfg.channel      = freq.label(idx_occ);
@@ -95,12 +95,13 @@ if doplot
   ft_singleplotTFR(cfg,freq);
   %ft_multiplotTFR(cfg,freq)
   %ft_topoplotTFR(cfg,freq)
+  %ft_hastoolbox('brewermap', 1);
   colormap(flipud(brewermap(64,'RdBu')))
   colorbar
 end
 
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures')
-saveas(gca,'alphaMultiTopo24-2.png','png')
+saveas(gca,'gammaSingleTFR24-64-120-2.png','png')
 
 %%
 % for the multiple plots also
