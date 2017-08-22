@@ -1,4 +1,4 @@
-function [co_variance, skewness] = compute_distmoments(dist_gam)
+function [co_variance, skewness_var] = compute_distmoments(dist_gam)
 %Input individual distribution of lissajous during the continuous block
 %Important to start each block as a new distribution, to reduce erroneous
 %heavy-tailed values if the same perceptual state is at the start and of two
