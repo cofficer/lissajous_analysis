@@ -4,9 +4,8 @@ function [co_variance, skewness] = compute_distmoments(dist_gam)
 %heavy-tailed values if the same perceptual state is at the start and of two
 %consequtive block.
 
-clear
 %Simulate a gamma distribution
-sim = 1;
+sim = 0;
 if sim
   %prob dist of gamma with a=2,b=2
   dist_pdf = gampdf(1,2,1:15);
@@ -18,11 +17,7 @@ end
 
 co_variance = (std(dist_gam)/mean(dist_gam))
 
-skewness = skewness(dist_gam)
+skewness_var = skewness(dist_gam)
 
-%plot
-figure(1),clf
-plot(dist_pdf)
-saveas(gca,'gamm.png','png')
 
 end
