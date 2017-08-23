@@ -33,7 +33,7 @@ fsr    = '1200'; %cfg.fsample;         % in Hz
 begtrl = 1; % in seconds cfg.trialdef.prestim
 endtrl = 2; % in seconds cfg.trialdef.poststim
 
-
+%'/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P21/P21_lissajous_20170224_02.ds'
 %Store the events
 
 event = ft_read_event(hdr);%'headerformat',[],'eventformat',[],'dataformat',[]
@@ -45,7 +45,7 @@ trgvalIndex = find(trgval);
 % start by selecting all events
 trgval2 = strcmp('UPPT002',{event.type}); % this should be a row vector
 trgvalIndex2 = find(trgval2);
-
+respVals = unique([event(trgvalIndex2).value]);
 %add the two indices together to get all the data.
 trgvalIndex = [trgvalIndex trgvalIndex2];
 
@@ -72,10 +72,7 @@ trlN=1;
 numSelfo=0;
 
 for i=1:length(trgvalIndex)
-    
-    
-    
-    
+
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
         case {trigger.trial_start}
@@ -87,12 +84,12 @@ for i=1:length(trgvalIndex)
             %remove the prestim defin from the sample
             trl(trlN,1)=event(trgvalIndex(i)).sample-cfgin.trialdef.prestim*1200;
             trl(trlN,9)=trlN;
-            
+
             %Number self-occlusios
             numSelfo = numSelfo+1;
-            
+
         case trigger.self_occlusion
-            
+
             %The offse of all trials should be around the occlusions
             stimSample = event(trgvalIndex(i)).sample;
             %start of trial
@@ -102,17 +99,17 @@ for i=1:length(trgvalIndex)
             %value of occlusion
             trl(trlN,4) = event(trgvalIndex(i)).value;
             %Simulus onset trial offset
-            
+
             %Trial start 2s before Stimulus onset
             trl(trlN,9)=trlN;
-            
+
             numSelfo = numSelfo+1;
-            
+
         case trigger.go_cue
             trl(trlN,5)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,6)=event(trgvalIndex(i)).value;
-            
-        case {trigger.resp_leftL,trigger.resp_rightL,trigger.resp_leftR,trigger.resp_rightR,trigger.resp_bad}
+
+        case {respVals(1),respVals(2)}
             %response triggers
             trl(trlN,7)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,8)=event(trgvalIndex(i)).value;
@@ -126,22 +123,16 @@ for i=1:length(trgvalIndex)
             %          trl(trlN,11)=event(trgvalIndex(i)).value;
             %Adding 2.4s to include more data after feedback.
             %trl(trlN,2)=event(trgvalIndex(i)).sample+endtrl*fsr;
-            
+
             %case trigger.block_end
             %    trl(trlN-1,12)=event(trgvalIndex(i)).sample-stimSample;
             %    trl(trlN-1,11)=event(trgvalIndex(i)).value;
-            
+
             %case {trigger.block_start,trigger.block_end}
             %    %trl(trlN,13)=event(trgvalIndex(i)).sample;
             %    trl(trlN,13)=event(trgvalIndex(i)).value;
-            
+
     end
 end
 
 end
-
-
-
-
-
-
