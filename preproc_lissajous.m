@@ -18,15 +18,17 @@ datasets = dir('*ds');
 if cfgin.blocktype == 'trial'
   dsfile=datasets(1).name;
   %if continuous then there will be several datasets to analyze. 
+  trldef = 'trialfun_lissajous';
 elseif cfgin.blocktype == 'continuous'
   %Choosing the second dataset is arbitrary.
   dsfile=datasets(2).name;
+  trldef = 'trialfun_lissajous_CONT';
 end
 
 %Load data into trial-based format.
 cfg                         = [];
 cfg.dataset                 = dsfile;
-cfg.trialfun                = 'trialfun_lissajous'; % this is the default
+cfg.trialfun                = trldef; % this is the default
 cfg.trialdef.eventtype      = 'UPPT001';
 cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
 cfg.trialdef.prestim        = 2.25; % in seconds
