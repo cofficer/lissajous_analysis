@@ -66,7 +66,7 @@ ntrls = sum([event(trgvalIndex).value]==trigger.self_occlusion)
 trl= zeros(sum([event(trgvalIndex).value]==trigger.self_occlusion)-2,9);%zeros(sum(trgval==goCue),numel(trigAll)+1); %Actually empty var.
 
 %Establish point of reference after each trigger==64. Counting trials.
-trlN=1;
+trlN=0;
 %Define trloff (trial offset). Need to be a running value during each
 %trial.
 numSelfo=0;
@@ -77,6 +77,7 @@ for i=1:length(trgvalIndex)
     switch event(trgvalIndex(i)).value
         case {trigger.trial_start}
 
+            trlN = trlN + 1;
             %The offset
             stimSample = event(trgvalIndex(i)).sample;
             trl(trlN,3)= stimSample;
@@ -86,10 +87,11 @@ for i=1:length(trgvalIndex)
             trl(trlN,9)=trlN;
 
             %Number self-occlusios
-            numSelfo = numSelfo+1;
+
 
         case trigger.self_occlusion
 
+            trlN = trlN + 1;
             %The offse of all trials should be around the occlusions
             stimSample = event(trgvalIndex(i)).sample;
             %start of trial
@@ -103,7 +105,7 @@ for i=1:length(trgvalIndex)
             %Trial start 2s before Stimulus onset
             trl(trlN,9)=trlN;
 
-            numSelfo = numSelfo+1;
+
 
         case trigger.go_cue
             trl(trlN,5)=event(trgvalIndex(i)).sample-stimSample;
@@ -114,7 +116,7 @@ for i=1:length(trgvalIndex)
             trl(trlN,7)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,8)=event(trgvalIndex(i)).value;
             trl(trlN,2)=event(trgvalIndex(i)).sample + cfgin.trialdef.poststim*1200;
-            trlN = trlN + 1;
+            
 
             %      case {trigger.block_start}
             %          trl(trlN,12)=event(trgvalIndex(i)).sample-stimSample;
