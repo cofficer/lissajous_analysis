@@ -63,7 +63,7 @@ trgvalIndex = sort([trgvalIndex trgvalIndex2(trgvalIndex2>trgvalIndex(2))]);
 
 ntrls = sum([event(trgvalIndex).value]==trigger.self_occlusion)
 %Create a matrix with all the relevant trigger columns + offsets etc.
-trl= zeros(sum([event(trgvalIndex).value]==trigger.self_occlusion),9);%zeros(sum(trgval==goCue),numel(trigAll)+1); %Actually empty var.
+trl= zeros(sum([event(trgvalIndex).value]==trigger.self_occlusion)-2,9);%zeros(sum(trgval==goCue),numel(trigAll)+1); %Actually empty var.
 
 %Establish point of reference after each trigger==64. Counting trials.
 trlN=1;
