@@ -17,6 +17,7 @@ datasets = dir('*ds');
 
 if cfgin.blocktype == 'trial'
   dsfile=datasets(1).name;
+  %if continuous then there will be several datasets to analyze. 
 elseif cfgin.blocktype == 'continuous'
   %Choosing the second dataset is arbitrary.
   dsfile=datasets(2).name;
@@ -152,7 +153,7 @@ cfg.channel = 'UADC003'; %UADC003 UADC004 if eyelink is present
 blinks = ft_selectdata(cfg,dataNoMEG);
 
 %Could reduce blinks data to only trials with blinks.
-%Identify blinks... 
+%Identify blinks...
 for iart = 1:length(cfgart.artfctdef.zvalue.artifact)
 
     %Compare the samples identified by the artifact detection and the
@@ -180,7 +181,7 @@ data.sampleinfo = data.cfg.previous.previous.previous.trl(:,1:2);
 cfg          = [];
 removeTrials = unique([artifactTrl(:,1);artifactTrl(:,2)]);
 allTrials    = ones(1,length(data.trial));
-allTrials(removeTrials)    = 0; 
+allTrials(removeTrials)    = 0;
 cfg.trials   = logical(allTrials');
 data         = ft_redefinetrial(cfg, data);
 
@@ -208,7 +209,7 @@ title('Blink rate 3')
 %[channelJump,trialnum]=findSquidJumps(data,dsfile(1:3));
 % artifact_Jump = channelJump;
 % subplot(2,3,cnt); cnt = cnt + 1;
-% 
+%
 % %If there are jumps, plot them.
 % if ~isempty(channelJump)
 %   %subplot...

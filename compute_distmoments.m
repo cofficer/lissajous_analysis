@@ -15,7 +15,7 @@ if sim
 
 end
 
-co_variance = (std(dist_gam)/mean(dist_gam))
+co_variance = (std(dist_gam)/mean(dist_gam));
 
 skewns = @(x) (sum((x-mean(x)).^3)./length(x)) ./ (var(x,1).^1.5);
 
