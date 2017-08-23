@@ -47,7 +47,7 @@ trgval2 = strcmp('UPPT002',{event.type}); % this should be a row vector
 trgvalIndex2 = find(trgval2);
 respVals = unique([event(trgvalIndex2).value]);
 %add the two indices together to get all the data.
-trgvalIndex = sort([trgvalIndex trgvalIndex2]);
+trgvalIndex = sort([trgvalIndex trgvalIndex2(trgvalIndex2>trgvalIndex(2))]);
 
 %trlTA.responseValue(trlTA.responseValue==228)=225;
 %trlTA.responseValue(trlTA.responseValue==226)=232;
