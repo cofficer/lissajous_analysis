@@ -47,7 +47,7 @@ trgval2 = strcmp('UPPT002',{event.type}); % this should be a row vector
 trgvalIndex2 = find(trgval2);
 respVals = unique([event(trgvalIndex2).value]);
 %add the two indices together to get all the data.
-trgvalIndex = [trgvalIndex trgvalIndex2];
+trgvalIndex = sort([trgvalIndex trgvalIndex2]);
 
 %trlTA.responseValue(trlTA.responseValue==228)=225;
 %trlTA.responseValue(trlTA.responseValue==226)=232;
@@ -115,9 +115,7 @@ for i=1:length(trgvalIndex)
             trl(trlN,8)=event(trgvalIndex(i)).value;
             trl(trlN,2)=event(trgvalIndex(i)).sample + cfgin.trialdef.poststim*1200;
             trlN = trlN + 1;
-            if trlN==257
-                aa=1;
-            end
+
             %      case {trigger.block_start}
             %          trl(trlN,12)=event(trgvalIndex(i)).sample-stimSample;
             %          trl(trlN,11)=event(trgvalIndex(i)).value;
