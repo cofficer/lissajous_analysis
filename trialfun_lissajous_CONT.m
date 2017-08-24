@@ -106,8 +106,8 @@ for i=1:length(trgvalIndex)
             trlN = trlN + 1;
             %The offset
             %find and index the upcoming trial start
-            idx_trlstart = [event(trgvalIndex(i:end)).value]==11;
-
+            idx_trlstart = find([event(trgvalIndex(i:end)).value]==11);
+           
             stimSample = event(idx_trlstart(1)).sample;
             trl(trlN,3)= stimSample;
             trl(trlN,4)= event(idx_trlstart(1)).value;
