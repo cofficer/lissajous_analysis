@@ -128,7 +128,7 @@ for i=1:length(trgvalIndex)
             %remove the prestim defin from the sample
             trl(trlN,1)=event(trgvalIndex(currTrlInd)).sample-cfgin.trialdef.prestim*1200;
             %Trial end, take the full time until next self-occlusion
-            trl(trlN,2)=event(trgvalIndex(i)).sample + cfgin.trialdef.poststim*1200;
+            trl(trlN,2)=event(trgvalIndex(currTrlInd)).sample + cfgin.trialdef.poststim*1200;
             trl(trlN,9)=trlN;
 
             %Number self-occlusios
