@@ -46,6 +46,9 @@ trgvalIndex = find(trgval);
 trgval2 = strcmp('UPPT002',{event.type}); % this should be a row vector
 trgvalIndex2 = find(trgval2);
 respVals = unique([event(trgvalIndex2).value]);
+respSamp = [event(trgvalIndex2).sample];
+
+
 %add the two indices together to get all the data.
 trgvalIndex = sort([trgvalIndex trgvalIndex2(trgvalIndex2>trgvalIndex(2))]);
 
@@ -71,11 +74,34 @@ trlN=0;
 %trial.
 numSelfo=0;
 
+%
+iplot = 0;
+if iplot
+
+  all_events = event(trgvalIndex).value;
+
+  left  = ([event(trgvalIndex2).value]==225);
+  right = ([event(trgvalIndex2).value]==232);
+
+  bpSample = [event(trgvalIndex2).sample];
+  bpVal    = [event(trgvalIndex2).value]-225;
+  bpVal(right)=1;
+  g=gramm('x',bpSample(1:100),'y',bpVal(1:100),'color',[bpVal(1:100)==1]);
+  g.geom_jitter();
+  %g.coord_flip()
+  g.draw();
+  g.facet_axes_handles.YLim = [-1 2];
+  saveas(gca,'sampleBP.png','png')
+  close
+
+end
+
+
 for i=1:length(trgvalIndex)
 
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
-        case {trigger.trial_start}
+       case {trigger.block_start}
 
             trlN = trlN + 1;
             %The offset
@@ -116,7 +142,7 @@ for i=1:length(trgvalIndex)
             trl(trlN,7)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,8)=event(trgvalIndex(i)).value;
             trl(trlN,2)=event(trgvalIndex(i)).sample + cfgin.trialdef.poststim*1200;
-            
+
 
             %      case {trigger.block_start}
             %          trl(trlN,12)=event(trgvalIndex(i)).sample-stimSample;

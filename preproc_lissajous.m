@@ -15,11 +15,11 @@ cd(dsfile)
 datasets = dir('*ds');
 
 
-if cfgin.blocktype == 'trial'
+if strcmp(cfgin.blocktype,'trial')
   dsfile=datasets(1).name;
-  %if continuous then there will be several datasets to analyze. 
+  %if continuous then there will be several datasets to analyze.
   trldef = 'trialfun_lissajous';
-elseif cfgin.blocktype == 'continuous'
+elseif strcmp(cfgin.blocktype,'continuous')
   %Choosing the second dataset is arbitrary.
   dsfile=datasets(2).name;
   trldef = 'trialfun_lissajous_CONT';
