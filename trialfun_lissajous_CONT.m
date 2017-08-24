@@ -102,17 +102,33 @@ for i=1:length(trgvalIndex)
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
        case {trigger.block_start}
-
+            
+           if trlN ~= 0
+            %Go back one trlN because the last selfOcclusion is not usable
+               trlN = trlN-1;
+           end
+              
             trlN = trlN + 1;
             %The offset
             %find and index the upcoming trial start
-            idx_trlstart = find([event(trgvalIndex(i:end)).value]==11);
            
-            stimSample = event(idx_trlstart(1)).sample;
+            %Find the start of the two blocks and dependin on if 
+            %it is the first trial or not, select the correct first 
+            %trial sample after blockstart
+            idx_bloktart = find([event(trgvalIndex).value]==1);
+            
+            if trlN == 1
+                currTrlInd   = idx_bloktart(1)+1;
+            else
+                currTrlInd   = idx_bloktart(2)+1;
+            end
+            stimSample = event(trgvalIndex(currTrlInd)).sample;
             trl(trlN,3)= stimSample;
-            trl(trlN,4)= event(idx_trlstart(1)).value;
+            trl(trlN,4)= event(trgvalIndex(currTrlInd)).value;
             %remove the prestim defin from the sample
-            trl(trlN,1)=event(idx_trlstart(1)).sample-cfgin.trialdef.prestim*1200;
+            trl(trlN,1)=event(trgvalIndex(currTrlInd)).sample-cfgin.trialdef.prestim*1200;
+            %Trial end, take the full time until next self-occlusion
+            trl(trlN,2)=event(trgvalIndex(i)).sample + cfgin.trialdef.poststim*1200;
             trl(trlN,9)=trlN;
 
             %Number self-occlusios
@@ -121,6 +137,9 @@ for i=1:length(trgvalIndex)
         case trigger.self_occlusion
 
             trlN = trlN + 1;
+            if trlN==137
+                aa=1;
+            end
             %The offse of all trials should be around the occlusions
             stimSample = event(trgvalIndex(i)).sample;
             %start of trial
@@ -129,11 +148,10 @@ for i=1:length(trgvalIndex)
             trl(trlN,3) = stimSample;
             %value of occlusion
             trl(trlN,4) = event(trgvalIndex(i)).value;
-            %Simulus onset trial offset
-
+            %Trial end, take the full time until next self-occlusion
+            trl(trlN,2)=event(trgvalIndex(i)).sample + cfgin.trialdef.poststim*1200;
             %Trial start 2s before Stimulus onset
             trl(trlN,9)=trlN;
-
 
 
         case trigger.go_cue
@@ -144,7 +162,7 @@ for i=1:length(trgvalIndex)
             %response triggers
             trl(trlN,7)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,8)=event(trgvalIndex(i)).value;
-            trl(trlN,2)=event(trgvalIndex(i)).sample + cfgin.trialdef.poststim*1200;
+            
 
 
             %      case {trigger.block_start}

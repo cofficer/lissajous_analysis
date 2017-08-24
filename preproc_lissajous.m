@@ -38,16 +38,16 @@ cfg.channel    ={'all'};
 cfg.continuous = 'yes';
 data = ft_preprocessing(cfg);
 
-
-%select the data around the self-occlusions
-cfg              = [];
-begsample        = 1;
-endsample        = 4.5*1200;
-cfg.begsample = ones(1,length(data.trial))';
-cfg.endsample = ones(1,length(data.trial))'*endsample;
-
-data = ft_redefinetrial(cfg,data);
-
+if strcmp(cfgin.blocktype,'trial')
+    %select the data around the self-occlusions
+    cfg              = [];
+    begsample        = 1;
+    endsample        = 4.5*1200;
+    cfg.begsample = ones(1,length(data.trial))';
+    cfg.endsample = ones(1,length(data.trial))'*endsample;
+    
+    data = ft_redefinetrial(cfg,data);
+end
 %Resample the data
 cfg3.resample = 'yes';
 cfg3.fsample = 1200;
