@@ -32,7 +32,7 @@ cfg.trialfun                = trldef; % this is the default
 cfg.trialdef.eventtype      = 'UPPT001';
 cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
 cfg.trialdef.prestim        = 2.25; % in seconds
-cfg.trialdef.poststim       = 2.25; % in seconds
+cfg.trialdef.poststim       = 2.25; % in seconds cfg.trl=cfg.trl(1:25,:)
 cfg = ft_definetrial(cfg);
 cfg.channel    ={'all'};
 cfg.continuous = 'yes';
@@ -45,7 +45,7 @@ if strcmp(cfgin.blocktype,'trial')
     endsample        = 4.5*1200;
     cfg.begsample = ones(1,length(data.trial))';
     cfg.endsample = ones(1,length(data.trial))'*endsample;
-    
+
     data = ft_redefinetrial(cfg,data);
 end
 %Resample the data

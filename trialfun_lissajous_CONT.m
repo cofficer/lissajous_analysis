@@ -102,28 +102,28 @@ for i=1:length(trgvalIndex)
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
        case {trigger.block_start}
-            
+
            if trlN ~= 0
             %Go back one trlN because the last selfOcclusion is not usable
                trlN = trlN-1;
            end
-              
+
             trlN = trlN + 1;
             %The offset
             %find and index the upcoming trial start
-           
-            %Find the start of the two blocks and dependin on if 
-            %it is the first trial or not, select the correct first 
+
+            %Find the start of the two blocks and dependin on if
+            %it is the first trial or not, select the correct first
             %trial sample after blockstart
             idx_bloktart = find([event(trgvalIndex).value]==1);
-            
+
             if trlN == 1
                 currTrlInd   = idx_bloktart(1)+1;
             else
                 currTrlInd   = idx_bloktart(2)+1;
             end
             stimSample = event(trgvalIndex(currTrlInd)).sample;
-            trl(trlN,3)= stimSample;
+            trl(trlN,3)= cfgin.trialdef.prestim*1200;
             trl(trlN,4)= event(trgvalIndex(currTrlInd)).value;
             %remove the prestim defin from the sample
             trl(trlN,1)=event(trgvalIndex(currTrlInd)).sample-cfgin.trialdef.prestim*1200;
@@ -145,7 +145,7 @@ for i=1:length(trgvalIndex)
             %start of trial
             trl(trlN,1)=event(trgvalIndex(i)).sample-cfgin.trialdef.prestim*1200;
             %start of oclcusion
-            trl(trlN,3) = stimSample;
+            trl(trlN,3) = cfgin.trialdef.prestim*1200;
             %value of occlusion
             trl(trlN,4) = event(trgvalIndex(i)).value;
             %Trial end, take the full time until next self-occlusion
@@ -162,7 +162,7 @@ for i=1:length(trgvalIndex)
             %response triggers
             trl(trlN,7)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,8)=event(trgvalIndex(i)).value;
-            
+
 
 
             %      case {trigger.block_start}

@@ -20,7 +20,7 @@ for icfg = 1:length(restingpaths)
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
     cfgin{icfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin{icfg}.blocktype               = 'trial'; % trial or continuous.
+    cfgin{icfg}.blocktype               = 'continuous'; % trial or continuous.
 
     %cfgin=cfgin{21}
 end

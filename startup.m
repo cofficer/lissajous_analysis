@@ -4,8 +4,7 @@
 %Set paths
 warning off
 
-whichFieldtrip = '2017-3';%'2017-2';
-ft_hastoolbox('brewermap', 1);
+whichFieldtrip = '2017-2';%'2017-2';
 
 if strcmp(whichFieldtrip,'2015')
 
@@ -58,6 +57,8 @@ elseif strcmp(whichFieldtrip,'2017-3')
 
 
 end
+ft_hastoolbox('brewermap', 1);
+
 %Set graphs:
 set(0,'DefaultAxesColorOrder',cbrewer('qual','Set2',8))
 set(0,'DefaultLineLineWidth',1.2)
