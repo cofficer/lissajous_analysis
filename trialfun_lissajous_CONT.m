@@ -105,11 +105,14 @@ for i=1:length(trgvalIndex)
 
             trlN = trlN + 1;
             %The offset
-            stimSample = event(trgvalIndex(i)).sample;
+            %find and index the upcoming trial start
+            idx_trlstart = [event(trgvalIndex(i:end)).value]==11;
+
+            stimSample = event(idx_trlstart(1)).sample;
             trl(trlN,3)= stimSample;
-            trl(trlN,4)= event(trgvalIndex(i)).value;
+            trl(trlN,4)= event(idx_trlstart(1)).value;
             %remove the prestim defin from the sample
-            trl(trlN,1)=event(trgvalIndex(i)).sample-cfgin.trialdef.prestim*1200;
+            trl(trlN,1)=event(idx_trlstart(1)).sample-cfgin.trialdef.prestim*1200;
             trl(trlN,9)=trlN;
 
             %Number self-occlusios
