@@ -99,7 +99,6 @@ loglog(freq.freq, mean(freq.powspctrm), 'k', 'linewidth', 1);
 axis tight; axis square; box off;
 set(gca, 'xtick', [10 50 100], 'tickdir', 'out', 'xticklabel', []);
 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/')
 
 %%
 
@@ -166,7 +165,7 @@ blinks = ft_selectdata(cfg,dataNoMEG);
 
 %Could reduce blinks data to only trials with blinks.
 %Identify blinks...
-%artifactTrl=zeros(length(cfgart.artfctdef.zvalue.artifact),length(cfgart.artfctdef.zvalue.artifact));
+artifactTrl=zeros(length(cfgart.artfctdef.zvalue.artifact),length(cfgart.artfctdef.zvalue.artifact));
 for iart = 1:size(cfgart.artfctdef.zvalue.artifact,1)
 
     %Compare the samples identified by the artifact detection and the
@@ -188,6 +187,7 @@ end
 %in case no eye artifacts
 if length(cfgart.artfctdef.zvalue.artifact)>0
 %Remove the blinks but inserting NaNs
+artfctdef.eog.artifact=zeros(size(cfgart.artfctdef.zvalue.artifact));
 artfctdef.eog.artifact=cfgart.artfctdef.zvalue.artifact;
 %data.sampleinfo = data.cfg.previous.previous.previous.trl(:,1:2);
 %data = insertNan(artfctdef,data);
