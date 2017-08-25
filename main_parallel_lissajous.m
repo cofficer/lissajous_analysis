@@ -22,15 +22,15 @@ for icfg = 1:length(restingpaths)
     %Define which blocks to run.
     cfgin{icfg}.blocktype               = 'continuous'; % trial or continuous.
 
-    %cfgin=cfgin{21}
+    %cfgin=cfgin{20}
 end
 
+cfgin=cfgin{20};
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq'; %preproc, parallel, findsquid, check_nSensors
+runcfg.execute         = 'preproc'; %preproc, parallel, findsquid, check_nSensors
 runcfg.timreq          = 2000;      %number of minutes.
-runcfg.parallel        = 'torque';  %local or torque
-
+runcfg.parallel        = 'local';  %local or torque
 
 
 %Execute jobs on the torque

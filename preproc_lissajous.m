@@ -43,7 +43,6 @@ cfg.trialdef.poststim       = 2.25; % in seconds cfg.trl=cfg.trl(1:25,:)
 
 cfg = ft_definetrial(cfg);
 %while testing only do 25 trials
-cfg.trl=cfg.trl(1:5,:);
 
 cfg.channel    ={'all'};
 cfg.continuous = 'yes';
@@ -357,16 +356,16 @@ if strcmp(cfgin.blocktype,'trial')
   saveas(gca,figurestore,'png')
   trldef = 'trialfun_lissajous';
 elseif strcmp(cfgin.blocktype,'continuous')
-  filestore=sprintf('%dpreproc%s.mat',nblocks,datafile(1:3));
+  filestore=sprintf('%dpreproc%s.mat',iblock,datafile(1:3));
   save(filestore,'data')
 
   %Save the artifacts
-  artstore=sprintf('%dartifacts%s.mat',nblocks,datafile(1:3));
+  artstore=sprintf('%dartifacts%s.mat',iblock,datafile(1:3));
 
   save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
 
   %save the invisible figure
-  figurestore=sprintf('%doverview%s.png',nblocks,datafile(1:3));
+  figurestore=sprintf('%doverview%s.png',iblock,datafile(1:3));
   saveas(gca,figurestore,'png')
 end
 
