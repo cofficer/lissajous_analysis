@@ -14,8 +14,6 @@ cd(dsfile)
 %Identify datasets, and load correct block.
 datasets = dir('*ds');
 
-
-
 %TODO: Define how to loop over blocks.
 if strcmp(cfgin.blocktype,'trial')
   %dsfile=datasets(1).name;
@@ -32,11 +30,11 @@ elseif strcmp(cfgin.blocktype,'continuous')
 end
 
 for iblock = startblock:nblocks
-
-  dsfile=datasets(iblock).name;
+  cd(dsfile)
+  datafile=datasets(iblock).name;
 %Load data into trial-based format.
 cfg                         = [];
-cfg.dataset                 = dsfile;
+cfg.dataset                 = datafile;
 cfg.trialfun                = trldef; % this is the default
 cfg.trialdef.eventtype      = 'UPPT001';
 cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
@@ -169,10 +167,12 @@ blinks = ft_selectdata(cfg,dataNoMEG);
 
 %Could reduce blinks data to only trials with blinks.
 %Identify blinks...
-for iart = 1:length(cfgart.artfctdef.zvalue.artifact)
+%artifactTrl=zeros(length(cfgart.artfctdef.zvalue.artifact),length(cfgart.artfctdef.zvalue.artifact));
+for iart = 1:size(cfgart.artfctdef.zvalue.artifact,1)
 
     %Compare the samples identified by the artifact detection and the
     %samples of each trial to identify the trial with artifact.
+    %TODO: Check this error which occurs for blocks = 4, Part = 21.
 
     artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2250)+1;
 
@@ -190,7 +190,7 @@ end
 if length(cfgart.artfctdef.zvalue.artifact)>0
 %Remove the blinks but inserting NaNs
 artfctdef.eog.artifact=cfgart.artfctdef.zvalue.artifact;
-data.sampleinfo = data.cfg.previous.previous.previous.trl(:,1:2);
+%data.sampleinfo = data.cfg.previous.previous.previous.trl(:,1:2);
 %data = insertNan(artfctdef,data);
 cfg          = [];
 removeTrials = unique([artifactTrl(:,1);artifactTrl(:,2)]);
@@ -331,7 +331,7 @@ data         = ft_preprocessing(cfg,data);
 %Change folder and save approapriate data + figures
 lisdir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/preprocessed/',cfgin.blocktype);
 cd(lisdir)
-name = sprintf('%s%s/',lisdir,dsfile(1:3));
+name = sprintf('%s%s/',lisdir,datafile(1:3));
 
 %If the folder does not already exist, create it.
 if 7==exist(name,'dir')
@@ -344,29 +344,29 @@ end
 
 
 if strcmp(cfgin.blocktype,'trial')
-  filestore=sprintf('preproc%s.mat',dsfile(1:3));
+  filestore=sprintf('preproc%s.mat',datafile(1:3));
   save(filestore,'data')
 
   %Save the artifacts
-  artstore=sprintf('artifacts%s.mat',dsfile(1:3));
+  artstore=sprintf('artifacts%s.mat',datafile(1:3));
 
   save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
 
   %save the invisible figure
-  figurestore=sprintf('Overview%s.png',dsfile(1:3));
+  figurestore=sprintf('Overview%s.png',datafile(1:3));
   saveas(gca,figurestore,'png')
   trldef = 'trialfun_lissajous';
 elseif strcmp(cfgin.blocktype,'continuous')
-  filestore=sprintf('%dpreproc%s.mat',dsfile(1:3),nblocks);
+  filestore=sprintf('%dpreproc%s.mat',nblocks,datafile(1:3));
   save(filestore,'data')
 
   %Save the artifacts
-  artstore=sprintf('%dartifacts%s.mat',dsfile(1:3),nblocks);
+  artstore=sprintf('%dartifacts%s.mat',nblocks,datafile(1:3));
 
   save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
 
   %save the invisible figure
-  figurestore=sprintf('%dOverview%s.png',dsfile(1:3),nblocks);
+  figurestore=sprintf('%doverview%s.png',nblocks,datafile(1:3));
   saveas(gca,figurestore,'png')
 end
 
