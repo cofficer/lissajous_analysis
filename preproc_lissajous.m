@@ -7,6 +7,8 @@ function data = preproc_lissajous(cfgin)
 %The key here is to use the already defined tables for samples when calling
 %trialfun function which I should define next.
 
+%Inclose the whole function to catch potential error.
+try
 %define ds file, this is actually from the trial-based data
 dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/%s/',cfgin.restingfile);
 cd(dsfile)
@@ -370,4 +372,20 @@ elseif strcmp(cfgin.blocktype,'continuous')
 end
 
 end
+
+
+catch err
+
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/')
+  fid=fopen('preprocErrors','a+');
+  c=clock;
+  fprintf(fid,sprintf('\n\n\n\nNew entry for %s at %i/%i/%i %i:%i\n',cfgin.restingfile,fix(c(1)),fix(c(2)),fix(c(3)),fix(c(4)),fix(c(5))))
+
+  fprintf(fid,'%s',err.getReport('extended','hyperlinks','off'))
+
+  fclose(fid)
+
+
+end
+
 end

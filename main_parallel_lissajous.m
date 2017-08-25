@@ -14,7 +14,7 @@ restingpaths = dir('P*');
 restingpaths = restingpaths(1:end);
 %Loop all data files into seperate jobs
 
-for icfg = 1:length(restingpaths)
+for icfg = 1:5%length(restingpaths)
 
     cfgin{icfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
@@ -22,15 +22,14 @@ for icfg = 1:length(restingpaths)
     %Define which blocks to run.
     cfgin{icfg}.blocktype               = 'continuous'; % trial or continuous.
 
-    %cfgin=cfgin{20}
+    %cfgin=cfgin{22}
 end
 
-cfgin=cfgin{20};
 
 %Define script to run and whether to run on the torque
 runcfg.execute         = 'preproc'; %preproc, parallel, findsquid, check_nSensors
 runcfg.timreq          = 2000;      %number of minutes.
-runcfg.parallel        = 'local';  %local or torque
+runcfg.parallel        = 'torque';  %local or torque
 
 
 %Execute jobs on the torque
