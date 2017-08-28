@@ -83,13 +83,13 @@ if doplot
   idx_occ=find(~cellfun(@isempty,idx_occ));
 
   cfg = [];
-  cfg.baseline = [0.5 1];
+  cfg.baseline = [2.5 3];
   cfg.baselinetype = 'relative';
   cfg.masktype     = 'saturation';
-  cfg.zlim         = [0.95 1.05];
-  cfg.ylim         = [64 120];
+  cfg.zlim         = [0.8 1.2];
+  cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
-  cfg.xlim         = [0.5 4];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+  cfg.xlim         = [2.5 6];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
   cfg.channel      = freq.label(idx_occ);
   cfg.interactive = 'no';
   ft_singleplotTFR(cfg,freq);
@@ -101,13 +101,13 @@ if doplot
 end
 
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures')
-saveas(gca,'gammaSingleTFR24-64-120-2.png','png')
+saveas(gca,'beta3SingleTFRP23.png','png')
 
 %%
 % for the multiple plots also
 cfg = [];
 cfg.xlim = [0.6:0.35:4];
-cfg.ylim = [7 12];
+%cfg.ylim = [7 12];
 cfg.zlim = [0.7 1.3];
 cfg.baseline = [0.5 1];
 cfg.baselinetype = 'relative';
