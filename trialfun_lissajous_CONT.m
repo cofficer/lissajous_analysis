@@ -145,7 +145,7 @@ for i=1:length(trgvalIndex)
             %start of trial
             trl(trlN,1)=event(trgvalIndex(i)).sample-cfgin.trialdef.prestim*1200;
             %start of oclcusion
-            trl(trlN,3) = cfgin.trialdef.prestim*1200;
+            trl(trlN,3)= 1;%cfgin.trialdef.prestim*1200;
             %value of occlusion
             trl(trlN,4) = event(trgvalIndex(i)).value;
             %Trial end, take the full time until next self-occlusion
