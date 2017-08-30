@@ -8,6 +8,8 @@ function data = freq_lissajousCONT(cfgin)
 %loop and load preproc data
 %example /mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/P22/
 
+try
+
 for iblock = 2:4
 
 dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc%s.mat',cfgin.restingfile,iblock,cfgin.restingfile);
@@ -125,4 +127,20 @@ outputfile = sprintf('%sfreq_%s_%sBlock%d.mat',cfgin.restingfile(2:3),cfg.freqan
 save(outputfile, 'freq');
 
 end
+
+
+catch err
+
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/')
+  fid=fopen('freqContErrors','a+');
+  c=clock;
+  fprintf(fid,sprintf('\n\n\n\nNew entry for %s at %i/%i/%i %i:%i\n',cfgin.restingfile,fix(c(1)),fix(c(2)),fix(c(3)),fix(c(4)),fix(c(5))))
+
+  fprintf(fid,'%s',err.getReport('extended','hyperlinks','off'))
+
+  fclose(fid)
+
+
+end
+
 end
