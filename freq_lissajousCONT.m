@@ -5,9 +5,12 @@ function data = freq_lissajousCONT(cfgin)
 %TODO: Consider the case of no button presses. Remove for now.
 %%
 
-%load preproc data
+%loop and load preproc data
+%example /mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/P22/
 
-dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/preproc%s.mat',cfgin.restingfile,cfgin.restingfile);
+for iblock = 2:4
+
+dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc%s.mat',cfgin.restingfile,iblock,cfgin.restingfile);
 load(dsfile)
 
 %Seperate the data into orthogonal sensors
@@ -69,7 +72,7 @@ if strcmp(cfg.trigger,'baseline')
 
 elseif strcmp(cfg.trigger,'selfoccl')
 
-    cfg.toi = 0.5:0.05:4;
+    cfg.toi = 0.25:0.05:4.25;
 
 elseif strcmp(cfg.trigger,'resp')
 
@@ -111,14 +114,15 @@ freq=ft_combineplanar(cfgC,freq);
 %  ft_topoplotTFR(cfg,freq)
 
 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/')
+cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/')
 [pathstr, name] = fileparts(cfgin.fullpath);
 fprintf('Saving %s from...\n %s\n', name, pathstr)
 
-outputfile = sprintf('%sfreq_%s_%s.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger);
+%If continuous then also include the block number in the saved file.
+outputfile = sprintf('%sfreq_%s_%sBlock%d.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,iblock);
 
 
 save(outputfile, 'freq');
 
-
+end
 end

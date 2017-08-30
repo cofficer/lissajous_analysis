@@ -27,7 +27,7 @@ end
 
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'preproc'; %preproc, parallel, findsquid, check_nSensors
+runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -49,9 +49,14 @@ switch runcfg.execute
         %cellfun(@restingPreprocNumbers, cfgin);
         nnodes = 1;%64; % how many licenses?
         stack = 1;%round(length(cfg1)/nnodes);
-        qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
-            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
 
+        if strcmp(cfgin{icfg}.blocktype,'continuous')
+          qsubcellfun(@freq_lissajousCONT, cfgin, 'compile', 'no', ...
+            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+        else
+          qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
+            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+        end
 
 
 end
