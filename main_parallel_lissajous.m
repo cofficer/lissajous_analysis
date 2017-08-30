@@ -41,11 +41,7 @@ switch runcfg.execute
         %cellfun(@restingPreprocNumbers, cfgin);
         nnodes = 1;%64; % how many licenses?
         stack = 1;%round(length(cfg1)/nnodes);
-        if strcmp(cfgin{icfg}.blocktype,'continuous')
-          qsubcellfun(@preproc_lissajousCONT, cfgin, 'compile', 'no', ...
-            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
-        else
-          qsubcellfun(@preproc_lissajous, cfgin, 'compile', 'no', ...
+        qsubcellfun(@preproc_lissajous, cfgin, 'compile', 'no', ...
               'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
 
     case 'freq'

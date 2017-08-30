@@ -40,8 +40,8 @@ cfg.dataset                 = datafile;
 cfg.trialfun                = trldef; % this is the default
 cfg.trialdef.eventtype      = 'UPPT001';
 cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
-cfg.trialdef.prestim        = 2.25; % in seconds
-cfg.trialdef.poststim       = 2.25; % in seconds cfg.trl=cfg.trl(1:25,:)
+cfg.trialdef.prestim        = 4.5; % in seconds
+cfg.trialdef.poststim       = 0; % in seconds cfg.trl=cfg.trl(1:25,:)
 
 cfg = ft_definetrial(cfg);
 %while testing only do 25 trials
@@ -154,29 +154,24 @@ cfg                             = [];
 cfg.artfctdef.reject            = 'partial';
 cfg.artfctdef.eog.artifact      = artifact_eogHorizontal;
 
-% reject blinks when they occur between ref and the offset of the stim
-%crittoilim = [data.trialinfo(:,2) - data.trialinfo(:,1) - 0.4*data.fsample ...
-%    data.trialinfo(:,5) - data.trialinfo(:,1) + 0.8*data.fsample] / data.fsample;
-%cfg.artfctdef.crittoilim        = crittoilim;
-%data                            = ft_rejectartifact(cfg, data);
-
 %plot the blink rate horizontal??
 cfg=[];
 cfg.channel = 'UADC003'; %UADC003 UADC004 if eyelink is present
 blinks = ft_selectdata(cfg,dataNoMEG);
 
 %Could reduce blinks data to only trials with blinks.
-%Identify blinks...
-artifactTrl=zeros(length(cfgart.artfctdef.zvalue.artifact),length(cfgart.artfctdef.zvalue.artifact));
+%Identify blinks... could make us of: cfgart.artfctdef.zvalue.trl
+artifactTrl=zeros(size(cfgart.artfctdef.zvalue.artifact,2),size(cfgart.artfctdef.zvalue.artifact,1));
 for iart = 1:size(cfgart.artfctdef.zvalue.artifact,1)
 
     %Compare the samples identified by the artifact detection and the
     %samples of each trial to identify the trial with artifact.
     %TODO: Check this error which occurs for blocks = 4, Part = 21.
 
-    artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2250)+1;
+    %Why add one to the floor? Because there is no trl = 0.
+    artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2251)+1;
 
-    artifactTrl(iart,2) = floor(cfgart.artfctdef.zvalue.artifact(iart,2)/2250)+1;
+    artifactTrl(iart,2) = floor(cfgart.artfctdef.zvalue.artifact(iart,2)/2251)+1;
 
     %There should be some kind of modulus to use here to find in which interval of 2250
     %the artifact sample is contained within
@@ -199,9 +194,6 @@ allTrials    = ones(1,length(data.trial));
 allTrials(removeTrials)    = 0;
 cfg.trials   = logical(allTrials');
 data         = ft_redefinetrial(cfg, data);
-
-
-
 
 subplot(2,3,cnt); cnt = cnt + 1;
 %figure(1),clf
