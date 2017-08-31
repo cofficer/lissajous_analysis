@@ -1,11 +1,13 @@
 function [avgFreq] = freq_average(cfgin)
 %Load in freq data, and average across appropriate trials and frequencies
 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/')
+filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
+
+cd(filepath)
 
 freqrange  = 'low';
 doplot     = 1;
-compSwitch = 1;
+compSwitch = 0;
 freqpath   = dir(sprintf('*%s*',freqrange));
 
 
@@ -13,16 +15,18 @@ if doplot
   figure(1),clf
 end
 
+suplot = 0;
 %Loop over participants
-for ipart = 1:length(freqpath)
-
+for ipart = 1:5:length(freqpath)
+  suplot=suplot+1;
   load(freqpath(ipart).name)
 
-  %select trials, and average over trials
-    gdtrl = freq.trialinfo(:,6)~=43;
 
     %If comparing perceptual switch with no switch.
     if compSwitch
+
+        %select trials, and average over trials
+          gdtrl = freq.trialinfo(:,6)~=43;
       switchtrl1 = freq.trialinfo(:,6)==42; %45
       switchtrl2 = freq.trialinfo(:,6)==45; %45
       noswitchtrl1 = freq.trialinfo(:,6)==41; %45
@@ -44,8 +48,10 @@ for ipart = 1:length(freqpath)
       %freq = ft_freqbaseline(cfg,freq);
       %freqS = ft_freqbaseline(cfg,freqS);
       freq.powspctrm = (freqS.powspctrm-freq.powspctrm);
-    else
+    elseif strcmp(freq.dimord,'rpt_chan_freq_time')
 
+        %select trials, and average over trials
+          gdtrl = freq.trialinfo(:,6)~=43;
       %Probably good to baseline before averaging.
       %Not sure anymore.
       %cfg = [];
@@ -69,10 +75,34 @@ for ipart = 1:length(freqpath)
     end
 
 
+    % %plot TFR
+    if doplot
+      subplot(3,4,suplot)
+      %select channels
+      idx_occ=strfind(freq.label,'O');
+      idx_occ=find(~cellfun(@isempty,idx_occ));
+
+      cfg = [];
+      cfg.baseline = [0.25 4.25];
+      cfg.baselinetype = 'relative';
+      cfg.masktype     = 'saturation';
+      cfg.zlim         = [0.6 1.4];
+      cfg.ylim         = [3 35];
+      cfg.layout       = 'CTF275_helmet.lay';
+      cfg.xlim         = [0.25 4.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+      cfg.channel      = freq.label(idx_occ);
+      cfg.interactive = 'no';
+      ft_singleplotTFR(cfg,freq);
+      %ft_multiplotTFR(cfg,freq)
+      %ft_topoplotTFR(cfg,freq)
+      %ft_hastoolbox('brewermap', 1);
+      colormap(flipud(brewermap(64,'RdBu')))
+      colorbar
+    end
 
 end
 
-avgFreq=squeeze(mean(avgFreq,1));
+avgFreq=squeeze(nanmean(avgFreq,1));
 freq.powspctrm=avgFreq;
 
 % %plot TFR
@@ -83,13 +113,13 @@ if doplot
   idx_occ=find(~cellfun(@isempty,idx_occ));
 
   cfg = [];
-  cfg.baseline = [2.5 3];
+  cfg.baseline = [0.25 4.25];
   cfg.baselinetype = 'relative';
   cfg.masktype     = 'saturation';
-  cfg.zlim         = [0.8 1.2];
+  cfg.zlim         = [0.6 1.4];
   cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
-  cfg.xlim         = [2.5 6];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+  cfg.xlim         = [0.25 4.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
   cfg.channel      = freq.label(idx_occ);
   cfg.interactive = 'no';
   ft_singleplotTFR(cfg,freq);
@@ -100,8 +130,8 @@ if doplot
   colorbar
 end
 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures')
-saveas(gca,'beta3SingleTFRP23.png','png')
+cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
+saveas(gca,'betaSingleTFRPseperate.png','png')
 
 %%
 % for the multiple plots also
