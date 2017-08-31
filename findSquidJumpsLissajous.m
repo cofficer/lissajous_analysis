@@ -67,7 +67,7 @@ function [channelJump,trialnum]=findSquidJumpsLissajous( data,pathname )
 
     jumps_total=length(idx);
 
-    cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos/resting/preprocessed')
+    cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/')
     fid=fopen('logfile_squidJumps','a+');
     c=clock;
     fprintf(fid,sprintf('\n\nNew entry for %s at %i/%i/%i %i:%i\n\n',pathname,fix(c(1)),fix(c(2)),fix(c(3)),fix(c(4)),fix(c(5))))
