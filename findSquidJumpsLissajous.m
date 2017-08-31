@@ -62,6 +62,7 @@ function [channelJump,trialnum]=findSquidJumpsLissajous( data,pathname )
     fprintf('no squid jump trials found \n');
     %title('No jumps'); axis off;
     channelJump=[];
+    trialnum   =[];
   else
 
     jumps_total=length(idx);
