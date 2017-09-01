@@ -17,7 +17,7 @@ end
 
 suplot = 0;
 %Loop over participants
-for ipart = 1:5:length(freqpath)
+for ipart = 16:18%1:length(freqpath)
   suplot=suplot+1;
   load(freqpath(ipart).name)
 
@@ -77,7 +77,7 @@ for ipart = 1:5:length(freqpath)
 
     % %plot TFR
     if doplot
-      subplot(3,4,suplot)
+      subplot(3,1,suplot)
       %select channels
       idx_occ=strfind(freq.label,'O');
       idx_occ=find(~cellfun(@isempty,idx_occ));
@@ -90,14 +90,14 @@ for ipart = 1:5:length(freqpath)
       cfg.ylim         = [3 35];
       cfg.layout       = 'CTF275_helmet.lay';
       cfg.xlim         = [0.25 4.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
-      cfg.channel      = freq.label(idx_occ);
+      %cfg.channel      = freq.label(idx_occ);
       cfg.interactive = 'no';
       ft_singleplotTFR(cfg,freq);
       %ft_multiplotTFR(cfg,freq)
-      %ft_topoplotTFR(cfg,freq)
+      ft_topoplotTFR(cfg,freq)
       %ft_hastoolbox('brewermap', 1);
       colormap(flipud(brewermap(64,'RdBu')))
-      colorbar
+      %colorbar
     end
 
 end
@@ -120,26 +120,26 @@ if doplot
   cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
   cfg.xlim         = [0.25 4.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
-  cfg.channel      = freq.label(idx_occ);
+  %cfg.channel      = freq.label(idx_occ);
   cfg.interactive = 'no';
-  ft_singleplotTFR(cfg,freq);
+  %ft_singleplotTFR(cfg,freq);
   %ft_multiplotTFR(cfg,freq)
-  %ft_topoplotTFR(cfg,freq)
+  ft_topoplotTFR(cfg,freq)
   %ft_hastoolbox('brewermap', 1);
   colormap(flipud(brewermap(64,'RdBu')))
-  colorbar
+  %colorbar
 end
 
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
-saveas(gca,'betaSingleTFRPseperate.png','png')
+saveas(gca,'betaTOPOseperateP10Block1.png','png')
 
 %%
 % for the multiple plots also
 cfg = [];
-cfg.xlim = [0.6:0.35:4];
+cfg.xlim = [0.25:0.35:3];
 %cfg.ylim = [7 12];
 cfg.zlim = [0.7 1.3];
-cfg.baseline = [0.5 1];
+cfg.baseline = [3.5 3.8];
 cfg.baselinetype = 'relative';
 cfg.masktype     = 'saturation';
 cfg.layout = 'CTF275_helmet.lay';

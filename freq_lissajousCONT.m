@@ -55,7 +55,7 @@ try
                 cfg.tapsmofrq = ones(length(cfg.foi),1) .* 8;
             case 'low'
                 cfg.taper = 'hanning'; % low frequency-optimized analysis
-                cfg.keeptrials  = 'no'; % needed for fourier-output
+                cfg.keeptrials  = 'yes'; % needed for fourier-output
                 %           cfg.keeptapers = 'yes'; % idem
                 cfg.foi = 3:35;
                 cfg.t_ftimwin = ones(length(cfg.foi),1) .* 0.5; %400ms time window?
