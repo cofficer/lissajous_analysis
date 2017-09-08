@@ -27,7 +27,7 @@ if do_baseline
   % cfg.baselinetype = 'relative';
   % noswitch.freq = ft_freqbaseline(cfg,noswitch.freq);
   % switches.freq = ft_freqbaseline(cfg,switches.freq);
-  [freq_base1,freq_base2]=baseline_lissajous(noswitch.freq,switches.freq,cfg)
+  [noswitch.freq.powspctrm,switches.freq.powspctrm]=baseline_lissajous(noswitch.freq,switches.freq,cfg);
 
 end
 
