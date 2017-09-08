@@ -5,8 +5,8 @@ function [freq_base1,freq_base2]=baseline_lissajous(freq1,freq2,cfg)
 %Created 8/09/2017.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-freq1=freq1.freq.powspctrm;
-freq2=freq2.freq.powspctrm;
+freq1=freq1.powspctrm;
+freq2=freq2.powspctrm;
 
 toi = cfg.baselinewindow;
 
