@@ -18,10 +18,16 @@ switches=load('freqLowSwitches.mat');
 if do_baseline
 
   cfg = [];
-  cfg.baseline = [1.5 2];
-  cfg.baselinetype = 'relative';
-  noswitch.freq = ft_freqbaseline(cfg,noswitch.freq);
-  switches.freq = ft_freqbaseline(cfg,switches.freq);
+  cfg.baselinewindow = [1.5 2];
+  %Change to indices
+  cfg.baselinewindow(1) = find(switches.freq.time==cfg.baselinewindow(1));
+  cfg.baselinewindow(2) = find(switches.freq.time==cfg.baselinewindow(2));
+
+  % cfg.baseline = [1.5 2];
+  % cfg.baselinetype = 'relative';
+  % noswitch.freq = ft_freqbaseline(cfg,noswitch.freq);
+  % switches.freq = ft_freqbaseline(cfg,switches.freq);
+  [freq_base1,freq_base2]=baseline_lissajous(noswitch.freq,switches.freq,cfg)
 
 end
 

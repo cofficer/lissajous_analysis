@@ -8,7 +8,7 @@ function [freq_base1,freq_base2]=baseline_lissajous(freq1,freq2,cfg)
 freq1=freq1.freq.powspctrm;
 freq2=freq2.freq.powspctrm;
 
-toi = cfgin.baselinewindow;
+toi = cfg.baselinewindow;
 
 %Compute the average signal for combined baseline
 freq12 = freq1(:,:,toi(1):toi(2))+freq2(:,:,toi(1):toi(2))./2;
