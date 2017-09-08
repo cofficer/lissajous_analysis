@@ -18,7 +18,9 @@ switches=load('freqLowSwitches.mat');
 if do_baseline
 
   cfg = [];
-  cfg.baselinewindow = [1.5 2];
+  cfg.baselinewindow = [3.5 4];
+  %Testing different subtraction settings. 
+  cfg.subtractmode   ='combined';
   %Change to indices
   cfg.baselinewindow(1) = find(switches.freq.time==cfg.baselinewindow(1));
   cfg.baselinewindow(2) = find(switches.freq.time==cfg.baselinewindow(2));
@@ -37,8 +39,8 @@ idx_occ=find(~cellfun(@isempty,idx_occ));
 
 %Create tmaps. If across dim 1, testing sig across channels
 %between switch and no switch averages.
-[h,p]=ttest2(switches.freq.powspctrm(idx_occ,:,10:70),...
-noswitch.freq.powspctrm(idx_occ,:,10:70),'Dim',1);
+[h,p]=ttest2(switches.freq.powspctrm(idx_occ,:,:),...
+noswitch.freq.powspctrm(idx_occ,:,:),'Dim',1);
 
 
 %plot the tmap
@@ -65,7 +67,7 @@ xlabel('time (s)')
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
 if do_baseline
-  namefigure = sprintf('lowfreqTmap_baserange%1.1f-%1.1fs',cfg.baseline(1),cfg.baseline(2));%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('lowfreqTmap_CustomBaserange%1.1f-%1.1fs',cfg.baselinewindow(1),cfg.baselinewindow(2));%Stage of analysis, frequencies, type plot, baselinewindow
 else
   namefigure = 'lowfreqTmap';
 end
