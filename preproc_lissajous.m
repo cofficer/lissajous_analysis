@@ -338,7 +338,7 @@ try
             saveas(gca,figurestore,'png')
             trldef = 'trialfun_lissajous';
         elseif strcmp(cfgin.blocktype,'continuous')
-            filestore=sprintf('%dpreproc%s.mat',iblock,datafile(1:3));
+            filestore=sprintf('%dpreproc26-26%s.mat',iblock,datafile(1:3));
             save(filestore,'data')
 
             %Save the artifacts
