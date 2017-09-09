@@ -48,7 +48,7 @@ try
         %cfg.trl=cfg.trl(1:25,:)
         cfg.channel    ={'all'};
         cfg.continuous = 'yes';
-        data = ft_preprocessing(cfg);
+        data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
 
         if strcmp(cfgin.blocktype,'trial')
             %select the data around the self-occlusions
@@ -161,7 +161,7 @@ try
 
         %Could reduce blinks data to only trials with blinks.
         %Identify blinks... could make us of: cfgart.artfctdef.zvalue.trl
-        artifactTrl=zeros(size(cfgart.artfctdef.zvalue.artifact,2),size(cfgart.artfctdef.zvalue.artifact,1));
+        artifactTrl=zeros(size(cfgart.artfctdef.zvalue.artifact,2),size(cfgart.artfctdef.zvalue.artifact,1))';
         for iart = 1:size(cfgart.artfctdef.zvalue.artifact,1)
 
             %Compare the samples identified by the artifact detection and the
@@ -169,9 +169,9 @@ try
             %TODO: Check this error which occurs for blocks = 4, Part = 21.
 
             %Why add one to the floor? Because there is no trl = 0.
-            artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/2251)+1;
+            artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/length(data.time{1}))+1;
 
-            artifactTrl(iart,2) = floor(cfgart.artfctdef.zvalue.artifact(iart,2)/2251)+1;
+            artifactTrl(iart,2) = floor(cfgart.artfctdef.zvalue.artifact(iart,2)/length(data.time{1}))+1;
 
             %There should be some kind of modulus to use here to find in which interval of 2250
             %the artifact sample is contained within
