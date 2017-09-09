@@ -41,11 +41,11 @@ try
         cfg.trialdef.eventtype      = 'UPPT001';
         cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
         cfg.trialdef.prestim        = 2.6; % in seconds
-        cfg.trialdef.poststim       = 2.6; % in seconds cfg.trl=cfg.trl(1:25,:)
+        cfg.trialdef.poststim       = 2.6; % in seconds
 
         cfg = ft_definetrial(cfg);
         %while testing only do 25 trials
-
+        %cfg.trl=cfg.trl(1:25,:)
         cfg.channel    ={'all'};
         cfg.continuous = 'yes';
         data = ft_preprocessing(cfg);
