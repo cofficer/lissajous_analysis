@@ -40,8 +40,8 @@ try
         cfg.trialfun                = trldef; % this is the default
         cfg.trialdef.eventtype      = 'UPPT001';
         cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
-        cfg.trialdef.prestim        = 4.5; % in seconds
-        cfg.trialdef.poststim       = 0; % in seconds cfg.trl=cfg.trl(1:25,:)
+        cfg.trialdef.prestim        = 2.6; % in seconds
+        cfg.trialdef.poststim       = 2.6; % in seconds cfg.trl=cfg.trl(1:25,:)
 
         cfg = ft_definetrial(cfg);
         %while testing only do 25 trials

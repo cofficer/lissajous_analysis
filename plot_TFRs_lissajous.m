@@ -18,8 +18,8 @@ switches=load('freqLowSwitches.mat');
 if do_baseline
 
   cfg = [];
-  cfg.baselinewindow = [3.5 4];
-  %Testing different subtraction settings. 
+  cfg.baselinewindow = [1.5 2];
+  %Testing different subtraction settings.
   cfg.subtractmode   ='combined';
   %Change to indices
   cfg.baselinewindow(1) = find(switches.freq.time==cfg.baselinewindow(1));
@@ -67,7 +67,8 @@ xlabel('time (s)')
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
 if do_baseline
-  namefigure = sprintf('lowfreqTmap_CustomBaserange%1.1f-%1.1fs',cfg.baselinewindow(1),cfg.baselinewindow(2));%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('lowfreqTmap_CustomBaserange%1.1f-%1.1fs%s',...
+  cfg.baselinewindow(1),cfg.baselinewindow(2),cfg.subtractmode);%Stage of analysis, frequencies, type plot, baselinewindow
 else
   namefigure = 'lowfreqTmap';
 end
