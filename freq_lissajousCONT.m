@@ -12,7 +12,7 @@ try
 
     for iblock = 2:4
 
-        dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc%s.mat',cfgin.restingfile,iblock,cfgin.restingfile);
+        dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc26-26%s.mat',cfgin.restingfile,iblock,cfgin.restingfile);
         if exist(dsfile) == 0
           continue
         end
@@ -77,7 +77,8 @@ try
 
         elseif strcmp(cfg.trigger,'selfoccl')
 
-            cfg.toi = 0.25:0.05:4.25;
+            %cfg.toi = 0.25:0.05:4.25;
+            cfg.toi = -2.5:0.05:2.5;
 
         elseif strcmp(cfg.trigger,'resp')
 
@@ -124,7 +125,7 @@ try
         fprintf('Saving %s from...\n %s\n', name, pathstr)
 
         %If continuous then also include the block number in the saved file.
-        outputfile = sprintf('%sfreq_%s_%sBlock%d.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,iblock);
+        outputfile = sprintf('%sfreq_%s_%sBlock%d-26-26.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,iblock);
 
 
         save(outputfile, 'freq');
