@@ -6,14 +6,14 @@ function [] = plot_TFRs_lissajous(cfgin)
 clear all;close all;
 %Settings for analysis.
 cfgin.blocktype = 'continuous'
-do_baseline     = 1;
+do_baseline     = 0;
 
 
 %Load in data.
 filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
 cd(filepath)
-noswitch=load('freqLowNoSwitches.mat');
-switches=load('freqLowSwitches.mat');
+noswitch=load('freqLowNoSwitches26-26.mat');
+switches=load('freqLowSwitches26-26.mat');
 
 if do_baseline
 
@@ -57,7 +57,7 @@ xticks = linspace(1, numel(switches.freq.time),numel(xticklabels));
 set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
 
 set(gca,'YDir','normal')
-caxis([0 0.5])
+%caxis([0 0.5])
 colorbar
 title('P values for ttest2')
 ylabel('Frequencies')
@@ -67,10 +67,10 @@ xlabel('time (s)')
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
 if do_baseline
-  namefigure = sprintf('lowfreqTmap_CustomBaserange%1.1f-%1.1fs%s',...
+  namefigure = sprintf('lowfreqTmap_CustomBaserange26-26%1.1f-%1.1fs%s',...
   cfg.baselinewindow(1),cfg.baselinewindow(2),cfg.subtractmode);%Stage of analysis, frequencies, type plot, baselinewindow
 else
-  namefigure = 'lowfreqTmap';
+  namefigure = 'lowfreqTmap26-26';
 end
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure);

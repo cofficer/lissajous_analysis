@@ -1,6 +1,8 @@
 function [avgFreq] = freq_average(cfgin)
 %Load in freq data, and average across appropriate trials and frequencies
 
+
+cfgin.blocktype='continuous';
 filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
 
 cd(filepath)
@@ -8,7 +10,7 @@ cd(filepath)
 freqrange  = 'low';
 doplot     = 0;
 compSwitch = 0;
-freqpath   = dir(sprintf('*%s*',freqrange));
+freqpath   = dir(sprintf('*%s*-26-26*',freqrange));
 
 
 if doplot
@@ -32,6 +34,8 @@ for ipart = 1:length(namecell)
   %Load the freq data
   load(namecell{ipart})
 
+  %store details about each freq.
+  partInfo(ipart).trialinfo = freq.trialinfo;
 
 
   %While the same participant, average together and at the First
@@ -69,7 +73,10 @@ for ipart = 1:length(namecell)
       %cfg.baseline = [0.5 1];
       %cfg.baselinetype = 'relative';
       %freq = ft_freqbaseline(cfg,freq);
-
+      typesBP = unique(freq.trialinfo(:,5));
+      if sum(ismember(typesBP,[232,225]))~=2
+        continue
+      end
       %Find the indices of switches and non switches.
       idx_switch   = (abs(diff(freq.trialinfo(:,5)))==7);
       nopress      = freq.trialinfo(:,5)==0;
@@ -80,7 +87,9 @@ for ipart = 1:length(namecell)
       currNum = partnum(ipart);
 
       cfg   = [];
+      %select trials if need be.
       cfg.trials = idx_noswitch;
+      %cfg.trial = ~nopress;
       %cfg.frequency = [12 35];
       cfg.avgoverrpt = 'yes';
       freq  = ft_selectdata(cfg,freq);
@@ -133,23 +142,27 @@ if doplot
   idx_occ=find(~cellfun(@isempty,idx_occ));
 
   cfg = [];
-  cfg.baseline = [1.5 2];
+  cfg.baseline = [2 2.3];
   cfg.baselinetype = 'relative';
   cfg.masktype     = 'saturation';
   cfg.zlim         = [0.8 1.2];
   cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
-  cfg.xlim         = [0.25 4.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
-  %cfg.channel      = freq.label(idx_occ);
+  cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+  cfg.channel      = freq.label(idx_occ);
   cfg.interactive = 'no';
   ft_singleplotTFR(cfg,freq);
   %ft_multiplotTFR(cfg,freq)
-  ft_topoplotTFR(cfg,freq)
+  %ft_topoplotTFR(cfg,freq)
   %ft_hastoolbox('brewermap', 1);
   colormap(flipud(brewermap(64,'RdBu')))
   %colorbar
 end
 
+%Freq data before and after one self-occlusion,save('freqLowNoSwitches26-26.mat','freq')
+Avg26 = load('freqLowAvg26-26.mat');
+
+%Freq data during the time between self-occlusion
 noswitch=load('freqLowNoSwitches.mat');
 switches=load('freqLowSwitches.mat');
 
@@ -162,17 +175,22 @@ cfg.baseline = [1.5 2];
 cfg.baselinetype = 'relative';
 noswitch.freq = ft_freqbaseline(cfg,noswitch.freq);
 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
 
+
+%Save figure active.
+cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim_lowfreq_topo_baserange%1.1f-%1.1fs',cfg.baseline(1),cfg.baseline(2));%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim_lowfreq26-26_TFR_baserange%1.1f-%1.1fs',cfg.baseline(1),cfg.baseline(2));%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 
-saveas(gca,'lowTOPOOccipitalSwitchOnlyMany.png','png')
-saveas(gca,'testingSubstr.png','png')
+saveas(gca,figurefreqname,'png')
+
+
+
+%saveas(gca,'testingSubstr.png','png')
 %%
 % for the multiple plots also
 cfg = [];
