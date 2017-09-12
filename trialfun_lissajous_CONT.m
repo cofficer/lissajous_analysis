@@ -96,6 +96,9 @@ if iplot
 
 end
 
+%Index how many times a new block is found and started.
+%Only needed beacuase of late start recordings, i.e. P04.
+numBlockStarts=0;
 
 for i=1:length(trgvalIndex)
 
@@ -115,12 +118,16 @@ for i=1:length(trgvalIndex)
             %Find the start of the two blocks and dependin on if
             %it is the first trial or not, select the correct first
             %trial sample after blockstart
+            %-edit 12/09/17. Making blockstart work with late recordings...
+            %Or if there are more then two blockstarts per dataset. 
+            numBlockStarts = numBlockStarts+1;
             idx_bloktart = find([event(trgvalIndex).value]==1);
 
             if trlN == 1
-                currTrlInd   = idx_bloktart(1)+1;
+                currTrlInd   = idx_bloktart(numBlockStarts)+1;
             else
-                currTrlInd   = idx_bloktart(2)+1;
+
+                currTrlInd   = idx_bloktart(numBlockStarts)+1;
             end
             stimSample = event(trgvalIndex(currTrlInd)).sample;
             trl(trlN,3)= -cfgin.trialdef.prestim*1200;
