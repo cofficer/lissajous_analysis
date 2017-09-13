@@ -43,7 +43,7 @@ try
         cfg.trigger     = 'selfoccl';
         cfg.channel     ='MEG'; %
         cfg.trials      = 'all';
-        cfg.freqanalysistype = 'low';
+        cfg.freqanalysistype = 'high';
 
 
         switch cfg.freqanalysistype

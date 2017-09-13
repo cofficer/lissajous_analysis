@@ -57,7 +57,7 @@ xticks = linspace(1, numel(switches.freq.time),numel(xticklabels));
 set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
 
 set(gca,'YDir','normal')
-%caxis([0 0.5])
+caxis([0 0.5])
 colorbar
 title('P values for ttest2')
 ylabel('Frequencies')

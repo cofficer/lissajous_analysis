@@ -28,9 +28,8 @@ namecell = {freqpath.name};
 
 partnum = cellfun(@(x) x(1:2),namecell,'UniformOutput',false);
 
-idx_partnum = ~strcmp(partnum,'10');
-
-namecell = namecell(idx_partnum);
+%idx_partnum = ~strcmp(partnum,'10');
+%namecell = namecell(idx_partnum);
 
 %Loop over participants
 for ipart = 1:length(namecell)
@@ -85,10 +84,10 @@ for ilen = 2:length(partInfo)
     %update the lastID
     lastID=partInfo(ilen).ID(1:2);
     ipart=ipart+1;
+    %Save the name of ID of each participant
+    %To know what is left out.
     allID{ipart}=partInfo(ilen).ID(1:2);
-
     lenblock(ipart)=size(partInfo(ilen).trialinfo,1);
-
     %Seperate into the two types of responses.
     BP1(ipart) = sum(partInfo(ilen).trialinfo(:,5)==225);
     BP2(ipart) = sum(partInfo(ilen).trialinfo(:,5)==232);
@@ -105,7 +104,7 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figu
 
 figure(1),clf
 clear g
-g=gramm('x',[1:length(lenblock),1:length(lenblock)],'y',[BP1+BP2,BP2]./[lenblock,lenblock],'color',[ones(1,length(BP1)),ones(1,length(BP1))*2]');
+g=gramm('x',[1:29,1:29],'y',[BP1+BP2,BP2]./[lenblock,lenblock],'color',[ones(1,length(BP1)),ones(1,length(BP1))*2]');
 g.geom_bar()
 %g.stat_summary()
 g.set_names('column','Origin','x','Participant category','y','% of trials remain (max 804)','color','Left vs. right choices');

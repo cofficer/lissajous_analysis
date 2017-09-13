@@ -74,8 +74,13 @@ for ipart = 1:length(namecell)
       %cfg.baselinetype = 'relative';
       %freq = ft_freqbaseline(cfg,freq);
       typesBP = unique(freq.trialinfo(:,5));
-      if sum(ismember(typesBP,[232,225]))~=2
-        continue
+
+      if sum(freq.trialinfo(:,5)==226)>0
+        freq.trialinfo(freq.trialinfo(:,5)==226,5)=225;
+        freq.trialinfo(freq.trialinfo(:,5)==228,5)=232;
+      elseif sum(freq.trialinfo(:,5)==228)>0
+        freq.trialinfo(freq.trialinfo(:,5)==228,5)=232;
+        freq.trialinfo(freq.trialinfo(:,5)==226,5)=225;
       end
       %Find the indices of switches and non switches.
       idx_switch   = (abs(diff(freq.trialinfo(:,5)))==7);
@@ -88,7 +93,7 @@ for ipart = 1:length(namecell)
 
       cfg   = [];
       %select trials if need be.
-      cfg.trials = idx_noswitch;
+      cfg.trials = idx_switch;
       %cfg.trial = ~nopress;
       %cfg.frequency = [12 35];
       cfg.avgoverrpt = 'yes';
@@ -148,7 +153,7 @@ if doplot
   cfg.zlim         = [0.8 1.2];
   cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
-  cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+  %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
   cfg.channel      = freq.label(idx_occ);
   cfg.interactive = 'no';
   ft_singleplotTFR(cfg,freq);
@@ -163,8 +168,8 @@ end
 Avg26 = load('freqLowAvg26-26.mat');
 
 %Freq data during the time between self-occlusion
-noswitch=load('freqLowNoSwitches.mat');
-switches=load('freqLowSwitches.mat');
+noswitch=load('freqLowNoSwitches26-26.mat'); %freqLowSwitches26-26.mat
+switches=load('freqLowSwitches26-26.mat'); %freqLowSwitches26-26.mat
 
 freq.powspctrm=switches.freq.powspctrm;
 
@@ -182,7 +187,7 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim_lowfreq26-26_TFR_baserange%1.1f-%1.1fs',cfg.baseline(1),cfg.baseline(2));%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim_NoSwitches_lowfreq26-26_TFR_baserange%1.1f-%1.1fs',cfg.baseline(1),cfg.baseline(2));%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 

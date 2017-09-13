@@ -28,12 +28,27 @@ try
         %dsfile=datasets(2).name;
         nblocks=4;
         startblock=2;
+        if strcmp(cfgin.restingfile(2:3),'19')
+          nblocks=6;
+        end
         trldef = 'trialfun_lissajous_CONT';
     end
 
     for iblock = startblock:nblocks
         cd(dsfile)
         datafile=datasets(iblock).name;
+
+        %Hard coding P08 issues.
+        if iblock==3 && strcmp(cfgin.restingfile(2:3),'08')
+          continue
+        end
+        %Hard codgin P19 issues.
+        if iblock==3 && strcmp(cfgin.restingfile(2:3),'19')
+          continue
+        elseif iblock==4 && strcmp(cfgin.restingfile(2:3),'19')
+          continue
+        end
+
         %Load data into trial-based format.
         cfg                         = [];
         cfg.dataset                 = datafile;
@@ -45,7 +60,9 @@ try
 
         cfg = ft_definetrial(cfg);
         %while testing only do 25 trials
-        %cfg.trl=cfg.trl(1:25,:)
+        if startblock==2 && strcmp(cfgin.restingfile(2:3),'04')
+         cfg.trl=cfg.trl(2:end,:);
+        end
         cfg.channel    ={'all'};
         cfg.continuous = 'yes';
         data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
