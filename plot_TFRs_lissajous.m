@@ -6,25 +6,23 @@ function [] = plot_TFRs_lissajous(cfgin)
 clear all;close all;
 %Settings for analysis.
 cfgin.blocktype = 'continuous'
-do_baseline     = 0;
+do_baseline     = 1;
 
 
 %Load in data.
 filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
 cd(filepath)
-noswitch=load('freqLowNoSwitches26-26.mat');
-switches=load('freqLowSwitches26-26.mat');
+noswitch=load('freqHighNoSwitches26-26.mat');
+switches=load('freqHighSwitches26-26.mat');
 
 if do_baseline
 
   cfg = [];
   cfg.baselinewindow = [1.5 2];
   %Testing different subtraction settings.
-  cfg.subtractmode   ='combined';
-  %Change to indices
-  cfg.baselinewindow(1) = find(switches.freq.time==cfg.baselinewindow(1));
-  cfg.baselinewindow(2) = find(switches.freq.time==cfg.baselinewindow(2));
-
+  cfg.subtractmode   ='combine';
+  cfg.timeperiod     = [20,70];
+  
   % cfg.baseline = [1.5 2];
   % cfg.baselinetype = 'relative';
   % noswitch.freq = ft_freqbaseline(cfg,noswitch.freq);
@@ -39,8 +37,8 @@ idx_occ=find(~cellfun(@isempty,idx_occ));
 
 %Create tmaps. If across dim 1, testing sig across channels
 %between switch and no switch averages.
-[h,p]=ttest2(switches.freq.powspctrm(idx_occ,:,:),...
-noswitch.freq.powspctrm(idx_occ,:,:),'Dim',1);
+[h,p]=ttest2(switches.freq.powspctrm(idx_occ,:,20:70),...
+noswitch.freq.powspctrm(idx_occ,:,20:70),'Dim',1);
 
 
 %plot the tmap
@@ -57,7 +55,7 @@ xticks = linspace(1, numel(switches.freq.time),numel(xticklabels));
 set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
 
 set(gca,'YDir','normal')
-caxis([0 0.5])
+caxis([0 0.0005])
 colorbar
 title('P values for ttest2')
 ylabel('Frequencies')
@@ -67,10 +65,10 @@ xlabel('time (s)')
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
 if do_baseline
-  namefigure = sprintf('lowfreqTmap_CustomBaserange26-26%1.1f-%1.1fs%s',...
+  namefigure = sprintf('highfreqTmap_CustomBaserange26-26%1.1f-%1.1fs%s',...
   cfg.baselinewindow(1),cfg.baselinewindow(2),cfg.subtractmode);%Stage of analysis, frequencies, type plot, baselinewindow
 else
-  namefigure = 'lowfreqTmap26-26';
+  namefigure = 'highfreqTmap26-26';
 end
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure);

@@ -1,13 +1,13 @@
 function [avgFreq] = freq_average(cfgin)
 %Load in freq data, and average across appropriate trials and frequencies
 
-
+clear all;close all
 cfgin.blocktype='continuous';
 filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
 
 cd(filepath)
 
-freqrange  = 'low';
+freqrange  = 'high';
 doplot     = 0;
 compSwitch = 0;
 freqpath   = dir(sprintf('*%s*-26-26*',freqrange));
@@ -33,7 +33,7 @@ for ipart = 1:length(namecell)
 
   %Load the freq data
   load(namecell{ipart})
-
+  disp(namecell{ipart})
   %store details about each freq.
   partInfo(ipart).trialinfo = freq.trialinfo;
 
@@ -93,7 +93,7 @@ for ipart = 1:length(namecell)
 
       cfg   = [];
       %select trials if need be.
-      cfg.trials = idx_switch;
+      cfg.trials = idx_noswitch;
       %cfg.trial = ~nopress;
       %cfg.frequency = [12 35];
       cfg.avgoverrpt = 'yes';
@@ -150,8 +150,8 @@ if doplot
   cfg.baseline = [2 2.3];
   cfg.baselinetype = 'relative';
   cfg.masktype     = 'saturation';
-  cfg.zlim         = [0.8 1.2];
-  cfg.ylim         = [3 35];
+  cfg.zlim         = [-5 5];
+  %cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
   %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
   cfg.channel      = freq.label(idx_occ);
@@ -187,7 +187,7 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim_NoSwitches_lowfreq26-26_TFR_baserange%1.1f-%1.1fs',cfg.baseline(1),cfg.baseline(2));%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('OwnBaseline_SwitchvsNoswitch_highfreq26-26_TFR_baserange%1.1f-%1.1fs',cfg.baseline(1),cfg.baseline(2));%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 

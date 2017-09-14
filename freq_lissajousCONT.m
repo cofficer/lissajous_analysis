@@ -10,10 +10,10 @@ function data = freq_lissajousCONT(cfgin)
 
 try
 
-    for iblock = 3:4
+    for iblock = 2:4
 
 
-        dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc26-26%s.mat',cfgin.restingfile,iblock,cfgin.restingfile);
+        dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc26-26p%s.mat',cfgin.restingfile,iblock,cfgin.restingfile(2:3));
         if exist(dsfile) == 0
           continue
         end
