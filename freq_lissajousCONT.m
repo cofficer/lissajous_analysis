@@ -128,7 +128,7 @@ try
         outputfile = sprintf('%sfreq_%s_%sBlock%d-26-26.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,iblock);
 
 
-        save(outputfile, 'freq','-v7.3'));
+        save(outputfile, 'freq','-v7.3');
 
     end
 
