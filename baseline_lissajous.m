@@ -12,19 +12,13 @@ toi1 = find(round(freq1.time,2)==cfg.baselinewindow(1));
 toi2 = find(round(freq1.time,2)==cfg.baselinewindow(2));
 
 
-
-
-
-
 %Compute the average signal for combined baseline
 if strcmp(cfg.subtractmode,'within')
-  freq12    = ft_appenddata([],freq1,freq2)
+  freq12    = append_trialfreq([],freq1,freq2);
   cfg2      = [];
   cfg2.avgoverrpt = 'yes';
-  freq12    = ft_selectdata(cfg,freq12)
-  freq1  = freq1.powspctrm;
-  freq2  = freq2.powspctrm;
-  freq12 = freq.powspctrm(:,:,toi1:toi2);
+  freq12    = ft_selectdata(cfg2,freq12);
+  freq12 = mean(freq12.powspctrm(:,:,toi1:toi2),3);
 else
 
   freq1  = freq1.powspctrm;
@@ -44,11 +38,11 @@ elseif strcmp(cfg.subtractmode,'combine')
 elseif strcmp(cfg.subtractmode,'within')
 
   %loop over all trials for each switch and stable trials
-  for itrl1 = 1:length(freq1.powspctrm)
-    freq_base1(itrl,:,:,:) = ((freq1(itrl,:,:,:) - freq12)./freq12)*100;
+  for itrl1 = 1:size(freq1.powspctrm,1)
+    freq_base1(itrl1,:,:,:) = ((squeeze(freq1.powspctrm(itrl1,:,:,:)) - freq12)./freq12)*100;
   end
-  for itrl2 = 1:length(freq1.powspctrm)
-    freq_base2(itrl2,:,:,:) = ((freq2(itrl2,:,:,:) - freq12)./freq12)*100;
+  for itrl2 = 1:size(freq2.powspctrm,1)
+    freq_base2(itrl2,:,:,:) = ((squeeze(freq2.powspctrm(itrl2,:,:,:)) - freq12)./freq12)*100;
   end
 
 end

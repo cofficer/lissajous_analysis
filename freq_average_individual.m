@@ -91,7 +91,11 @@ for ipart = 1:length(blocks_ID)
 
 end
 
-%How to do the within trial baseline?
+%Run within trial baseline
+cfg                       = [];
+cfg.subtractmode          = 'within';
+cfg.baselinewindow        = [1.5 2];
+[switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
 
 
 %Save figure active.
