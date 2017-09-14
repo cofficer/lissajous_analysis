@@ -10,7 +10,8 @@ function data = freq_lissajousCONT(cfgin)
 
 try
 
-    for iblock = 2:4
+    for iblock = 3:4
+
 
         dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc26-26%s.mat',cfgin.restingfile,iblock,cfgin.restingfile);
         if exist(dsfile) == 0
@@ -130,6 +131,8 @@ try
 
         save(outputfile, 'freq','-v7.3');
 
+        %There might be an error due to memory
+        clear freq
     end
 
 
