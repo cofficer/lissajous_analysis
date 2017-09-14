@@ -1,4 +1,4 @@
-function switchTrial = append_trialfreq([],switchTrial,freqtmp)
+function [switchTrial] = append_trialfreq([],switchTrial,freqtmp)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load in freq data, and append across trials
 %Created 15/09/2017.

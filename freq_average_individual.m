@@ -69,7 +69,6 @@ for ipart = 1:length(blocks_ID)
   cfg.avgoverrpt = 'no';
   if ipart>1
     freqtmp = ft_selectdata(cfg,freq);
-    %switchTrial = ft_appenddata([],switchTrial,freqtmp);
     %new function for appending data.
     switchTrial = append_trialfreq([],switchTrial,freqtmp);
     freqtmp=[];
@@ -82,7 +81,8 @@ for ipart = 1:length(blocks_ID)
   cfg.avgoverrpt = 'no';
   if ipart>1
     freqtmp = ft_selectdata(cfg,freq);
-    stableTrial = ft_appenddata([],stableTrial,freqtmp);
+    %new function for appending data.
+    stableTrial = append_trialfreq([],stableTrial,freqtmp);
     freqtmp=[];
   else
     stableTrial  = ft_selectdata(cfg,freq);
