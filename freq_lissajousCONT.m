@@ -103,7 +103,7 @@ try
         freq=ft_combineplanar(cfgC,freq);
 
 
-        % %
+        % %save(outputfile,'freq','-v7.3');
         % %plot TFR
         %  cfg = [];
         %  cfg.baseline = [0.5 1];
@@ -128,7 +128,7 @@ try
         outputfile = sprintf('%sfreq_%s_%sBlock%d-26-26.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,iblock);
 
 
-        save(outputfile, 'freq');
+        save(outputfile, 'freq','-v7.3'));
 
     end
 
