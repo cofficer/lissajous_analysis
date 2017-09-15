@@ -94,11 +94,22 @@ cfg                       = [];
 cfg.subtractmode          = 'within';
 cfg.baselinewindow        = [1.5 2];
 [switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
-
 switchTrial=squeeze(nanmean(switchTrial,1));
 stableTrial=squeeze(nanmean(stableTrial,1));
 
+%Make the freq the trial average
+cfg =[];
+cfg.avgoverrpt = 'yes';
+freq = ft_selectdata(cfg,freq);
+
+%substitute powspctrm with own baselined data
 freq.powspctrm=squeeze(switchTrial)-squeeze(stableTrial);
+
+%Save the freq in new folder
+d_average = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average/';
+cd(d_average)
+freqtosave = sprintf('freqavgs_%d',part_ID);
+save(freqtosave,'freq','switchTrial','stableTrial')
 
 
 %%

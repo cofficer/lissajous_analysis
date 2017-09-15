@@ -22,7 +22,7 @@ if do_baseline
   %Testing different subtraction settings.
   cfg.subtractmode   ='combine';
   cfg.timeperiod     = [20,70];
-  
+
   % cfg.baseline = [1.5 2];
   % cfg.baselinetype = 'relative';
   % noswitch.freq = ft_freqbaseline(cfg,noswitch.freq);
@@ -55,7 +55,7 @@ xticks = linspace(1, numel(switches.freq.time),numel(xticklabels));
 set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
 
 set(gca,'YDir','normal')
-caxis([0 0.0005])
+caxis([0 0.005])
 colorbar
 title('P values for ttest2')
 ylabel('Frequencies')
