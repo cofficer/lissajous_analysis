@@ -45,6 +45,9 @@ elseif strcmp(cfg.subtractmode,'within')
     freq_base2(itrl2,:,:,:) = ((squeeze(freq2.powspctrm(itrl2,:,:,:)) - freq12)./freq12)*100;
   end
 
+  %Average over trials
+  freq_base1 = nanmean(freq_base1,1);
+  freq_base2 = nanmean(freq_base2,1);
 end
 
 

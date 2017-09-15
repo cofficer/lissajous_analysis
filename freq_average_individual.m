@@ -1,11 +1,9 @@
-function [avgFreq] = freq_average_individual(cfgin)
+function freq_average_individual(part_ID)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load in freq data, and average across
 %Created 15/09/2017.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-clear all;close all
 cfgin.blocktype='continuous';
 filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
 
@@ -24,7 +22,7 @@ partnum = cellfun(@(x) x(1:2),namecell,'UniformOutput',false);
 partnum = cellfun(@str2num,partnum,'UniformOutput',false);
 
 
-part_ID = 5;
+%part_ID = 5;
 
 blocks_ID = find(ismember([partnum{:}],part_ID));
 
@@ -87,7 +85,7 @@ for ipart = 1:length(blocks_ID)
   else
     stableTrial  = ft_selectdata(cfg,freq);
   end
-  freq=[];
+
 
 end
 
@@ -97,13 +95,37 @@ cfg.subtractmode          = 'within';
 cfg.baselinewindow        = [1.5 2];
 [switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
 
+switchTrial=squeeze(nanmean(switchTrial,1));
+stableTrial=squeeze(nanmean(stableTrial,1));
+
+freq.powspctrm=squeeze(switchTrial)-squeeze(stableTrial);
+
+
+%%
+%Plot and save
+idx_occ=strfind(freq.label,'O');
+idx_occ=find(~cellfun(@isempty,idx_occ));
+
+figure(1),clf
+cfg=[];
+cfg.zlim         = [-10 10];
+%cfg.ylim         = [3 35];
+cfg.layout       = 'CTF275_helmet.lay';
+%cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.channel      = freq.label(idx_occ);
+cfg.interactive = 'no';
+ft_singleplotTFR(cfg,freq);
+%ft_multiplotTFR(cfg,freq)
+%ft_topoplotTFR(cfg,freq)
+%ft_hastoolbox('brewermap', 1);
+colormap(flipud(brewermap(64,'RdBu')))
 
 %Save figure active.
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim2_SwitchvsNoswitch_highfreq26-26_TFR');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim2_SwitchvsNoSwitch_highfreq_%s_TFR',freqpath(blocks_ID(ipart)).name(1:2));%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 
