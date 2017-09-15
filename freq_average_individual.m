@@ -92,7 +92,7 @@ end
 %Run within trial baseline
 cfg                       = [];
 cfg.subtractmode          = 'within';
-cfg.baselinewindow        = [1.5 2];
+cfg.baselinewindow        = [-2.5 2.5];
 [switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
 switchTrial=squeeze(nanmean(switchTrial,1));
 stableTrial=squeeze(nanmean(stableTrial,1));

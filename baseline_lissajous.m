@@ -18,7 +18,7 @@ if strcmp(cfg.subtractmode,'within')
   cfg2      = [];
   cfg2.avgoverrpt = 'yes';
   freq12    = ft_selectdata(cfg2,freq12);
-  freq12 = mean(freq12.powspctrm(:,:,toi1:toi2),3);
+  freq12 = nanmean(freq12.powspctrm(:,:,toi1:toi2),3);
 else
 
   freq1  = freq1.powspctrm;
