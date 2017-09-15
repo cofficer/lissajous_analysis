@@ -72,7 +72,7 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim2_SwitchvsNoSwitch_highfreq_%s_TFR',freqpath(blocks_ID(ipart)).name(1:2));%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim2_SwitchvsNoSwitch_highfreq_%d_TFR',part_ID);%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 
