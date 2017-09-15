@@ -1,4 +1,4 @@
-function freq_average_individual(part_ID)
+function [freq,switchTrial,stableTrial]=freq_average_individual(part_ID)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load in freq data, and average across
 %Created 15/09/2017.
@@ -111,33 +111,4 @@ cd(d_average)
 freqtosave = sprintf('freqavgs_%d',part_ID);
 save(freqtosave,'freq','switchTrial','stableTrial')
 
-
-%%
-%Plot and save
-idx_occ=strfind(freq.label,'O');
-idx_occ=find(~cellfun(@isempty,idx_occ));
-
-figure(1),clf
-cfg=[];
-cfg.zlim         = [-10 10];
-%cfg.ylim         = [3 35];
-cfg.layout       = 'CTF275_helmet.lay';
-%cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
-cfg.channel      = freq.label(idx_occ);
-cfg.interactive = 'no';
-ft_singleplotTFR(cfg,freq);
-%ft_multiplotTFR(cfg,freq)
-%ft_topoplotTFR(cfg,freq)
-%ft_hastoolbox('brewermap', 1);
-colormap(flipud(brewermap(64,'RdBu')))
-
-%Save figure active.
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
-%New naming file standard. Apply to all projects.
-formatOut = 'yyyy-mm-dd';
-todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim2_SwitchvsNoSwitch_highfreq_%s_TFR',freqpath(blocks_ID(ipart)).name(1:2));%Stage of analysis, frequencies, type plot, baselinewindow
-
-figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
-
-saveas(gca,figurefreqname,'png')
+end
