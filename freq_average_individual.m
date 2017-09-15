@@ -9,7 +9,7 @@ filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/f
 
 cd(filepath)
 
-freqrange  = 'high';
+freqrange  = 'low';
 doplot     = 0;
 compSwitch = 0;
 freqpath   = dir(sprintf('*%s*-26-26*',freqrange));
@@ -108,7 +108,7 @@ freq.powspctrm=squeeze(switchTrial)-squeeze(stableTrial);
 %Save the freq in new folder
 d_average = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average/';
 cd(d_average)
-freqtosave = sprintf('freqavgs_%d',part_ID);
+freqtosave = sprintf('freqavgs_%s_%d',freqrange,part_ID);
 save(freqtosave,'freq','switchTrial','stableTrial')
 
 end
