@@ -50,7 +50,9 @@ lenblock(1)=size(partInfo(1).trialinfo,1);
 %Seperate into the two types of responses.
 if sum(partInfo(1).trialinfo(:,5)==226)>0
   partInfo(1).trialinfo(partInfo(1).trialinfo(:,5)==226,5)=225;
+  partInfo(1).trialinfo(partInfo(1).trialinfo(:,5)==228,5)=232;
 elseif sum(partInfo(1).trialinfo(:,5)==228)>0
+  partInfo(1).trialinfo(partInfo(1).trialinfo(:,5)==226,5)=225;
   partInfo(1).trialinfo(partInfo(1).trialinfo(:,5)==228,5)=232;
 end
 BP1(1) = sum(partInfo(1).trialinfo(:,5)==225);
@@ -104,10 +106,10 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figu
 
 figure(1),clf
 clear g
-g=gramm('x',[1:29,1:29],'y',[BP1+BP2,BP2]./[lenblock,lenblock],'color',[ones(1,length(BP1)),ones(1,length(BP1))*2]');
+g=gramm('x',[1:29,1:29],'y',[BP1+BP2,BP2],'color',[ones(1,length(BP1)),ones(1,length(BP1))*2]');
 g.geom_bar()
 %g.stat_summary()
-g.set_names('column','Origin','x','Participant category','y','% of trials remain (max 804)','color','Left vs. right choices');
+g.set_names('column','Origin','x','Participant category','y','trials remaining (max 804)','color','Left vs. right choices');
 g.draw();
 
 %name files

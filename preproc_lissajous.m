@@ -58,11 +58,32 @@ try
         cfg.trialdef.prestim        = 2.6; % in seconds
         cfg.trialdef.poststim       = 2.6; % in seconds
 
+        %Stores all the trial information
         cfg = ft_definetrial(cfg);
-        %while testing only do 25 trials
+
+        %add trial information about perceptual switches.
+
+        %Change the button press to the same values.
+        if sum(cfg.trl(:,8)==226)>0
+          cfg.trl(cfg.trl(:,8)==226,8)=225;
+          cfg.trl(cfg.trl(:,8)==228,8)=232;
+        elseif sum(cfg.trialinfo(:,8)==228)>0
+          cfg.trl(cfg.trl(:,8)==228,8)=232;
+          cfg.trl(cfg.trl(:,8)==226,8)=225;
+        end
+
+        %Find the indices of switches and non switches.
+        idx_switch   = [(abs(diff(cfg.trl(:,8)))==7);0];
+
+        %add the idx_switch to trl structure
+        cfg.trl(:,end+1) = idx_switch;
+
+        %Hard coded to deal with bad recording.
         if startblock==2 && strcmp(cfgin.restingfile(2:3),'04')
          cfg.trl=cfg.trl(2:end,:);
         end
+
+        %Load in raw data.
         cfg.channel    ={'all'};
         cfg.continuous = 'yes';
         data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
@@ -77,12 +98,13 @@ try
 
             data = ft_redefinetrial(cfg,data);
         end
-        %Resample the data
+
+
+        %Resample raw data
         cfg3.resample = 'yes';
         cfg3.fsample = 1200;
         cfg3.resamplefs = 500;
-        cfg3.detrend = 'no';
-
+        cfg3.detrend = 'no'; %Why not detrend? Might destort eyelink?
         data = ft_resampledata(cfg3,data);
 
         %Get all data except for the MEG.
@@ -92,7 +114,7 @@ try
 
         %Get all MEG.
         cfg          = [];
-        cfg.channel  = {'MEG'};
+        cfg.channel  = {'all','-EEG','HLC'};
         data    = ft_selectdata(cfg,data);
         %%
 
@@ -137,12 +159,12 @@ try
         % ==================================================================
 
         %find pupil index.
-        idx_blink = find(ismember(dataNoMEG.label,{'UADC003'})==1);
+        idx_blink = find(ismember(data.label,{'UADC003'})==1);
 
         %Take the absolute of the blinks to make identification easier with zscoring.
-        for itrials = 1:length(dataNoMEG.trial)
+        for itrials = 1:length(data.trial)
 
-            dataNoMEG.trial{itrials}(idx_blink,:) = abs(dataNoMEG.trial{itrials}(idx_blink,:));
+            data.trial{itrials}(idx_blink,:) = abs(data.trial{itrials}(idx_blink,:));
 
         end
 
@@ -163,54 +185,43 @@ try
         % set cutoff
         cfg.artfctdef.zvalue.cutoff     = 4;
         cfg.artfctdef.zvalue.interactive = 'no';
-        [cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, dataNoMEG);
+        [cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, data);
 
         artifact_eogHorizontal = artifact_eog;
-
-        cfg                             = [];
-        cfg.artfctdef.reject            = 'partial';
-        cfg.artfctdef.eog.artifact      = artifact_eogHorizontal;
-
         %plot the blink rate horizontal??
         cfg=[];
         cfg.channel = 'UADC003'; %UADC003 UADC004 if eyelink is present
-        blinks = ft_selectdata(cfg,dataNoMEG);
+        blinks = ft_selectdata(cfg,data);
 
-        %Could reduce blinks data to only trials with blinks.
-        %Identify blinks... could make us of: cfgart.artfctdef.zvalue.trl
+        %Save the blinks before removal.
         artifactTrl=zeros(size(cfgart.artfctdef.zvalue.artifact,2),size(cfgart.artfctdef.zvalue.artifact,1))';
         for iart = 1:size(cfgart.artfctdef.zvalue.artifact,1)
 
             %Compare the samples identified by the artifact detection and the
             %samples of each trial to identify the trial with artifact.
             %TODO: Check this error which occurs for blocks = 4, Part = 21.
-
             %Why add one to the floor? Because there is no trl = 0.
             artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/length(data.time{1}))+1;
-
             artifactTrl(iart,2) = floor(cfgart.artfctdef.zvalue.artifact(iart,2)/length(data.time{1}))+1;
-
             %There should be some kind of modulus to use here to find in which interval of 2250
             %the artifact sample is contained within
             avgBlinks(iart,:) = blinks.trial{artifactTrl(iart)};
 
         end
 
+        %Remove the eye artifacts
+        cfg                              = [];
+        cfg.artfctdef.reject             = 'complete';
+        cfg.artfctdef.eog.artifact       = artifact_eogHorizontal;
+        data                             = ft_rejectartifact(cfg,data);
+
         %Add the samples info to the trial numbers.
         %artifactTrl(:,3:4) = cfgart.artfctdef.zvalue.artifact;
-        %in case no eye artifacts
         if length(cfgart.artfctdef.zvalue.artifact)>0
             %Remove the blinks but inserting NaNs
             artfctdef.eog.artifact=zeros(size(cfgart.artfctdef.zvalue.artifact));
             artfctdef.eog.artifact=cfgart.artfctdef.zvalue.artifact;
-            %data.sampleinfo = data.cfg.previous.previous.previous.trl(:,1:2);
-            %data = insertNan(artfctdef,data);
-            cfg          = [];
-            removeTrials = unique([artifactTrl(:,1);artifactTrl(:,2)]);
-            allTrials    = ones(1,length(data.trial));
-            allTrials(removeTrials)    = 0;
-            cfg.trials   = logical(allTrials');
-            data         = ft_redefinetrial(cfg, data);
+
 
             subplot(2,3,cnt); cnt = cnt + 1;
             %figure(1),clf
@@ -219,9 +230,8 @@ try
             axis tight; axis square; box off;
             title('Blink rate 3')
         end
-        %reject trial with blinks
 
-        %saveas(gca,'testing.png','png')
+
         %%
         % ==================================================================
         % 4. REMOVE TRIALS WITH JUMPS
@@ -355,16 +365,16 @@ try
             saveas(gca,figurestore,'png')
             trldef = 'trialfun_lissajous';
         elseif strcmp(cfgin.blocktype,'continuous')
-            filestore=sprintf('%dpreproc26-26%s.mat',iblock,datafile(1:3));
+            filestore=sprintf('%dpreproc26-26P%s.mat',iblock,datafile(2:3));
             save(filestore,'data')
 
             %Save the artifacts
-            artstore=sprintf('%dartifacts%s.mat',iblock,datafile(1:3));
+            artstore=sprintf('%dartifactsP%s.mat',iblock,datafile(2:3));
 
             save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
 
             %save the invisible figure
-            figurestore=sprintf('%doverview%s.png',iblock,datafile(1:3));
+            figurestore=sprintf('%doverviewP%s.png',iblock,datafile(2:3));
             saveas(gca,figurestore,'png')
         end
 

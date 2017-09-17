@@ -14,6 +14,7 @@ part_available(logical(~remove_part))=[];
 
 %loop over part_ID, plot ... profit???
 for part_idx = 2:length(part_available)
+
   [freq,switchTrial,stableTrial]=freq_average_individual(part_available(part_idx));
   plot_average_individual(part_available(part_idx),freq,switchTrial,stableTrial);
 
@@ -31,7 +32,7 @@ datainfosAll = dir('*.mat');
 
 datainfoHigh = datainfosAll(~ismember({datainfosAll.name},{datainfosLow.name}));
 
-datainfos=datainfoHigh;
+datainfos=datainfosLow;
 
 %Just to get the freq info stored in all structs.
 load(datainfos(1).name)
@@ -57,7 +58,7 @@ avg_freq_switch=squeeze(nanmean(avg_freq_switch,1));
 avg_freq_stable=squeeze(nanmean(avg_freq_stable,1));
 
 %Insert the freq data averaged over participants.
-freq.powspctrm=avg_freq_switch+avg_freq_stable./2;
+freq.powspctrm=avg_freq_stable;
 
 
 idx_occ=strfind(freq.label,'O');
@@ -70,7 +71,7 @@ cfg.layout       = 'CTF275_helmet.lay';
 %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
-cfg.title='Switch added Stable';
+cfg.title='Switch vs Stable';
 ft_singleplotTFR(cfg,freq);
 %ft_multiplotTFR(cfg,freq)
 %ft_topoplotTFR(cfg,freq)
@@ -83,7 +84,7 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim2_SwitchaddedStable_highAverage_TFR');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim2_Stable_3-15HzAverage-2s_TOPO');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 
@@ -94,12 +95,12 @@ saveas(gca,figurefreqname,'png')
 figure(2),clf
 cfg=[];
 cfg.zlim         = [-8 8];
-%cfg.ylim         = [3 35];
+cfg.ylim         = [3 15];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-0.1 0.1];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-2 -1.7];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 %cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
-cfg.title='SwitchvsNoswitch';
+cfg.title='Stable';
 %ft_singleplotTFR(cfg,freq);
 %ft_multiplotTFR(cfg,freq)
 ft_topoplotTFR(cfg,freq)

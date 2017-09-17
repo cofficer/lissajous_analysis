@@ -13,7 +13,7 @@ try
     for iblock = 2:4
 
 
-        dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc26-26p%s.mat',cfgin.restingfile,iblock,cfgin.restingfile(2:3));
+        dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc26-26P%s.mat',cfgin.restingfile,iblock,cfgin.restingfile(2:3));
         if exist(dsfile) == 0
           continue
         end
@@ -95,6 +95,7 @@ try
 
 
         %Fieltrip fourier
+        cfg.polyremoval = -1; %Detrend that data.
         freq = ft_freqanalysis(cfg, data);
 
         %Combine planar
