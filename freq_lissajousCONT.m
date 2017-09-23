@@ -1,4 +1,4 @@
-function data = freq_lissajousCONT(cfgin)
+function freq = freq_lissajousCONT(cfgin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Run time-frequency analysis for continuous data. 28/08-2017. cofficer.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -7,7 +7,7 @@ function data = freq_lissajousCONT(cfgin)
 
 %loop and load preproc data
 %example /mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/P22/
-
+%
 try
 
     for iblock = 2:4
