@@ -10,14 +10,26 @@ function freq = freq_lissajousCONT(cfgin)
 %
 try
 
-    for iblock = 2:4
 
 
-        dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%dpreproc26-26P%s.mat',cfgin.restingfile,iblock,cfgin.restingfile(2:3));
-        if exist(dsfile) == 0
+    %Would be more efficient to load available blocks
+    %Instead of looping 2:4.
+    dirpart = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/',cfgin.restingfile(1:3));
+    cd(dirpart)
+
+    dat_name = dir('*26-26*.mat');
+
+    for iblock = 1:length(dat_name)
+
+        load(dat_name(iblock).name)
+
+        outputfile = sprintf('%sfreq_%s_%sBlock%s-26-26.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,dat_name(iblock).name(1));
+
+        cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/')
+
+        if exist(outputfile)==2
           continue
         end
-        load(dsfile)
 
         %Seperate the data into orthogonal sensors
         cfg_pn = [];
@@ -126,10 +138,6 @@ try
         [pathstr, name] = fileparts(cfgin.fullpath);
         fprintf('Saving %s from...\n %s\n', name, pathstr)
 
-        %If continuous then also include the block number in the saved file.
-        outputfile = sprintf('%sfreq_%s_%sBlock%d-26-26.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,iblock);
-
-
         save(outputfile, 'freq','-v7.3');
 
         %There might be an error due to memory
@@ -144,7 +152,7 @@ catch err
     c=clock;
     fprintf(fid,sprintf('\n\n\n\nNew entry for %s at %i/%i/%i %i:%i\n',cfgin.restingfile,fix(c(1)),fix(c(2)),fix(c(3)),fix(c(4)),fix(c(5))))
 
-    fprintf(fid,'%s',err.getReport('extended','hyperlinks','off'))
+    fprintf(fid,'%s\n\n',err.message)
 
     fclose(fid)
 
