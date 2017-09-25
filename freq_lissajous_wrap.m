@@ -9,10 +9,10 @@ function freq = freq_lissajous_wrap(cfgin,runcfg)
   %Would be more efficient to load available blocks
   %Instead of looping 2:4.
 
-  i_exp=0;
+  i_exp=1;
   %expand the cfgin three times.
   for ipart = 1:length(cfgin)
-    i_exp=i_exp+1;
+  %  i_exp=i_exp+1;
     dirpart = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/',cfgin{ipart}.restingfile(1:3));
     cd(dirpart)
 
