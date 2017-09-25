@@ -26,7 +26,7 @@ function freq = freq_lissajousCONT(cfgin)
     cd(cfgin.dirpart)
     load(cfgin.iblock)
 
-    outputfile = sprintf('%sfreq_%s_%sBlock%s-26-26.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,dat_name(iblock).name(1));
+    outputfile = sprintf('%sfreq_%s_%sBlock%s-26-26.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,cfgin.iblock(1));
 
     cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/')
 
