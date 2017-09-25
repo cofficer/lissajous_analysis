@@ -21,7 +21,7 @@ function freq = freq_lissajousCONT(cfgin)
     cfg.trigger     = 'selfoccl';
     cfg.channel     ='MEG'; %
     cfg.trials      = 'all';
-    cfg.freqanalysistype = 'high';
+    cfg.freqanalysistype = 'low';
 
     cd(cfgin.dirpart)
     load(cfgin.iblock)
