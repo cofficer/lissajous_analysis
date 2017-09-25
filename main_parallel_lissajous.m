@@ -51,8 +51,9 @@ switch runcfg.execute
         stack = 1;%round(length(cfg1)/nnodes);
 
         if strcmp(cfgin{1}.blocktype,'continuous')
-          qsubcellfun(@freq_lissajousCONT, cfgin, 'compile', 'no', ...
-            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+          for icfg = 1:length(cfgin)
+            freq_lissajous_wrap(cfgin,runcfg)
+          end
         else
           qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
             'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
