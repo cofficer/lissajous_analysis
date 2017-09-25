@@ -9,12 +9,12 @@ filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/f
 
 cd(filepath)
 
-freqrange  = 'low';
+freqrange  = 'high';
 doplot     = 0;
 compSwitch = 0;
 freqpath   = dir(sprintf('*%s*-26-26*',freqrange));
 
-%Remove participant nr 10, super weird artifacts.
+
 namecell = {freqpath.name};
 
 partnum = cellfun(@(x) x(1:2),namecell,'UniformOutput',false);
