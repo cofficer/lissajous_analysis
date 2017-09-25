@@ -8,15 +8,29 @@ function freq = freq_lissajous_wrap(cfgin,runcfg)
 
   %Would be more efficient to load available blocks
   %Instead of looping 2:4.
-  dirpart = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/',cfgin.restingfile(1:3));
-  cd(dirpart)
 
-  dat_name = dir('*26-26*.mat');
+  i_exp=0;
+  %expand the cfgin three times.
+  for ipart = 1:length(cfgin)
+    i_exp=i_exp+1;
+    dirpart = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/',cfgin{ipart}.restingfile(1:3));
+    cd(dirpart)
 
-  for iblock = 1:length(dat_name)
-    cfgin.dirpart=dirpart;
-    cfgin.iblock=dat_name(iblock).name; % needs to contain the block number as well.
-    qsubcellfun(@freq_lissajousCONT, cfgin, 'compile', 'no', ...
-    'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+    dat_name = dir('*26-26*.mat');
+
+    for iblock = 1:length(dat_name)
+      cfgin_exp{i_exp} = cfgin{ipart};
+      cfgin_exp{i_exp}.dirpart=dirpart;
+      cfgin_exp{i_exp}.iblock=dat_name(iblock).name; % needs to contain the block number as well.
+      i_exp=i_exp+1;
+    end
+
+
   end
+
+
+
+  qsubcellfun(@freq_lissajousCONT, cfgin_exp, 'compile', 'no', ...
+  'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+
 end
