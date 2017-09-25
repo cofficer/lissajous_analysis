@@ -17,6 +17,6 @@ function freq = freq_lissajous_wrap(cfgin,runcfg)
     cfgin.dirpart=dirpart;
     cfgin.iblock=dat_name(iblock).name; % needs to contain the block number as well.
     qsubcellfun(@freq_lissajousCONT, cfgin, 'compile', 'no', ...
-    'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+    'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
   end
 end

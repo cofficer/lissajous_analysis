@@ -47,8 +47,8 @@ switch runcfg.execute
     case 'freq'
         %restingPreprocNumbers(cfgin{1})
         %cellfun(@restingPreprocNumbers, cfgin);
-        nnodes = 1;%64; % how many licenses?
-        stack = 1;%round(length(cfg1)/nnodes);
+        runcfg.nnodes = 1;%64; % how many licenses?
+        runcfg.stack = 1;%round(length(cfg1)/nnodes);
 
         if strcmp(cfgin{1}.blocktype,'continuous')
           for icfg = 1:length(cfgin)
