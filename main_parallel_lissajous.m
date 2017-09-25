@@ -52,7 +52,7 @@ switch runcfg.execute
 
         if strcmp(cfgin{1}.blocktype,'continuous')
           for icfg = 1:length(cfgin)
-            freq_lissajous_wrap(cfgin,runcfg)
+            freq_lissajous_wrap(cfgin{icfg},runcfg)
           end
         else
           qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
