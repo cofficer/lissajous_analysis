@@ -37,11 +37,8 @@ for ipart = 1:length(namecell)
   %store details about each freq.
   partInfo(ipart).trialinfo = freq.trialinfo;
 
-
   %While the same participant, average together and at the First
   %new participant plot the TFR.
-
-
     %If comparing perceptual switch with no switch.
     if compSwitch
 

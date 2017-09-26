@@ -13,7 +13,7 @@ remove_part(16)=0;
 part_available(logical(~remove_part))=[];
 
 %loop over part_ID, plot ... profit???
-for part_idx = 7:length(part_available)
+for part_idx = 1:length(part_available)
   disp(part_idx)
   [freq,switchTrial,stableTrial]=freq_average_individual(part_available(part_idx));
   plot_average_individual(part_available(part_idx),freq,switchTrial,stableTrial);
