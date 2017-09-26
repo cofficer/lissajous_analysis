@@ -75,7 +75,7 @@ todaystr = datestr(now,formatOut);
 namefigure = sprintf('prelim2_SwitchvsNoSwitch_lowRealfreq_%d_TFR',part_ID);%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
-
-saveas(gca,figurefreqname,'png')
+set(hf,'PaperpositionMode','Auto')
+saveas(hf,figurefreqname,'png')
 
 end
