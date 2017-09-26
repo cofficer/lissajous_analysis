@@ -1,4 +1,4 @@
-function preproc_eye_artifact(data,cnt)
+function [data,cnt]=preproc_eye_artifact(data,cnt)
   % ==================================================================
   % 26-09-2017. CG.
   % 3. Identify blinks (only during beginning of trial)
