@@ -48,7 +48,7 @@ try
         elseif iblock==4 && strcmp(cfgin.restingfile(2:3),'19')
           continue
         end
-
+%%
         %Load data into trial-based format.
         cfg                         = [];
         cfg.dataset                 = datafile;
@@ -67,7 +67,7 @@ try
         if sum(cfg.trl(:,8)==226)>0
           cfg.trl(cfg.trl(:,8)==226,8)=225;
           cfg.trl(cfg.trl(:,8)==228,8)=232;
-        elseif sum(cfg.trialinfo(:,8)==228)>0
+        elseif sum(cfg.trl(:,8)==228)>0
           cfg.trl(cfg.trl(:,8)==228,8)=232;
           cfg.trl(cfg.trl(:,8)==226,8)=225;
         end
@@ -113,12 +113,12 @@ try
         dataNoMEG    = ft_selectdata(cfg,data);
 
         %Get all MEG.
-        cfg          = [];
-        cfg.channel  = {'all','-EEG','HLC'};
-        data    = ft_selectdata(cfg,data);
-        %%
+       % cfg          = [];
+       % cfg.channel  = {'all','-EEG','-HLC','EEG058','EEG057'};
+       % data    = ft_selectdata(cfg,data);
+        %
 
-        %%
+        %
         % plot a quick power spectrum
         % save those cfgs for later plotting
         cfgfreq             = [];
@@ -141,7 +141,7 @@ try
         set(gca, 'xtick', [10 50 100], 'tickdir', 'out', 'xticklabel', []);
 
 
-        %%
+        %
 
 
         % compute head rotation wrt first trial
@@ -151,6 +151,7 @@ try
         plot(cc_rel); ylabel('HeadM');
         axis tight; box off;
 
+        %%
         % ==================================================================
         % 3. Identify blinks (only during beginning of trial)
         % Remove trials with (horizontal) saccades (EOGH). Use the same settings as
@@ -160,19 +161,18 @@ try
 
         %find pupil index.
         idx_blink = find(ismember(data.label,{'UADC003'})==1);
+        idx_sacc  = find(ismember(data.label,{'EEG058'})==1); %Vertical
 
         %Take the absolute of the blinks to make identification easier with zscoring.
         for itrials = 1:length(data.trial)
-
             data.trial{itrials}(idx_blink,:) = abs(data.trial{itrials}(idx_blink,:));
-
         end
 
         cfg                              = [];
         cfg.continuous                   = 'yes'; % data has been epoched
 
         % channel selection, cutoff and padding
-        cfg.artfctdef.zvalue.channel     = {'UADC003'}; %UADC003 UADC004s
+        cfg.artfctdef.zvalue.channel     = {'EEG058'}; %UADC003 UADC004s
 
         % 001, 006, 0012 and 0018 are the vertical and horizontal eog chans
         cfg.artfctdef.zvalue.trlpadding  = 0; % padding doesnt work for data thats already on disk
@@ -183,7 +183,7 @@ try
         cfg.artfctdef.zvalue.bpfilter   = 'no';
 
         % set cutoff
-        cfg.artfctdef.zvalue.cutoff     = 4;
+        cfg.artfctdef.zvalue.cutoff     = 2.5;
         cfg.artfctdef.zvalue.interactive = 'no';
         [cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, data);
 
@@ -208,7 +208,7 @@ try
             avgBlinks(iart,:) = blinks.trial{artifactTrl(iart)};
 
         end
-
+%%
         %Remove the eye artifacts
         cfg                              = [];
         cfg.artfctdef.reject             = 'complete';
