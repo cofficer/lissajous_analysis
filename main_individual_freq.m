@@ -21,10 +21,11 @@ freqrange  = 'low';
 load_avg = 1;
 
 %Loop over correct participants to plot or save the trials switch no switch sep.
-for part_idx = 1:length(part_available)
+for part_idx = 3:length(part_available)
   disp(part_idx)
 
   if load_avg
+    cd(d_average)
     freqpath   = dir(sprintf('*%s_%s.mat',freqrange,num2str(part_available(part_idx))));
     load(freqpath.name);
   else
