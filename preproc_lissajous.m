@@ -159,8 +159,8 @@ try
         % (z = [4 6]). Reject all trials that contain saccades before going further.
         % ==================================================================
 %
-
-        [data,cnt]=preproc_eye_artifact(data,cnt);
+        blinkchannel = 'UADC003';%EEG058
+        [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
 
 
 %         %find pupil index.

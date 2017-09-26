@@ -1,4 +1,4 @@
-function [data,cnt]=preproc_eye_artifact(data,cnt)
+function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
   % ==================================================================
   % 26-09-2017. CG.
   % 3. Identify blinks (only during beginning of trial)
@@ -10,8 +10,8 @@ function [data,cnt]=preproc_eye_artifact(data,cnt)
 
 
   %find pupil index.
-  idx_blink = find(ismember(data.label,{'UADC003'})==1);
-  idx_sacc  = find(ismember(data.label,{'EEG058'})==1); %Vertical
+  idx_blink = find(ismember(data.label,{blinkchannel})==1);
+  %idx_sacc  = find(ismember(data.label,{'EEG058'})==1); %Vertical
 
   %Take the absolute of the blinks to make identification easier with zscoring.
   for itrials = 1:length(data.trial)
@@ -22,25 +22,40 @@ function [data,cnt]=preproc_eye_artifact(data,cnt)
   cfg.continuous                   = 'yes'; % data has been epoched
 
   % channel selection, cutoff and padding
-  cfg.artfctdef.zvalue.channel     = {'UADC003'}; %UADC003 UADC004s
+  cfg.artfctdef.zvalue.channel     = {'blinkchannel'}; %UADC003 UADC004s
+  if strcmp(blinkchannel,'UADC003')
+    % 001, 006, 0012 and 0018 are the vertical and horizontal eog chans
+    cfg.artfctdef.zvalue.trlpadding  = 0; % padding doesnt work for data thats already on disk
+    cfg.artfctdef.zvalue.fltpadding  = 0; % 0.2; this crashes the artifact func!
+    cfg.artfctdef.zvalue.artpadding  = 0.1; % go a bit to the sides of blinks
 
-  % 001, 006, 0012 and 0018 are the vertical and horizontal eog chans
-  cfg.artfctdef.zvalue.trlpadding  = 0; % padding doesnt work for data thats already on disk
-  cfg.artfctdef.zvalue.fltpadding  = 0; % 0.2; this crashes the artifact func!
-  cfg.artfctdef.zvalue.artpadding  = 0.1; % go a bit to the sides of blinks
+    % algorithmic parameters
+    cfg.artfctdef.zvalue.bpfilter   = 'no';
 
-  % algorithmic parameters
-  cfg.artfctdef.zvalue.bpfilter   = 'no';
+    % set cutoff
+    cfg.artfctdef.zvalue.cutoff     = 2.5;
+    cfg.artfctdef.zvalue.interactive = 'no';
+  elseif strcmp(blinkchannel,'EEG058')
 
-  % set cutoff
-  cfg.artfctdef.zvalue.cutoff     = 2.5;
-  cfg.artfctdef.zvalue.interactive = 'no';
+    cfg.artfctdef.zvalue.cutoff      = 3;
+    cfg.artfctdef.zvalue.trlpadding  = 0;
+    cfg.artfctdef.zvalue.artpadding  = 0.1;
+    cfg.artfctdef.zvalue.fltpadding  = 0.2;
+
+    % algorithmic parameters
+    cfg.artfctdef.zvalue.bpfilter   = 'yes';
+    cfg.artfctdef.zvalue.bpfilttype = 'but';
+    cfg.artfctdef.zvalue.bpfreq     = [1 15];
+    cfg.artfctdef.zvalue.bpfiltord  = 4;
+    cfg.artfctdef.zvalue.hilbert    = 'yes';
+  end
+
   [cfgart, artifact_eog]               = ft_artifact_zvalue(cfg, data);
 
   artifact_eogHorizontal = artifact_eog;
   %plot the blink rate horizontal??
   cfg=[];
-  cfg.channel = 'UADC003'; %UADC003 UADC004 if eyelink is present
+  cfg.channel = 'blinkchannel'; %UADC003 UADC004 if eyelink is present
   blinks = ft_selectdata(cfg,data);
 
   %Save the blinks before removal.
