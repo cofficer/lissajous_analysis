@@ -22,7 +22,7 @@ function [data,cnt]=preproc_eye_artifact(data,cnt)
   cfg.continuous                   = 'yes'; % data has been epoched
 
   % channel selection, cutoff and padding
-  cfg.artfctdef.zvalue.channel     = {'EEG058'}; %UADC003 UADC004s
+  cfg.artfctdef.zvalue.channel     = {'UADC003'}; %UADC003 UADC004s
 
   % 001, 006, 0012 and 0018 are the vertical and horizontal eog chans
   cfg.artfctdef.zvalue.trlpadding  = 0; % padding doesnt work for data thats already on disk
