@@ -38,10 +38,16 @@ namecell = {freqpath.name};
 
 partnum = cellfun(@(x) x(14:15),namecell,'UniformOutput',false);
 partnum = strrep(partnum,'.','');
+partnum = cell2mat(cellfun(@str2num,partnum,'un',0));
+
+%Found the participants which are present as average data
+%and are not flagged as bad form hard coding and 100trials of each..
+part_idx = ismember(partnum,part_available);
 
 
-%idx_partnum = ~strcmp(partnum,'10');
-%namecell = namecell(idx_partnum);
+namecell = namecell(part_idx);
+
+
 
 %Loop over participants
 for ipart = 1:length(namecell)
@@ -50,8 +56,7 @@ for ipart = 1:length(namecell)
   load(namecell{ipart})
   disp(sprintf('Loading data from participant: %s',namecell{ipart}(1:2)))
   %store details about each freq.
-  partInfo(ipart).trialinfo = freq.trialinfo;
-  partInfo(ipart).ID        = namecell{ipart}(1:2);
+
 end
 
 

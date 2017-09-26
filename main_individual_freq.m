@@ -12,10 +12,21 @@ remove_part(11)=0;
 remove_part(16)=0;
 part_available(logical(~remove_part))=[];
 
+
+
+d_average = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average/';
+cd(d_average)
+freqrange  = 'low';
+
+
+
+
 %loop over part_ID, plot ... profit???
 for part_idx = 1:length(part_available)
   disp(part_idx)
-  [freq,switchTrial,stableTrial]=freq_average_individual(part_available(part_idx));
+  freqpath   = dir(sprintf('*%s_%s.mat',freqrange,num2str(part_available(part_idx))));
+  %[freq,switchTrial,stableTrial]=freq_average_individual(part_available(part_idx));
+  load(freqpath.name);
   plot_average_individual(part_available(part_idx),freq,switchTrial,stableTrial);
 
 end

@@ -9,7 +9,7 @@ filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/f
 
 cd(filepath)
 
-freqrange  = 'high';
+freqrange  = 'low';
 doplot     = 0;
 compSwitch = 0;
 freqpath   = dir(sprintf('*%s*-26-26*',freqrange));
