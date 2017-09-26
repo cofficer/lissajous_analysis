@@ -22,7 +22,7 @@ function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
   cfg.continuous                   = 'yes'; % data has been epoched
 
   % channel selection, cutoff and padding
-  cfg.artfctdef.zvalue.channel     = {'blinkchannel'}; %UADC003 UADC004s
+  cfg.artfctdef.zvalue.channel     = {blinkchannel}; %UADC003 UADC004s
   if strcmp(blinkchannel,'UADC003')
     % 001, 006, 0012 and 0018 are the vertical and horizontal eog chans
     cfg.artfctdef.zvalue.trlpadding  = 0; % padding doesnt work for data thats already on disk
@@ -55,7 +55,7 @@ function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
   artifact_eogHorizontal = artifact_eog;
   %plot the blink rate horizontal??
   cfg=[];
-  cfg.channel = 'blinkchannel'; %UADC003 UADC004 if eyelink is present
+  cfg.channel = blinkchannel; %UADC003 UADC004 if eyelink is present
   blinks = ft_selectdata(cfg,data);
 
   %Save the blinks before removal.
