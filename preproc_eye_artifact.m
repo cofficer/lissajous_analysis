@@ -37,7 +37,7 @@ function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
     cfg.artfctdef.zvalue.interactive = 'no';
   elseif strcmp(blinkchannel,'EEG058')
 
-    cfg.artfctdef.zvalue.cutoff      = 3;
+    cfg.artfctdef.zvalue.cutoff      = 0.2;
     cfg.artfctdef.zvalue.trlpadding  = 0;
     cfg.artfctdef.zvalue.artpadding  = 0.1;
     cfg.artfctdef.zvalue.fltpadding  = 0.2;
@@ -46,7 +46,7 @@ function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
     cfg.artfctdef.zvalue.bpfilter   = 'yes';
     cfg.artfctdef.zvalue.bpfilttype = 'but';
     cfg.artfctdef.zvalue.bpfreq     = [1 15];
-    cfg.artfctdef.zvalue.bpfiltord  = 0.2;
+    cfg.artfctdef.zvalue.bpfiltord  = 4;
     cfg.artfctdef.zvalue.hilbert    = 'yes';
   end
 
