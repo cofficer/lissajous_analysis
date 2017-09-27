@@ -162,6 +162,9 @@ try
         blinkchannel = 'UADC003';%EEG058
         [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
 
+        blinkchannel = 'EEG058';%EEG058
+        [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+
 
 %         %find pupil index.
 %         idx_blink = find(ismember(data.label,{'UADC003'})==1);

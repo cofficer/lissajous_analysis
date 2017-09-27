@@ -58,21 +58,6 @@ function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
   cfg.channel = blinkchannel; %UADC003 UADC004 if eyelink is present
   blinks = ft_selectdata(cfg,data);
 
-  %Save the blinks before removal.
-  artifactTrl=zeros(size(cfgart.artfctdef.zvalue.artifact,2),size(cfgart.artfctdef.zvalue.artifact,1))';
-  for iart = 1:size(cfgart.artfctdef.zvalue.artifact,1)
-
-    %Compare the samples identified by the artifact detection and the
-    %samples of each trial to identify the trial with artifact.
-    %TODO: Check this error which occurs for blocks = 4, Part = 21.
-    %Why add one to the floor? Because there is no trl = 0.
-    artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/length(data.time{1}))+1;
-    artifactTrl(iart,2) = floor(cfgart.artfctdef.zvalue.artifact(iart,2)/length(data.time{1}))+1;
-    %There should be some kind of modulus to use here to find in which interval of 2250
-    %the artifact sample is contained within
-    avgBlinks(iart,:) = blinks.trial{artifactTrl(iart)};
-
-  end
   %%
   %Remove the eye artifacts
   cfg                              = [];
@@ -80,22 +65,39 @@ function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
   cfg.artfctdef.eog.artifact       = artifact_eogHorizontal;
   data                             = ft_rejectartifact(cfg,data);
 
-  %Add the samples info to the trial numbers.
-  %artifactTrl(:,3:4) = cfgart.artfctdef.zvalue.artifact;
-  if length(cfgart.artfctdef.zvalue.artifact)>0
-    %Remove the blinks but inserting NaNs
-    artfctdef.eog.artifact=zeros(size(cfgart.artfctdef.zvalue.artifact));
-    artfctdef.eog.artifact=cfgart.artfctdef.zvalue.artifact;
+  %Only plot the first time around. 
+  if strcmp(blinkchannel,'UADC003')
+    %Save the blinks before removal.
+    artifactTrl=zeros(size(cfgart.artfctdef.zvalue.artifact,2),size(cfgart.artfctdef.zvalue.artifact,1))';
+    for iart = 1:size(cfgart.artfctdef.zvalue.artifact,1)
+
+      %Compare the samples identified by the artifact detection and the
+      %samples of each trial to identify the trial with artifact.
+      %TODO: Check this error which occurs for blocks = 4, Part = 21.
+      %Why add one to the floor? Because there is no trl = 0.
+      artifactTrl(iart,1) = floor(cfgart.artfctdef.zvalue.artifact(iart,1)/length(data.time{1}))+1;
+      artifactTrl(iart,2) = floor(cfgart.artfctdef.zvalue.artifact(iart,2)/length(data.time{1}))+1;
+      %There should be some kind of modulus to use here to find in which interval of 2250
+      %the artifact sample is contained within
+      avgBlinks(iart,:) = blinks.trial{artifactTrl(iart)};
+
+    end
+    %Add the samples info to the trial numbers.
+    %artifactTrl(:,3:4) = cfgart.artfctdef.zvalue.artifact;
+    if length(cfgart.artfctdef.zvalue.artifact)>0
+      %Remove the blinks but inserting NaNs
+      artfctdef.eog.artifact=zeros(size(cfgart.artfctdef.zvalue.artifact));
+      artfctdef.eog.artifact=cfgart.artfctdef.zvalue.artifact;
 
 
-    subplot(2,3,cnt); cnt = cnt + 1;
-    %figure(1),clf
-    plot(mean(avgBlinks,1))
-    %plot(avgBlinks(:,:)')
-    axis tight; axis square; box off;
-    title('Blink rate 3')
+      subplot(2,3,cnt); cnt = cnt + 1;
+      %figure(1),clf
+      plot(mean(avgBlinks,1))
+      %plot(avgBlinks(:,:)')
+      axis tight; axis square; box off;
+      title('Blink rate 3')
+    end
   end
-
 
 
 end
