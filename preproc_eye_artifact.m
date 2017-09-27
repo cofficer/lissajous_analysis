@@ -46,7 +46,7 @@ function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
     cfg.artfctdef.zvalue.bpfilter   = 'yes';
     cfg.artfctdef.zvalue.bpfilttype = 'but';
     cfg.artfctdef.zvalue.bpfreq     = [1 15];
-    cfg.artfctdef.zvalue.bpfiltord  = 4;
+    cfg.artfctdef.zvalue.bpfiltord  = 0.2;
     cfg.artfctdef.zvalue.hilbert    = 'yes';
   end
 
@@ -65,7 +65,7 @@ function [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel)
   cfg.artfctdef.eog.artifact       = artifact_eogHorizontal;
   data                             = ft_rejectartifact(cfg,data);
 
-  %Only plot the first time around. 
+  %Only plot the first time around.
   if strcmp(blinkchannel,'UADC003')
     %Save the blinks before removal.
     artifactTrl=zeros(size(cfgart.artfctdef.zvalue.artifact,2),size(cfgart.artfctdef.zvalue.artifact,1))';
