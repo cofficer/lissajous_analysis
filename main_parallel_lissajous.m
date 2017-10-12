@@ -27,7 +27,7 @@ end
 
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors
+runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -51,7 +51,7 @@ switch runcfg.execute
         runcfg.stack = 1;%round(length(cfg1)/nnodes);
 
         if strcmp(cfgin{1}.blocktype,'continuous')
-          
+
           freq_lissajous_wrap(cfgin,runcfg)
 
         else
@@ -59,6 +59,42 @@ switch runcfg.execute
             'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
         end
 
+    case 'freq_plot'
+
+
+      %remove some participants from plotting.
+      part_available = 1:29;
+      remove_part = ones(1,length(part_available));
+      remove_part(1)=0; % Only one reponse
+      remove_part(8)=0;
+      remove_part(11)=0;
+      remove_part(16)=0;
+
+      cfg =[];
+      part_available(logical(~remove_part))=[];
+      cfg.part_available=part_available;
+      d_average = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average/';
+      cd(d_average)
+      freqrange  = 'low';
+
+      %Load data which has already been averaged...
+      cfg.load_avg = 0;
+
+      %insert the
+      for icfgin = 1:length(cfgin)
+        cfgin{icfgin}.part_ID=icfgin;
+      end
+
+      %remove error participants. 
+      cfgin=cfgin{part_available};
+
+
+
+
+      runcfg.nnodes = 1;%64; % how many licenses?
+      runcfg.stack = 1;%round(length(cfg1)/nnodes);
+      qsubcellfun(@main_individual_freq, cfgin, 'compile', 'no', ...
+        'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
 
 end
 
