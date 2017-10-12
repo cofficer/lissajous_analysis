@@ -76,6 +76,24 @@ function plot_average_all(runplot,freq,avg_freq_stable,avg_freq_switch)
     end
 
   case 'tfr'
+
+      idx_occ=strfind(freq.label,'O');
+      idx_occ=find(~cellfun(@isempty,idx_occ));
+      figure(1),clf
+      cfg=[];
+      cfg.zlim         = runplot.zlim;
+      %cfg.ylim         = [3 35];
+      cfg.layout       = 'CTF275_helmet.lay';
+      %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+      cfg.channel      = freq.label(idx_occ);
+      cfg.interactive = 'no';
+      cfg.title='Switch vs Stable';
+      ft_singleplotTFR(cfg,freq);
+      %ft_multiplotTFR(cfg,freq)
+      %ft_topoplotTFR(cfg,freq)
+      %ft_hastoolbox('brewermap', 1);
+      colormap(flipud(brewermap(64,'RdBu')))
+      namefigure = sprintf('prelim3_%s_%s_zlim%s_TFR',runplot.data,runplot.freqrange,num2str(runplot.zlim(2)));
   case 'tmap'
   end
 
