@@ -27,7 +27,7 @@ partnum = cellfun(@str2num,partnum,'UniformOutput',false);
 blocks_ID = find(ismember([partnum{:}],part_ID));
 
 suplot = 0;
-%Loop over participants
+%Loop over participant 3 seperate blocks
 for ipart = 1:length(blocks_ID)
   suplot=suplot+1;
 
@@ -91,11 +91,15 @@ end
 
 %Run within trial baseline
 cfg                       = [];
-cfg.subtractmode          = 'within';
-cfg.baselinewindow        = [-2.5 2.5];
+cfg.subtractmode          = 'within'; %what are the options?
+%Find first nonnan timepoint in data, and use that before and after self-O
+idx_nan = ~isnan(switchTrial.powspctrm(1,1,1,:));
+idx_time=find(diff(idx_nan)==-1);
+switchTrial.time(idx_time)
+
+cfg.baselinewindow        = [-switchTrial.time(idx_time) switchTrial.time(idx_time)];
 [switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
-switchTrial=squeeze(nanmean(switchTrial,1));
-stableTrial=squeeze(nanmean(stableTrial,1));
+
 
 %Make the freq the trial average
 cfg =[];

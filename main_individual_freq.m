@@ -18,10 +18,11 @@ d_average = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/
 cd(d_average)
 freqrange  = 'low';
 
-load_avg = 1;
+%Load data which has already been averaged...
+load_avg = 0;
 
 %Loop over correct participants to plot or save the trials switch no switch sep.
-for part_idx = 3:length(part_available)
+for part_idx = 1:length(part_available)
   disp(part_idx)
 
   if load_avg
