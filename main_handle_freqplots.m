@@ -15,12 +15,12 @@
 
   %Define plot type
   runplot.multi       = 1;
-  runplot.zlim        = [-4 4];
-  runplot.freqrange   = 'alpha'; %theta, alpha, beta
+  runplot.zlim        = [-10 10];
+  runplot.freqrange   = 'theta'; %theta, alpha, beta
   runplot.type        = 'topo'; %topo, tfr, tmap
-  runplot.timewindow  = [-2.0:0.2:-0.8];
+  runplot.timewindow  = [-0.8:0.2:0.4]; %make 1 too many, always
   runplot.sensors     = 'all'; %all, occipital
-  runplot.data        = 'SvsN'; %SvsN, stable, switch, combined
+  runplot.data        = 'switch'; %SvsN, stable, switch, combined
 
 
   plot_average_all(runplot,freq,avg_freq_stable,avg_freq_switch)

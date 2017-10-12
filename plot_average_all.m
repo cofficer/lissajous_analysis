@@ -55,7 +55,7 @@ function plot_average_all(runplot,freq,avg_freq_stable,avg_freq_switch)
       ft_topoplotTFR(cfg,freq)
       %ft_hastoolbox('brewermap', 1);
       colormap(flipud(brewermap(64,'RdBu')))
-      namefigure = sprintf('prelim3_%s_%s_%s_multiTOPO',runplot.data,runplot.freqrange,timewindow);
+      namefigure = sprintf('prelim3_%s_%s_%s_zlim%s_multiTOPO',runplot.data,runplot.freqrange,timewindow,num2str(runplot.zlim(2)));
     else
       figure(1),clf
       cfg=[];
@@ -72,7 +72,7 @@ function plot_average_all(runplot,freq,avg_freq_stable,avg_freq_switch)
       ft_topoplotTFR(cfg,freq)
       %ft_hastoolbox('brewermap', 1);
       colormap(flipud(brewermap(64,'RdBu')))
-      namefigure = sprintf('prelim3_%s_%s_%s_TOPO',runplot.data,runplot.freqrange,timewindow);
+      namefigure = sprintf('prelim3_%s_%s_%s_zlim%s_TOPO',runplot.data,runplot.freqrange,timewindow,num2str(runplot.zlim(2)));
     end
 
   case 'tfr'
