@@ -85,16 +85,14 @@ switch runcfg.execute
         cfgin{icfgin}.part_ID=icfgin;
       end
 
-      %remove error participants. 
-      cfgin=cfgin{part_available};
-
-
+      %remove error participants.
+      cfgin={cfgin{part_available}};
 
 
       runcfg.nnodes = 1;%64; % how many licenses?
       runcfg.stack = 1;%round(length(cfg1)/nnodes);
       qsubcellfun(@main_individual_freq, cfgin, 'compile', 'no', ...
-        'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+        'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
 
 end
 
