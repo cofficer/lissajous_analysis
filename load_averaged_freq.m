@@ -1,5 +1,5 @@
 
-function [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(~)
+function [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(frequencies)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Created 2017-10-11
   %Loads all averaged freq continuous data.
@@ -7,7 +7,7 @@ function [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(~)
 
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average')
 
-  datainfosLow = dir('*low*.mat');
+  datainfosLow = dir(sprintf('*%s*.mat',frequencies));
 
   datainfosAll = dir('*.mat');
 

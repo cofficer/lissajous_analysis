@@ -9,18 +9,19 @@
   %Created: 2017-10-11
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+  %Low or high frequencies
+  frequencies = 'high';
   %load averaged data
-  [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq;
+  [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(frequencies);
 
   %Define plot type
   runplot.multi       = 1;
   runplot.zlim        = [-5 5];
-  runplot.freqrange   = 'alpha'; %theta, alpha, beta, gamma
-  runplot.type        = 'tfr'; %topo, tfr, tmap
+  runplot.freqrange   = 'gamma'; %theta, alpha, beta, gamma
+  runplot.type        = 'topo'; %topo, tfr, tmap
   runplot.timewindow  = [-0.8:0.2:0.4]; %make 1 too many, always
   runplot.sensors     = 'all'; %all, occipital
-  runplot.data        = 'SvsN'; %SvsN, stable, switch, combined
+  runplot.data        = 'switch'; %SvsN, stable, switch, combined
 
 
   plot_average_all(runplot,freq,avg_freq_stable,avg_freq_switch)

@@ -26,6 +26,8 @@ function plot_average_all(runplot,freq,avg_freq_stable,avg_freq_switch)
     freqrange = [7 13];
   case 'beta'
     freqrange = [12 35];
+  case 'gamma'
+    freqrange = [35 150];
   end
 
   %timewindow as str
