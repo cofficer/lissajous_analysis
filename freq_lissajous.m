@@ -5,9 +5,15 @@ function data = freq_lissajous(cfgin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 
-%load preproc data
+%load preproc data, define stim or self.
+if strcmp(cfgin.stim_self,'stim')
 
-dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/preproc%s.mat',cfgin.restingfile,cfgin.restingfile);
+  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.restingfile);
+
+else
+  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/preproc%s.mat',cfgin.restingfile,cfgin.restingfile);
+end
+
 load(dsfile)
 
 %Seperate the data into orthogonal sensors
@@ -32,7 +38,7 @@ cfg.channel     = 'MEG';
 cfg.keeptapers  = 'no';
 cfg.pad         = 7;
 cfg.method      = 'mtmconvol';
-cfg.trigger     = 'selfoccl';
+cfg.trigger     = 'selfoccl'; %stim. selfoccl.
 cfg.channel     ='MEG'; %
 cfg.trials      = 'all';
 cfg.freqanalysistype = 'high';
@@ -76,6 +82,10 @@ elseif strcmp(cfg.trigger,'resp')
     cfg.toi = -0.60:0.05:0;            %still to figure
 
 elseif strcmp(cfg.trigger,'cue')
+
+    cfg.toi = -0.5:0.05:0.5;            %still to figure
+
+elseif strcmp(cfg.trigger,'stim')
 
     cfg.toi = -0.5:0.05:0.5;            %still to figure
 

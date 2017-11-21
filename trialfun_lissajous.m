@@ -30,8 +30,8 @@ trigAll     =[64,48,52,40,32,23,21,22,20,18,16,11,10];
 
 hdr    = cfgin.headerfile; %cfg.headerfile;
 fsr    = '1200'; %cfg.fsample;         % in Hz
-begtrl = 1; % in seconds cfg.trialdef.prestim
-endtrl = 2; % in seconds cfg.trialdef.poststim
+begtrl = cfgin.trialdef.prestim*1200;
+endtrl = cfgin.trialdef.poststim*1200;
 
 
 %Store the events
@@ -67,19 +67,16 @@ trloff=0;
 
 for i=1:length(trgvalIndex)
 
-
-
-
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
         case trigger.stim_start;
             %trl(trlN,1)=trlbeg;
             stimSample = event(trgvalIndex(i)).sample;
             trl(trlN,4)=event(trgvalIndex(i)).sample-stimSample;
-            trl(trlN,3)=trigger.stim_start;
+            trl(trlN,3)=event(trgvalIndex(i)).sample;
             trl(trlN,13)=trlN;
             trloff=0;
-            trl(trlN,1)=event(trgvalIndex(i)).sample;
+            trl(trlN,1)=event(trgvalIndex(i)).sample+begtrl;
 
         case trigger.self_occlusion
             %Simulus onset trial offset
