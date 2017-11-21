@@ -21,13 +21,13 @@ for icfg = 1:length(restingpaths)
     cfgin{icfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
     cfgin{icfg}.blocktype               = 'trial'; % trial or continuous.
-
+    cfgin{icfg}.stim_self               = 'stim'; %For preproc_trial. Either stim or self.
     %cfgin=cfgin{29}
 end
 
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors
+runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 

@@ -386,7 +386,7 @@ try
 
               %Save the artifacts
               artstore=sprintf('artifacts_stim_%s.mat',datafile(1:3));
-              save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
+              save(artstore,'artifact_Jump','artifact_Muscle') %Jumpos?
 
               %save the invisible figure
               figurestore=sprintf('Overview_stim_%s.png',datafile(1:3));

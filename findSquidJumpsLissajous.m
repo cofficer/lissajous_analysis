@@ -55,7 +55,8 @@ function [channelJump,trialnum]=findSquidJumpsLissajous( data,pathname )
 
 
   % detect jumps as outliers, actually this returns the channels too...
-  [~, idx] = deleteoutliers(intercept(:));
+  alphalvl = 0.0001;
+  [~, idx] = deleteoutliers(intercept(:),alphalvl);
 
   %subplot(4,4,cnt); cnt = cnt + 1;
   if isempty(idx),
