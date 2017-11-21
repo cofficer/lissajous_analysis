@@ -2,7 +2,7 @@ function [avgFreq] = freq_average(cfgin)
 %Load in freq data, and average across appropriate trials and frequencies
 
 clear all;close all
-cfgin.blocktype='continuous';
+cfgin.blocktype='trial';
 filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
 
 cd(filepath)
@@ -10,8 +10,13 @@ cd(filepath)
 freqrange  = 'low';
 doplot     = 0;
 compSwitch = 0;
-freqpath   = dir(sprintf('*%s*-26-26*',freqrange));
+if strcmp(cfgin.blocktype,'trial')
 
+  freqpath   = dir(sprintf('*%s*',freqrange));
+
+else
+  freqpath   = dir(sprintf('*%s*-26-26*',freqrange));
+end
 
 if doplot
   figure(1),clf

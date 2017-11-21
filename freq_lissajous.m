@@ -1,6 +1,7 @@
 function data = freq_lissajous(cfgin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Run time-frequency analysis
+%Run time-frequency analysis, for trial.
+%Edited 2017-11-21
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 

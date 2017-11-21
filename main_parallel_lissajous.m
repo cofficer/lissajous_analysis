@@ -20,14 +20,14 @@ for icfg = 1:length(restingpaths)
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
     cfgin{icfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin{icfg}.blocktype               = 'continuous'; % trial or continuous.
+    cfgin{icfg}.blocktype               = 'trial'; % trial or continuous.
 
     %cfgin=cfgin{29}
 end
 
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors
+runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 

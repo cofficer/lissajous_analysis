@@ -1,11 +1,13 @@
 
-function [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(frequencies)
+function [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(frequencies,cfgin)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Created 2017-10-11
   %Loads all averaged freq continuous data.
+  %TODO: accomodate trial-based freq data.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average')
+
+  cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype))
 
   datainfosLow = dir(sprintf('*%s*.mat',frequencies));
 

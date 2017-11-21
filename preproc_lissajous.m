@@ -55,9 +55,15 @@ try
         cfg.trialfun                = trldef; % this is the default
         cfg.trialdef.eventtype      = 'UPPT001';
         cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
-        cfg.trialdef.prestim        = 2.6; % in seconds
-        cfg.trialdef.poststim       = 2.6; % in seconds
-
+        %TODO: save preprocessed data occuring before the stimulus onset.
+        %Stim or selfocclusion is preprocessed
+        if strcmp(cfgin.stim_self,'stim')
+          cfg.trialdef.prestim        = 4.5; % in seconds
+          cfg.trialdef.poststim       = 0; % in seconds
+        else
+          cfg.trialdef.prestim        = 2.25; % in seconds
+          cfg.trialdef.poststim       = 2.25; % in seconds
+        end
         %Stores all the trial information
         cfg = ft_definetrial(cfg);
 
@@ -88,7 +94,7 @@ try
         cfg.continuous = 'yes';
         data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
 
-        if strcmp(cfgin.blocktype,'trial')
+        if strcmp(cfgin.blocktype,'trial') && strcmp(cfgin.stim_self,'self')
             %select the data around the self-occlusions
             cfg              = [];
             begsample        = 1;
@@ -359,18 +365,35 @@ try
 
 
         if strcmp(cfgin.blocktype,'trial')
-            filestore=sprintf('preproc%s.mat',datafile(1:3));
-            save(filestore,'data')
 
-            %Save the artifacts
-            artstore=sprintf('artifacts%s.mat',datafile(1:3));
 
-            save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
+            if strcmp(cfgin.stim_self,'self')
+              filestore=sprintf('preproc%s.mat',datafile(1:3));
+              save(filestore,'data')
 
-            %save the invisible figure
-            figurestore=sprintf('Overview%s.png',datafile(1:3));
-            saveas(gca,figurestore,'png')
-            trldef = 'trialfun_lissajous';
+              %Save the artifacts
+              artstore=sprintf('artifacts%s.mat',datafile(1:3));
+              save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
+
+              %save the invisible figure
+              figurestore=sprintf('Overview%s.png',datafile(1:3));
+              saveas(gca,figurestore,'png')
+              trldef = 'trialfun_lissajous';
+
+            else
+              filestore=sprintf('preproc_stim_%s.mat',datafile(1:3));
+              save(filestore,'data')
+
+              %Save the artifacts
+              artstore=sprintf('artifacts_stim_%s.mat',datafile(1:3));
+              save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
+
+              %save the invisible figure
+              figurestore=sprintf('Overview_stim_%s.png',datafile(1:3));
+              saveas(gca,figurestore,'png')
+              trldef = 'trialfun_lissajous';
+            end
+
         elseif strcmp(cfgin.blocktype,'continuous')
             filestore=sprintf('%dpreproc26-26P%s.mat',iblock,datafile(2:3));
             save(filestore,'data')
