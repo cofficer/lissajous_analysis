@@ -38,7 +38,7 @@ cfg.channel     = 'MEG';
 cfg.keeptapers  = 'no';
 cfg.pad         = 7;
 cfg.method      = 'mtmconvol';
-cfg.trigger     = 'selfoccl'; %stim. selfoccl.
+cfg.trigger     = 'stim'; %stim. selfoccl.
 cfg.channel     ='MEG'; %
 cfg.trials      = 'all';
 cfg.freqanalysistype = 'high';
@@ -48,9 +48,11 @@ switch cfg.freqanalysistype
         case 'high'
             cfg.taper = 'dpss'; % high frequency-optimized analysis (smooth)
             cfg.keeptrials  = 'yes';
-            cfg.foi = 36:2:150;
-            cfg.t_ftimwin = ones(length(cfg.foi),1) .* 0.5;
-            cfg.tapsmofrq = ones(length(cfg.foi),1) .* 8;
+            cfg.foi = 36:2:110;
+            % cfg.t_ftimwin = ones(length(cfg.foi),1) .* 0.5;
+            % cfg.tapsmofrq = ones(length(cfg.foi),1) .* 8;
+            cfg.t_ftimwin = (20./cfg.foi);%ones(length(cfg.foi),1) .* 0.5; %(20./cfg.foi)
+            cfg.tapsmofrq = 0.2 *cfg.foi; %ones(length(cfg.foi),1) .* 8; % 0.2 *cfg.foi
         case 'low'
             cfg.taper = 'hanning'; % low frequency-optimized analysis
             cfg.keeptrials  = 'yes'; % needed for fourier-output
@@ -87,7 +89,7 @@ elseif strcmp(cfg.trigger,'cue')
 
 elseif strcmp(cfg.trigger,'stim')
 
-    cfg.toi = -0.5:0.05:0.5;            %still to figure
+    cfg.toi = -1.5:0.05:1.5;            %still to figure
 
 end
 
@@ -125,7 +127,13 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/')
 [pathstr, name] = fileparts(cfgin.fullpath);
 fprintf('Saving %s from...\n %s\n', name, pathstr)
 
-outputfile = sprintf('%sfreq_%s_%s.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger);
+if strcmp(cfgin.stim_self,'stim')
+
+  outputfile = sprintf('%sfreq_stim_%s_%s.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger);
+
+else
+  outputfile = sprintf('%sfreq_%s_%s.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger);
+end
 
 
 save(outputfile, 'freq');
