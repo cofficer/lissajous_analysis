@@ -13,15 +13,17 @@ cd(mainDir)
 restingpaths = dir('P*');
 restingpaths = restingpaths(1:end);
 %Loop all data files into seperate jobs
+idx_cfg=1;
+for icfg = 2:4%length(restingpaths)
 
-for icfg = 1:length(restingpaths)
-
-    cfgin{icfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
+    cfgin{idx_cfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
-    cfgin{icfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
+    cfgin{idx_cfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin{icfg}.blocktype               = 'trial'; % trial or continuous.
-    cfgin{icfg}.stim_self               = 'stim'; %For preproc_trial. Either stim or self.
+    cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
+    cfgin{idx_cfg}.stim_self               = 'stim'; %For preproc_trial. Either stim or self.
+
+    idx_cfg = idx_cfg + 1;
     %cfgin=cfgin{29}
 end
 
@@ -29,7 +31,7 @@ end
 %Define script to run and whether to run on the torque
 runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors
 runcfg.timreq          = 2000;      %number of minutes.
-runcfg.parallel        = 'torque';  %local or torque
+runcfg.parallel        = 'local';  %local or torque
 
 
 %Execute jobs on the torque
@@ -38,7 +40,7 @@ switch runcfg.execute
 
     case 'preproc'
         %restingPreprocNumbers(cfgin{1})
-        %cellfun(@restingPreprocNumbers, cfgin);
+        %cellfun(@preproc_lissajous, cfgin,'UniformOutput',false);
         nnodes = 1;%64; % how many licenses?
         stack = 1;%round(length(cfg1)/nnodes);
         qsubcellfun(@preproc_lissajous, cfgin, 'compile', 'no', ...

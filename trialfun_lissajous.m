@@ -43,6 +43,14 @@ trgval = strcmp('UPPT001',{event.type}); % this should be a row vector
 trgvalIndex = find(trgval);
 
 
+%Find the first instance of stimulus start and use that
+
+first_stim_on = find([event(trgvalIndex).value]==21);
+
+%Only keep trgvalIndex after the first instance of stimulus onset. 
+trgvalIndex=trgvalIndex(first_stim_on(1):end);
+
+
 %trlTA.responseValue(trlTA.responseValue==228)=225;
 %trlTA.responseValue(trlTA.responseValue==226)=232;
 
@@ -54,6 +62,7 @@ trgvalIndex = find(trgval);
 %Ninth trial val, tenth sample end.
 %11th block start or end. 12th sample.
 %13th the trial number of the current block
+
 
 
 %Create a matrix with all the relevant trigger columns + offsets etc.
