@@ -14,7 +14,7 @@ restingpaths = dir('P*');
 restingpaths = restingpaths(1:end);
 %Loop all data files into seperate jobs
 idx_cfg=1;
-for icfg = 2:4%length(restingpaths)
+for icfg = 3:4%length(restingpaths)
 
     cfgin{idx_cfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
@@ -40,7 +40,7 @@ switch runcfg.execute
 
     case 'preproc'
         %restingPreprocNumbers(cfgin{1})
-        %cellfun(@preproc_lissajous, cfgin,'UniformOutput',false);
+        %cellfun(@preproc_lissajous, cfgin,'UniformOutput',false)
         nnodes = 1;%64; % how many licenses?
         stack = 1;%round(length(cfg1)/nnodes);
         qsubcellfun(@preproc_lissajous, cfgin, 'compile', 'no', ...
