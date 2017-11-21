@@ -14,7 +14,7 @@ restingpaths = dir('P*');
 restingpaths = restingpaths(1:end);
 %Loop all data files into seperate jobs
 idx_cfg=1;
-for icfg = 3:4%length(restingpaths)
+for icfg = 6:6%length(restingpaths)
 
     cfgin{idx_cfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));

@@ -165,12 +165,13 @@ try
         % (z = [4 6]). Reject all trials that contain saccades before going further.
         % ==================================================================
 %
-        blinkchannel = 'UADC003';%EEG058
-        [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+        if ~strcmp(cfgin.stim_self,'stim')
+          blinkchannel = 'UADC003';%EEG058
+          [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
 
-        blinkchannel = 'EEG058';%EEG058
-        [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
-
+          blinkchannel = 'EEG058';%EEG058
+          [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+        end
 
 %         %find pupil index.
 %         idx_blink = find(ismember(data.label,{'UADC003'})==1);
