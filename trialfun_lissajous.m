@@ -73,7 +73,7 @@ for i=1:length(trgvalIndex)
             %trl(trlN,1)=trlbeg;
             stimSample = event(trgvalIndex(i)).sample;
             trl(trlN,4)=event(trgvalIndex(i)).sample-stimSample;
-            trl(trlN,3)=event(trgvalIndex(i)).sample;
+            trl(trlN,3)=abs(begtrl);
             trl(trlN,13)=trlN;
             trloff=0;
             trl(trlN,1)=event(trgvalIndex(i)).sample+begtrl;
@@ -109,7 +109,7 @@ for i=1:length(trgvalIndex)
         %    %trl(trlN,13)=event(trgvalIndex(i)).sample;
         %    trl(trlN,13)=event(trgvalIndex(i)).value;
 
-        end
+    end
 
 end
 
