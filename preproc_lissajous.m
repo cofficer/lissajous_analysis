@@ -94,11 +94,11 @@ try
         cfg.continuous = 'yes';
         data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
 
-        if strcmp(cfgin.blocktype,'trial') && strcmp(cfgin.stim_self,'self')
+        if strcmp(cfgin.blocktype,'trial') %&& strcmp(cfgin.stim_self,'self')
             %select the data around the self-occlusions
             cfg              = [];
             begsample        = 1;
-            endsample        = 4.5*1200;
+            endsample        = 4.5*1200+1;
             cfg.begsample = ones(1,length(data.trial))';
             cfg.endsample = ones(1,length(data.trial))'*endsample;
 
