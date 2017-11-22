@@ -89,12 +89,14 @@ switch runcfg.execute
       filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
       cd(filepath)
 
-      %insert the
+      %settings for plotting and loading or creating average freq files.
       for icfgin = 1:length(cfgin)
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
         cfgin{icfgin}.freqrange='high';
         %Create new average freq or not.
         cfgin{icfgin}.load_avg   = 1 ;
+        %Create topo of tfr plots
+        cfgin{icfgin}.topo_tfr = 'topo';
       end
 
 
