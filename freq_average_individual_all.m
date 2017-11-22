@@ -26,7 +26,7 @@ disp(freqpath(cfgin.part_ID).name)
 
 %Run within trial baseline
 cfg                       = [];
-cfg.subtractmode          = 'within'; %what are the options? within_norm, within
+cfg.subtractmode          = 'within_norm'; %what are the options? within_norm, within
 %Find first nonnan timepoint in data, and use that before and after self-O
 %What if there are no nans at all...
 if strcmp(cfgin.blocktype,'continuous')

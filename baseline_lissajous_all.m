@@ -36,7 +36,7 @@ elseif strcmp(cfg.subtractmode,'within_norm')
   %loop over all trials for each switch and stable trials
   for itrl1 = 1:size(freq.powspctrm,1)
     base_trl = squeeze(mean(freq.powspctrm(itrl1,:,:,toi1:toi2),4));
-    freq_base1(itrl1,:,:,:) = ((squeeze(freq.powspctrm(itrl1,:,:,:)) - base_trl)./base_trl)*100;
+    freq_base(itrl1,:,:,:) = ((squeeze(freq.powspctrm(itrl1,:,:,:)) - base_trl)./base_trl)*100;
   end
 
   %Average over trials
