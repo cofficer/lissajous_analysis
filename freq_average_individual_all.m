@@ -21,10 +21,8 @@ end
 
 %Load the freq data
 load(freqpath(cfgin.part_ID).name)
-disp(freqpath(blocks_ID(ipart)).name)
+disp(freqpath(cfgin.part_ID).name)
 
-%store details about each freq.
-partInfo(ipart).trialinfo = freq.trialinfo;
 
 %Run within trial baseline
 cfg                       = [];
