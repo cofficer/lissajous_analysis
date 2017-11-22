@@ -4,6 +4,15 @@ function plot_average_individual(cfgin,freq,switchTrial,stableTrial)
 %Created 16/09/2017.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%Define index for time lengths
+if strcmp(cfgin.blocktype,'trial')
+  start_idx = 1;
+  end_idx   = length(freq.time)
+else
+  start_idx = 9;
+  end_idx   = 93;
+end
 %%
 %Plot and save
 idx_occ=strfind(freq.label,'O');
@@ -48,14 +57,14 @@ ax4=subplot(2,2,4)
 title('tMap')
 %Create tmaps. If across dim 1, testing sig across channels
 %between switch and no switch averages.
-[h,p]=ttest2(switchTrial(idx_occ,:,9:93),...
-stableTrial(idx_occ,:,9:93),'Dim',1);
+[h,p]=ttest2(switchTrial(idx_occ,:,start_idx:end_idx),...
+stableTrial(idx_occ,:,start_idx:end_idx),'Dim',1);
 
 colormap(ax4,cbrewer('seq', 'YlOrBr', 200))
 set(hf, 'Position', [0 0 500 500])
 imagesc(squeeze(p))
 %change the x values displayed
-xticklabels = freq.time(9:21:93);
+xticklabels = freq.time(start_idx:21:end_idx);
 xticks = linspace(1, find(freq.time==xticklabels(end)),numel(xticklabels));
 set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
 %change the y values displayed
