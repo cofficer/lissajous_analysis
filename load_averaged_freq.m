@@ -9,7 +9,7 @@ function [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(frequencies,c
 
   cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype))
 
-  datainfosLow = dir(sprintf('*%s*.mat',frequencies));
+  datainfosLow = dir(sprintf('*%s*.mat',cfgin.freqrange));
 
   datainfosAll = dir('*.mat');
 

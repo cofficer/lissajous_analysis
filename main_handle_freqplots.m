@@ -11,10 +11,10 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   %Low or high frequencies
-  frequencies = 'high';
   cfgin.blocktype ='trial'; %continuous, trial.
+  cfgin.stim_self ='stim';
   %load averaged data
-  [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(frequencies,cfgin);
+  [freq,avg_freq_stable,avg_freq_switch]=load_averaged_freq(cfgin);
 
   %Define plot type
   runplot.multi       = 0;

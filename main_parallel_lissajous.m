@@ -14,7 +14,7 @@ restingpaths = dir('P*');
 restingpaths = restingpaths(1:end);
 %Loop all data files into seperate jobs
 idx_cfg=1;
-for icfg = 1:length(restingpaths)
+for icfg = 16:length(restingpaths)
 
     cfgin{idx_cfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
@@ -24,14 +24,14 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.stim_self               = 'stim'; %For preproc_trial. Either stim or self.
 
     idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{29}
+    %cfgin=cfgin{4}
 end
 
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors
+runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
-runcfg.parallel        = 'local';  %local or torque
+runcfg.parallel        = 'torque';  %local or torque
 
 
 %Execute jobs on the torque
@@ -58,41 +58,50 @@ switch runcfg.execute
 
         else
           qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
-            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
         end
 
     case 'freq_plot'
 
 
       %remove some participants from plotting.
-      part_available = 1:29;
+
+      part_available = str2num(cfgin{1}.restingfile(2:3)):str2num(cfgin{end}.restingfile(2:3));
       remove_part = ones(1,length(part_available));
-      remove_part(1)=0; % Only one reponse
-      remove_part(8)=0;
-      remove_part(11)=0;
-      remove_part(16)=0;
 
-      cfg =[];
-      part_available(logical(~remove_part))=[];
-      cfg.part_available=part_available;
-      d_average = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average/';
-      cd(d_average)
-      freqrange  = 'low';
+      if strcmp(cfgin{1}.blocktype,'continuous')
+        remove_part(1)=0; % Only one reponse
+        remove_part(8)=0;
+        remove_part(11)=0;
+        remove_part(16)=0;
+        cfg =[];
+        part_available(logical(~remove_part))=[];
+        cfg.part_available=part_available;
 
-      %Load data which has already been averaged...
-      cfg.load_avg = 0;
+        %remove error participants.
+        cfgin={cfgin{part_available}};
+      end
+
+
+
+      %cfgin.blocktype='trial';
+
+      filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
+      cd(filepath)
 
       %insert the
       for icfgin = 1:length(cfgin)
-        cfgin{icfgin}.part_ID=icfgin;
+        cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
+        cfgin{icfgin}.freqrange='high';
+        %Create new average freq or not.
+        cfgin{icfgin}.load_avg   = 1 ;
       end
 
-      %remove error participants.
-      cfgin={cfgin{part_available}};
 
 
       runcfg.nnodes = 1;%64; % how many licenses?
       runcfg.stack = 1;%round(length(cfg1)/nnodes);
+      %cellfun(@main_individual_freq, cfgin);
       qsubcellfun(@main_individual_freq, cfgin, 'compile', 'no', ...
         'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
 
