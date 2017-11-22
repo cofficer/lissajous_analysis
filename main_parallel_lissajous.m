@@ -14,7 +14,7 @@ restingpaths = dir('P*');
 restingpaths = restingpaths(1:end);
 %Loop all data files into seperate jobs
 idx_cfg=1;
-for icfg = 16:length(restingpaths)
+for icfg = 1:15%length(restingpaths)
 
     cfgin{idx_cfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
@@ -94,14 +94,14 @@ switch runcfg.execute
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
         cfgin{icfgin}.freqrange='high';
         %Create new average freq or not.
-        cfgin{icfgin}.load_avg   = 1 ;
+        cfgin{icfgin}.load_avg   = 0 ;
       end
 
 
 
       runcfg.nnodes = 1;%64; % how many licenses?
       runcfg.stack = 1;%round(length(cfg1)/nnodes);
-      %cellfun(@main_individual_freq, cfgin);
+      %cellfun(@main_individual_freq, cfgin,'UniformOutput',false);
       qsubcellfun(@main_individual_freq, cfgin, 'compile', 'no', ...
         'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
 

@@ -122,7 +122,7 @@ switchTrial.time(idx_time)
 cfg.baselinewindow        = [-switchTrial.time(idx_time) switchTrial.time(idx_time)];
 
 else
-  cfg.baselinewindow        = [switchTrial.time(idx_time) switchTrial.time(11)];
+  cfg.baselinewindow        = [switchTrial.time(1) switchTrial.time(11)];
 end
 
 [switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
