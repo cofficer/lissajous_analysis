@@ -11,14 +11,14 @@ function main_individual_freq(cfgin)
 
 
   if cfgin.load_avg
-    cd(d_average)
+
     freqpath   = dir(sprintf('*%s_%s.mat',cfgin.freqrange,num2str(cfgin.part_ID)));
     load(freqpath.name);
   else
     [freq,switchTrial,stableTrial]=freq_average_individual(cfgin);
   end
 
-  %plot_average_individual(cfgin.part_ID,freq,switchTrial,stableTrial);
+  plot_average_individual(cfgin,freq,switchTrial,stableTrial);
 
 
 

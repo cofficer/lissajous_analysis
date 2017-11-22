@@ -1,4 +1,4 @@
-function plot_average_individual(part_ID,freq,switchTrial,stableTrial)
+function plot_average_individual(cfgin,freq,switchTrial,stableTrial)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load in freq data, and plot across interests
 %Created 16/09/2017.
@@ -68,11 +68,12 @@ colorbar
 title('P values for ttest2')
 
 %Save figure active.
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
+
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figures',cfgin.blocktype))
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim2_SwitchvsNoSwitch_lowRealfreq_%d_TFR',part_ID);%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim2_SwitchvsNoSwitch_lowRealfreq_%d_TFR',cfgin.part_ID);%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
