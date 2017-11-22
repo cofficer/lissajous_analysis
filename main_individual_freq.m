@@ -18,7 +18,7 @@ function main_individual_freq(cfgin)
     [freq,switchTrial,stableTrial]=freq_average_individual(cfgin);
   end
 
-  plot_average_individual(cfgin.part_ID,freq,switchTrial,stableTrial);
+  %plot_average_individual(cfgin.part_ID,freq,switchTrial,stableTrial);
 
 
 
