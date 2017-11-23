@@ -40,7 +40,7 @@ elseif strcmp(cfg.subtractmode,'within_norm')
   end
 
   %Average over trials
-  freq_base = squeeze(nanmean(freq_base1,1));
+  freq_base = squeeze(nanmean(freq_base,1));
 end
 
 
