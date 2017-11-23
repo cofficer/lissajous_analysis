@@ -1,4 +1,4 @@
-function plot_trial_all(cfgin,freq)
+function plot_trial_all(~)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load in freq data, and plot across interests
 %Created 22/11/2017.
@@ -38,7 +38,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-10 10];
+cfg.zlim         = [-3 3];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -56,7 +56,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim7_%sRealfreq_all_TFR',cfgin.freqrange);%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim8_high_all_TFR');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -68,10 +68,10 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-10 10];
-cfg.ylim         = [60 90];
+cfg.zlim         = [-7 7];
+cfg.ylim         = [36 46];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-0.8 -0.5];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-0.6 -0.3];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO all participants gamma';
@@ -86,7 +86,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim7_highRealfreq_all_TOPO4');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim8_high_all_TOPO_choice-rebound_36-46Hz');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
