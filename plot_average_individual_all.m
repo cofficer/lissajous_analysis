@@ -22,7 +22,13 @@ hf=figure(1),clf
 ax1=subplot(2,2,1)
 cfg=[];
 cfg.zlim         = [-10 10];
+if strcmp(cfgin.freqrange,'high')
 cfg.ylim         = [60 100];
+elseif strcmp(cfgin.freqrange,'low')
+  %Do beta for now.
+  cfg.ylim         = [12 35];
+end
+
 cfg.layout       = 'CTF275_helmet.lay';
 cfg.xlim         = [-0.75 -0.5];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
@@ -37,7 +43,12 @@ colormap(ax1,flipud(brewermap(64,'RdBu')))
 ax1=subplot(2,2,2)
 cfg=[];
 cfg.zlim         = [-10 10];
+if strcmp(cfgin.freqrange,'high')
 cfg.ylim         = [60 100];
+elseif strcmp(cfgin.freqrange,'low')
+  %Do beta for now.
+  cfg.ylim         = [12 35];
+end
 cfg.layout       = 'CTF275_helmet.lay';
 cfg.xlim         = [-0.5 -0.15];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
@@ -54,7 +65,12 @@ colormap(ax1,flipud(brewermap(64,'RdBu')))
 ax1=subplot(2,2,3)
 cfg=[];
 cfg.zlim         = [-10 10];
+if strcmp(cfgin.freqrange,'high')
 cfg.ylim         = [60 100];
+elseif strcmp(cfgin.freqrange,'low')
+  %Do beta for now.
+  cfg.ylim         = [12 35];
+end
 cfg.layout       = 'CTF275_helmet.lay';
 cfg.xlim         = [-0.15 0.15];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
@@ -69,7 +85,12 @@ colormap(ax1,flipud(brewermap(64,'RdBu')))
 ax1=subplot(2,2,4)
 cfg=[];
 cfg.zlim         = [-10 10];
-cfg.ylim         = [60 100];
+if strcmp(cfgin.freqrange,'high')
+  cfg.ylim         = [60 100];
+elseif strcmp(cfgin.freqrange,'low')
+  %Do beta for now.
+  cfg.ylim         = [12 35];
+end
 cfg.layout       = 'CTF275_helmet.lay';
 cfg.xlim         = [0.15 0.5];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
