@@ -13,7 +13,7 @@ function plot_trial_all(~)
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average')
 
 
-freqfiles= dir('*all_high*');
+freqfiles= dir('*all_low*');
 load(freqfiles(1).name)
 
 
@@ -38,7 +38,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-3 3];
+cfg.zlim         = [-20 20];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -56,7 +56,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim8_high_all_TFR');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim8_low_all_TFR');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -68,13 +68,14 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-7 7];
-cfg.ylim         = [36 46];
+cfg.zlim         = [-20 20];
+cfg.ylim         = [7 12];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-0.6 -0.3];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [0.4 0.7];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO all participants gamma';
+cfg.colorbar           = 'yes'
 % ft_singleplotTFR(cfg,freq);
 %ft_multiplotTFR(cfg,freq)
 ft_topoplotTFR(cfg,freq)
@@ -82,11 +83,12 @@ ft_topoplotTFR(cfg,freq)
 colormap(ax2,flipud(brewermap(64,'RdBu')))
 
 
+
 cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim8_high_all_TOPO_choice-rebound_36-46Hz');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim8_low_all_TOPO_7-12Hz');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

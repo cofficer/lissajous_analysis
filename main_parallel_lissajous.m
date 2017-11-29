@@ -12,6 +12,7 @@ cd(mainDir)
 %Store all the seperate data files
 restingpaths = dir('P*');
 restingpaths = restingpaths(1:end);
+
 %Loop all data files into seperate jobs
 idx_cfg=1;
 for icfg = 1:length(restingpaths)
