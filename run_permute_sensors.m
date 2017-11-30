@@ -15,7 +15,7 @@ function output = run_permute_sensors(cfgin)
   cd(mainDir)
 
   %Store all the seperate data files
-  freq_paths = dir('*all_high*');
+  freq_paths = dir('*freqavgs_high*');
 
   %new_powspctrm=zeros(29,274,38,61);
   %Loop all data files into seperate jobs
@@ -34,9 +34,11 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   %Select data for time of interest.
-  time0 = [freq.time(23) freq.time(29)];
-  time1 = [freq.time(39) freq.time(45)];
+  % time0 = [freq.time(23) freq.time(29)];
+  % time1 = [freq.time(39) freq.time(45)];
 
+  time0 = [freq.time(1) freq.time(11)];
+  time1 = [freq.time(37) freq.time(43)];
 
   cfg = [];
   cfg.keepindividual = 'yes';
@@ -48,7 +50,7 @@ function output = run_permute_sensors(cfgin)
   cfg.toilim =time1;
   dat_time1= ft_freqgrandaverage(cfg,allsubjLJ{:})
 
-  dat_time0.time = dat_time1.time;
+  % dat_time0.time = dat_time1.time;
 
 
   cfg = []
@@ -57,15 +59,23 @@ function output = run_permute_sensors(cfgin)
   cfg.avgoverfreq ='yes';
   cfg.frequency =[60 90];
   dat_time0 = ft_selectdata(cfg,dat_time0);
+
+
+  cfg = []
+  cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
+  cfg.avgovertime ='yes';
+  cfg.avgoverfreq ='yes';
+  cfg.frequency =[60 90];
   cfg.latency = time1;
   dat_time1 = ft_selectdata(cfg,dat_time1);
 
+  dat_time0.time = dat_time1.time;
 
   cfg = [];
   cfg.channel          = {'MEG'};
-  cfg.latency          = [0.4 0.7];
+  cfg.latency          = [0.3 0.6];
   cfg.method           = 'montecarlo';
-  cfg.frequency        = 70;
+  cfg.frequency        = 75;
   cfg.statistic        = 'ft_statfun_depsamplesT';
   cfg.correctm         = 'cluster';
   cfg.clusteralpha     = 0.05;
@@ -110,7 +120,7 @@ function output = run_permute_sensors(cfgin)
   % ft_singleplotTFR(cfg,freq);
   %ft_multiplotTFR(cfg,freq)
   cfg.highlight          = 'on'
-  cfg.highlightchannel=freq.label(stat.mask);
+  % cfg.highlightchannel=freq.label(stat.mask);
   cfg.colorbar           = 'yes'
   cfg.highlightcolor =[0 0 0];
   cfg.highlightsize=12;
@@ -123,7 +133,7 @@ function output = run_permute_sensors(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim8_sign_clusters_gamma_60-90Hz');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim8_checking_diffbaseline_60-90Hz');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   % set(gca,'PaperpositionMode','Auto')
