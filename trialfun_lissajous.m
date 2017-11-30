@@ -47,7 +47,7 @@ trgvalIndex = find(trgval);
 
 first_stim_on = find([event(trgvalIndex).value]==21);
 
-%Only keep trgvalIndex after the first instance of stimulus onset. 
+%Only keep trgvalIndex after the first instance of stimulus onset.
 trgvalIndex=trgvalIndex(first_stim_on(1):end);
 
 
@@ -98,10 +98,15 @@ for i=1:length(trgvalIndex)
             trl(trlN,8)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,7)=event(trgvalIndex(i)).value;
 
-        case {trigger.resp_leftL,trigger.resp_rightL,trigger.resp_leftR,trigger.resp_rightR,trigger.resp_bad}
-            %response triggers
+        case trigger.go_cue
+            %Onset of go cue
             trl(trlN,10)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,9)=event(trgvalIndex(i)).value;
+
+        case {trigger.resp_leftL,trigger.resp_rightL,trigger.resp_leftR,trigger.resp_rightR,trigger.resp_bad}
+            %response triggers
+            trl(trlN,12)=event(trgvalIndex(i)).sample-stimSample;
+            trl(trlN,11)=event(trgvalIndex(i)).value;
             trl(trlN,2)=event(trgvalIndex(i)).sample;
             trlN=trlN+1;
   %      case {trigger.block_start}

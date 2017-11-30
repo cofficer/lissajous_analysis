@@ -101,7 +101,7 @@ switch runcfg.execute
         cfgin{icfgin}.topo_tfr = 'topo-all';
       end
 
-      
+
 
       runcfg.nnodes = 1;%64; % how many licenses?
       runcfg.stack = 1;%round(length(cfg1)/nnodes);
