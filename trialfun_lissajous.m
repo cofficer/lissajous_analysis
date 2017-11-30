@@ -66,7 +66,7 @@ trgvalIndex=trgvalIndex(first_stim_on(1):end);
 
 
 %Create a matrix with all the relevant trigger columns + offsets etc.
-trl= zeros(sum([event(trgvalIndex).value]==trigger.self_occlusion),13);%zeros(sum(trgval==goCue),numel(trigAll)+1); %Actually empty var.
+trl= zeros(sum([event(trgvalIndex).value]==trigger.self_occlusion),14);%zeros(sum(trgval==goCue),numel(trigAll)+1); %Actually empty var.
 
 %Establish point of reference after each trigger==64. Counting trials.
 trlN=1;
@@ -116,8 +116,8 @@ for i=1:length(trgvalIndex)
             %trl(trlN,2)=event(trgvalIndex(i)).sample+endtrl*fsr;
 
         case trigger.block_end
-            trl(trlN-1,12)=event(trgvalIndex(i)).sample-stimSample;
-            trl(trlN-1,11)=event(trgvalIndex(i)).value;
+            trl(trlN-1,14)=event(trgvalIndex(i)).sample-stimSample;
+            trl(trlN-1,13)=event(trgvalIndex(i)).value;
 
         %case {trigger.block_start,trigger.block_end}
         %    %trl(trlN,13)=event(trgvalIndex(i)).sample;
