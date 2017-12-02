@@ -43,7 +43,7 @@ if strcmp(cfgin.blocktype,'continuous')
   cfg.baselinewindow        = [-switchTrial.time(idx_time) switchTrial.time(idx_time)];
 
 else
-  cfg.baselinewindow        = [freq.time(12) freq.time(29)]; %-0.4 -0.1
+  cfg.baselinewindow        = [freq.time(5) freq.time(11)]; %-0.4 -0.1
 end
 
 [freq_base] = baseline_lissajous_all(freq,cfg);

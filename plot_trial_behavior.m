@@ -4,30 +4,57 @@ function plot_trial_behavior
   %Created 23/11/2017.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  %Reado the reading of all trialinfo, for some reason I did not includ
-  %the cue onset or stim onset.
+  %Load all of the eyelink  data
+  clear all
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior/blinks')
+  file_blink=dir('*.mat');
 
+  for ifile = 1:length(file_blink)
+    disp(ifile)
+    load(file_blink(ifile).name);
 
-  % 4rd=stim_on. 6=self-o. 8=stim_off. 10=cue. 12th=resp, 14=end
-  trl_info{1}(2,:)
+    all_blink{ifile}=mean(vertcat(blinks{:}),1);
 
-  tot_info = vertcat(trl_info{:});
-  %Make the trl_info into a table to remove potential errors in indexing.
+  end
 
-  cue_on      = tot_info(:,10);
-  stim_on     = tot_info(:,4);
-  stim_off    = tot_info(:,8);
-  resp        = tot_info(:,12);
-  self_occ    = tot_info(:,6);
-  block_end   = tot_info(:,14);
+  all_blink = mean(vertcat(all_blink{:}),1);
 
-  T_info=table(stim_on,self_occ,stim_off,cue_on,resp,block_end);
+  figure(1)
+  plot(abs(all_blink))
+  set(gca,'XTick',[1 1200 2400 3600 4800 6000] ); %This are going to be the only values affected.
+  set(gca,'XTickLabel',[0 1 2 3 4 5] ); %This is what it's going to appear in those places.
+
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
-  % save('Table_trialinfo.mat','T_info') %load('Table_trialinfo.mat')
+  %Name of figure
+  %name filess
+  formatOut = 'yyyy-mm-dd';
+  todaystr = datestr(now,formatOut);
+  namefigure = sprintf('Blink_distribution');%fractionTrialsRemaining
+  filetype    = 'png';
+  figurename = sprintf('%s_%s.%s',todaystr,namefigure,filetype);
+  saveas(gca,figurename)
 
-  Cue_stimoff   = (T_info.cue_on-T_info.stim_off)./1200;
-  RT_stimoff    = (T_info.resp-T_info.stim_off)./1200;
-  S_onoff       = (T_info.block_end-T_info.stim_off)./1200;
+  %
+  % % 4rd=stim_on. 6=self-o. 8=stim_off. 10=cue. 12th=resp, 14=end
+  % trl_info{1}(2,:)
+  %
+  % tot_info = vertcat(trl_info{:});
+  % %Make the trl_info into a table to remove potential errors in indexing.
+  %
+  % cue_on      = tot_info(:,10);
+  % stim_on     = tot_info(:,4);
+  % stim_off    = tot_info(:,8);
+  % resp        = tot_info(:,12);
+  % self_occ    = tot_info(:,6);
+  % block_end   = tot_info(:,14);
+  %
+  % T_info=table(stim_on,self_occ,stim_off,cue_on,resp,block_end);
+  % cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
+  % % save('Table_trialinfo.mat','T_info') %load('Table_trialinfo.mat')
+  %
+  % Cue_stimoff   = (T_info.cue_on-T_info.stim_off)./1200;
+  % RT_stimoff    = (T_info.resp-T_info.stim_off)./1200;
+  % S_onoff       = (T_info.block_end-T_info.stim_off)./1200;
 
 
   %New way of saving Figure using gramm
