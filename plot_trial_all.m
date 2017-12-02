@@ -8,7 +8,7 @@ function plot_trial_all(~)
 
 
 %Load and average all averaged high data.
-
+clear all
 
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average')
 
@@ -24,6 +24,7 @@ all_freq = zeros(29,dims(1),dims(2),dims(3));
 %Load all participants
 for ifiles = 1:length(freqfiles)-1
   all_freq(ifiles,:,:,:) = freq.powspctrm;
+  disp((freqfiles(ifiles+1).name))
   load(freqfiles(ifiles+1).name)
 end
 
@@ -56,7 +57,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim10_low_all_TFR');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim10_low_all_TFR_T-04-01');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

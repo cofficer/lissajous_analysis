@@ -7,66 +7,6 @@ function plot_trial_behavior
   %Reado the reading of all trialinfo, for some reason I did not includ
   %the cue onset or stim onset.
 
-  clear all
-  %%
-  %Change the folder to where eyelink data is contained
-  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/';
-  cd(mainDir)
-
-  %Store all the seperate data files
-  restingpaths = dir('P*');
-  restingpaths = restingpaths(1:end);
-
-  %Loop all data files into seperate jobs
-  idx_cfg=1;
-  for icfg = 1:length(restingpaths)
-
-    cfgin{idx_cfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
-    fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
-    cfgin{idx_cfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
-    %Define which blocks to run.
-    cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
-    cfgin{idx_cfg}.stim_self               = 'stim'; %For preproc_trial. Either stim or self.
-
-    idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{4}
-  end
-
-  %Loop over all participants, and extract the trial information.
-  for icfgin = 1:length(cfgin)
-
-    dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P%s/',cfgin{icfgin}.restingfile(2:3));
-    cd(dsfile)
-
-    %Identify datasets, and load correct block.
-    datasets = dir('*ds');
-
-    cd(dsfile)
-    datafile=datasets(1).name;
-
-    %Load data into trial-based format.
-    cfg                         = [];
-    trldef = 'trialfun_lissajous';
-    cfg.dataset                 = datafile;
-    cfg.trialfun                = trldef; % this is the default
-    cfg.trialdef.eventtype      = 'UPPT001';
-    cfg.trialdef.eventvalue     = 10; % self-occlusion trigger value
-    %TODO: save preprocessed data occuring before the stimulus onset.
-    %Stim or selfocclusion is preprocessed
-    cfgin{icfgin}.stim_self='stim';
-    if strcmp(cfgin{icfgin}.stim_self,'stim')
-      cfg.trialdef.prestim        = -2; % in seconds
-      cfg.trialdef.poststim       = 1; % in seconds
-    else
-      cfg.trialdef.prestim        = 2.25; % in seconds
-      cfg.trialdef.poststim       = 2.25; % in seconds
-    end
-    %Stores all the trial information
-    cfg = ft_definetrial(cfg);
-    %Load or create a table of all trial-based behavior.
-    %Create.
-    trl_info{icfgin}=cfg.trl;
-  end
 
   % 4rd=stim_on. 6=self-o. 8=stim_off. 10=cue. 12th=resp, 14=end
   trl_info{1}(2,:)
