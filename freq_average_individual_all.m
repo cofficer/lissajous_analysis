@@ -20,8 +20,15 @@ else
 end
 
 %Load the freq data
-load(freqpath(cfgin.part_ID).name)
 disp(freqpath(cfgin.part_ID).name)
+load(freqpath(cfgin.part_ID).name)
+
+%Remove trials with response too close to stimulus onset.
+idx_trl = ((freq.trialinfo(:,9)-freq.trialinfo(:,7))./1200)>0.5
+
+cfg = [];
+cfg.trials = idx_trl;
+freq_test = ft_selectdata(cfg,freq);
 
 
 %Run within trial baseline
@@ -36,7 +43,7 @@ if strcmp(cfgin.blocktype,'continuous')
   cfg.baselinewindow        = [-switchTrial.time(idx_time) switchTrial.time(idx_time)];
 
 else
-  cfg.baselinewindow        = [freq.time(22) freq.time(29)];
+  cfg.baselinewindow        = [freq.time(23) freq.time(29)];
 end
 
 [freq_base] = baseline_lissajous_all(freq,cfg);
