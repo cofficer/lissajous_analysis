@@ -58,11 +58,11 @@ try
         %TODO: save preprocessed data occuring before the stimulus onset.
         %Stim or selfocclusion is preprocessed
         if strcmp(cfgin.stim_self,'stim')
-          cfg.trialdef.prestim        = -2; % in seconds
-          cfg.trialdef.poststim       = 1; % in seconds
+          cfg.trialdef.prestim        = 2.25; % -2in seconds
+          cfg.trialdef.poststim       = 5.5; % 1in seconds
         else
           cfg.trialdef.prestim        = 2.25; % 2.25in seconds
-          cfg.trialdef.poststim       = 5.5; % 4.25in seconds
+          cfg.trialdef.poststim       = 4.25; % 4.25in seconds
         end
         %Stores all the trial information
         cfg = ft_definetrial(cfg);
@@ -94,18 +94,18 @@ try
         cfg.continuous = 'yes';
         data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
 
-        if strcmp(cfgin.blocktype,'trial') %&& strcmp(cfgin.stim_self,'self')
-            %select the data around the self-occlusions
-            cfg              = [];
-            begsample        = 1;
-            endsample        = 3.5*1200+1; %4.5
-            cfg.begsample = ones(1,length(data.trial))';
-            cfg.endsample = ones(1,length(data.trial))'*endsample;
+        % if strcmp(cfgin.blocktype,'trial') %&& strcmp(cfgin.stim_self,'self')
+        %     %select the data around the self-occlusions
+        %     cfg              = [];
+        %     begsample        = 1;
+        %     endsample        = 4.5*1200+1; %4.5
+        %     cfg.begsample = ones(1,length(data.trial))';
+        %     cfg.endsample = ones(1,length(data.trial))'*endsample;
+        %
+        %     data = ft_redefinetrial(cfg,data);
+        % end
 
-            data = ft_redefinetrial(cfg,data);
-        end
-
-        ab=cellfun(@length,data.trial)
+        % ab=cellfun(@length,data.trial)
 
 
         %Resample raw data

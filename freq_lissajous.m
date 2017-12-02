@@ -38,10 +38,10 @@ cfg.channel     = 'MEG';
 cfg.keeptapers  = 'no';
 cfg.pad         = 7;
 cfg.method      = 'mtmconvol';
-cfg.trigger     = 'stim'; %stim. selfoccl.
+cfg.trigger     = 'stim_off'; %stim. selfoccl.
 cfg.channel     ='MEG'; %
 cfg.trials      = 'all';
-cfg.freqanalysistype = 'low';
+cfg.freqanalysistype = 'high';
 
 
 switch cfg.freqanalysistype
@@ -73,23 +73,26 @@ end
 %Select the step sizes.
 if strcmp(cfg.trigger,'baseline')
 
-    cfg.toi = -0.50:0.05:0;
+  cfg.toi = -0.50:0.05:0;
 
 elseif strcmp(cfg.trigger,'selfoccl')
 
-    cfg.toi = 0.5:0.05:4;
+  cfg.toi = 0.5:0.05:4;
 
 elseif strcmp(cfg.trigger,'resp')
 
-    cfg.toi = -0.60:0.05:0;            %still to figure
+  cfg.toi = -0.60:0.05:0;            %still to figure
 
 elseif strcmp(cfg.trigger,'cue')
 
-    cfg.toi = -0.5:0.05:0.5;            %still to figure
+  cfg.toi = -0.5:0.05:0.5;            %still to figure
 
 elseif strcmp(cfg.trigger,'stim')
 
-    cfg.toi = -1.5:0.05:1.5;            %still to figure
+  cfg.toi = -1.5:0.05:1.5;            %still to figure
+elseif strcmp(cfg.trigger,'stim_off')
+
+  cfg.toi = 2:0.05:3;            %still to figure
 
 end
 

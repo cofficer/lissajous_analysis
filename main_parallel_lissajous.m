@@ -22,7 +22,7 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
     cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
-    cfgin{idx_cfg}.stim_self               = 'self'; %For preproc_trial. Either stim or self. Or stim_off = data from when stimulus
+    cfgin{idx_cfg}.stim_self               = 'stim'; %For preproc_trial. Either stim or self. Or stim_off = data from when stimulus
 
     idx_cfg = idx_cfg + 1;
     %cfgin=cfgin{4}
