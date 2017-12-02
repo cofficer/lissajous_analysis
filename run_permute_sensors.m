@@ -34,8 +34,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [freq.time(23) freq.time(31)];
-  time1 = [freq.time(35) freq.time(43)];
+  time0 = [freq.time(21) freq.time(29)];
+  time1 = [freq.time(37) freq.time(45)];
 
   %Trying the orginal baseline comparison...
   % time0 = [freq.time(1) freq.time(11)];
@@ -74,7 +74,7 @@ function output = run_permute_sensors(cfgin)
 
   cfg = [];
   cfg.channel          = {'MEG'};
-  cfg.latency          = [0.2 0.6];
+  cfg.latency          = [0.3 0.7];
   cfg.method           = 'montecarlo';
   cfg.frequency        = 75;
   cfg.statistic        = 'ft_statfun_depsamplesT';
@@ -110,7 +110,7 @@ function output = run_permute_sensors(cfgin)
   hf=figure(1),clf
   %ax1=subplot(2,2,1)
   cfg=[];
-  cfg.zlim         = [-10 10];
+  cfg.zlim         = [-5 5];
   %cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
   %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -134,7 +134,7 @@ function output = run_permute_sensors(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim10_checking_diffbaseline_60-90Hz');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim10_checking_wholebaseline_60-90Hz');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   % set(gca,'PaperpositionMode','Auto')
