@@ -23,6 +23,7 @@ function main_individual_freq(cfgin)
 
   if strcmp(cfgin.topo_tfr,'tfr')
     plot_average_individual(cfgin,freq,switchTrial,stableTrial);
+    %plots the switch vs no switch TOPO.
   elseif strcmp(cfgin.topo_tfr,'topo')
     plot_average_individual_TOPO(cfgin,freq,switchTrial,stableTrial);
   elseif strcmp(cfgin.topo_tfr,'topo-all')

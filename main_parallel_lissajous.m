@@ -28,7 +28,6 @@ for icfg = 1:length(restingpaths)
     %cfgin=cfgin{4}
 end
 
-
 %Define script to run and whether to run on the torque
 runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
