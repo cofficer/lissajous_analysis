@@ -30,7 +30,7 @@ elseif strcmp(cfgin.freqrange,'low')
 end
 
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-0.75 -0.5];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [4.1 4.4];%[-0.75 -0.5];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='all';
@@ -50,7 +50,7 @@ elseif strcmp(cfgin.freqrange,'low')
   cfg.ylim         = [12 35];
 end
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-0.5 -0.15];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [4.4 4.8];%[-0.5 -0.15];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='all';
@@ -72,7 +72,7 @@ elseif strcmp(cfgin.freqrange,'low')
   cfg.ylim         = [12 35];
 end
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-0.15 0.15];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [4.8 5.2];%[-0.15 0.15];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='all';
@@ -92,7 +92,7 @@ elseif strcmp(cfgin.freqrange,'low')
   cfg.ylim         = [12 35];
 end
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [0.15 0.5];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [3.7 4];%[0.15 0.5];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='all';
