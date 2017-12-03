@@ -44,7 +44,7 @@ if strcmp(cfgin.blocktype,'continuous')
 
 else
   %4.5=stim_off.
-  cfg.baselinewindow        = [freq.time(33) freq.time(39)]; %-0.4 -0.1
+  cfg.baselinewindow        = [freq.time(1) freq.time(end)]; %-0.4 -0.1
 end
 
 [freq_base] = baseline_lissajous_all(freq,cfg);
