@@ -92,7 +92,7 @@ elseif strcmp(cfg.trigger,'stim')
   cfg.toi = -1.5:0.05:1.5;            %still to figure
 elseif strcmp(cfg.trigger,'stim_off')
 
-  cfg.toi = 2.5:0.05:5.25;            %still to figure
+  cfg.toi = 3.75:0.05:6.75;            %still to figure
 
 end
 
