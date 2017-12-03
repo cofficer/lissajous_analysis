@@ -16,7 +16,7 @@ compSwitch = 0;
 if strcmp(cfgin.blocktype,'continuous')
   freqpath   = dir(sprintf('*%s*-26-26*',cfgin.freqrange));
 else
-  freqpath   = dir(sprintf('*stim_%s*',cfgin.freqrange));
+  freqpath   = dir(sprintf('*%s_stim_off*',cfgin.freqrange));
 end
 
 %Load the freq data
@@ -24,7 +24,7 @@ disp(freqpath(cfgin.part_ID).name)
 load(freqpath(cfgin.part_ID).name)
 
 %Remove trials with response too close to stimulus onset.
-idx_trl = ((freq.trialinfo(:,9)-freq.trialinfo(:,7))./1200)>0.5;
+idx_trl = ((freq.trialinfo(:,9)-freq.trialinfo(:,7))./1200)>0.3;
 
 cfg = [];
 cfg.trials = idx_trl;
@@ -43,7 +43,8 @@ if strcmp(cfgin.blocktype,'continuous')
   cfg.baselinewindow        = [-switchTrial.time(idx_time) switchTrial.time(idx_time)];
 
 else
-  cfg.baselinewindow        = [freq.time(5) freq.time(11)]; %-0.4 -0.1
+  %4.5=stim_off.
+  cfg.baselinewindow        = [freq.time(33) freq.time(39)]; %-0.4 -0.1
 end
 
 [freq_base] = baseline_lissajous_all(freq,cfg);
