@@ -58,8 +58,8 @@ try
         %TODO: save preprocessed data occuring before the stimulus onset.
         %Stim or selfocclusion is preprocessed
         if strcmp(cfgin.stim_self,'stim')
-          cfg.trialdef.prestim        = 2.25; % -2in seconds
-          cfg.trialdef.poststim       = 5.5; % 1in seconds
+          cfg.trialdef.prestim        = 3.5; % -2in seconds
+          cfg.trialdef.poststim       = 7; % 1in seconds
         else
           cfg.trialdef.prestim        = 2.25; % 2.25in seconds
           cfg.trialdef.poststim       = 4.25; % 4.25in seconds
