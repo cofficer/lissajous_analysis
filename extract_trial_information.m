@@ -1,6 +1,7 @@
 function extract_trial_information(cfgin)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Load in eyelink or other data, and plot across events.
+  %Currently only focused on producing blink distributions.
   %Created 02/12/2017.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
