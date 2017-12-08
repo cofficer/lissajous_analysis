@@ -371,28 +371,28 @@ try
 
 
             if strcmp(cfgin.stim_self,'self')
-              filestore=sprintf('preproc%s.mat',datafile(1:3));
+              filestore=sprintf('preprocP%s.mat',datafile(2:3));
               save(filestore,'data')
 
               %Save the artifacts
-              artstore=sprintf('artifacts%s.mat',datafile(1:3));
+              artstore=sprintf('artifactsP%s.mat',datafile(2:3));
               save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
 
               %save the invisible figure
-              figurestore=sprintf('Overview%s.png',datafile(1:3));
+              figurestore=sprintf('OverviewP%s.png',datafile(2:3));
               saveas(gca,figurestore,'png')
               trldef = 'trialfun_lissajous';
 
             else
-              filestore=sprintf('preproc_stim_%s.mat',datafile(1:3));
+              filestore=sprintf('preproc_stim_P%s.mat',datafile(2:3));
               save(filestore,'data')
 
               %Save the artifacts
-              artstore=sprintf('artifacts_stim_%s.mat',datafile(1:3));
+              artstore=sprintf('artifacts_stim_P%s.mat',datafile(2:3));
               save(artstore,'artifact_Jump','artifact_Muscle') %Jumpos?
 
               %save the invisible figure
-              figurestore=sprintf('Overview_stim_%s.png',datafile(1:3));
+              figurestore=sprintf('Overview_stim_P%s.png',datafile(2:3));
               saveas(gca,figurestore,'png')
               trldef = 'trialfun_lissajous';
             end
