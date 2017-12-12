@@ -61,8 +61,8 @@ try
           cfg.trialdef.prestim        = 3.5; % -2in seconds
           cfg.trialdef.poststim       = 7; % 1in seconds
         else
-          cfg.trialdef.prestim        = 2;%5.5; % 2.25in seconds
-          cfg.trialdef.poststim       = 2;%5; % 4.25in seconds
+          cfg.trialdef.prestim        = 4;%5.5; % 2.25in seconds
+          cfg.trialdef.poststim       = 5;%5; % 4.25in seconds
         end
         %Stores all the trial information
         cfg = ft_definetrial(cfg);
@@ -167,7 +167,7 @@ try
         % (z = [4 6]). Reject all trials that contain saccades before going further.
         % ==================================================================
 %
-        if ~strcmp(cfgin.stim_self,'stim')
+        if ~strcmp(cfgin.stim_self,'stim_off')
           blinkchannel = 'UADC003';%EEG058
           [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
 
