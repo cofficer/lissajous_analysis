@@ -6,7 +6,7 @@ function data = freq_lissajous(cfgin)
 %%
 
 %load preproc data, define stim or self.
-if strcmp(cfgin.stim_self,'stim')
+if strcmp(cfgin.stim_self,'stim_off')
 
   dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.restingfile);
 

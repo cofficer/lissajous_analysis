@@ -331,7 +331,7 @@ try
         freq            = ft_freqanalysis(cfgfreq, data);
         subplot(2,3,cnt);
         %loglog(freq.freq, freq.powspctrm, 'linewidth', 0.5); hold on;
-        loglog(freq.freq, (freq.powspctrm), 'k', 'linewidth', 1);
+        loglog(freq.freq, (freq.powspctrm), 'k', 'linewidth', 0.1);
         axis tight; axis square; box off; %ylim(ylims);
         set(gca, 'xtick', [10 50 100], 'tickdir', 'out');
 
@@ -372,7 +372,7 @@ try
 
             if strcmp(cfgin.stim_self,'self')
               filestore=sprintf('preprocP%s.mat',datafile(2:3));
-              save(filestore,'data')
+              save(filestore,'data','-v7.3')
 
               %Save the artifacts
               artstore=sprintf('artifactsP%s.mat',datafile(2:3));
@@ -385,7 +385,7 @@ try
 
             else
               filestore=sprintf('preproc_stim_P%s.mat',datafile(2:3));
-              save(filestore,'data')
+              save(filestore,'data','-v7.3')
 
               %Save the artifacts
               artstore=sprintf('artifacts_stim_P%s.mat',datafile(2:3));
@@ -399,7 +399,7 @@ try
 
         elseif strcmp(cfgin.blocktype,'continuous')
             filestore=sprintf('%dpreproc26-26P%s.mat',iblock,datafile(2:3));
-            save(filestore,'data')
+            save(filestore,'data','-v7.3')
 
             %Save the artifacts
             artstore=sprintf('%dartifactsP%s.mat',iblock,datafile(2:3));

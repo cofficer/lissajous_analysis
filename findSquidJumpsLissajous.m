@@ -23,7 +23,7 @@ function [channelJump,trialnum]=findSquidJumpsLissajous( data,pathname )
   cfg.demean      = 'yes';
   %cfg1.trials     = cfg1.trial{1}
   %cfg.hpfilter = 'yes';
-  %cfg.channel  = {'MEG'};
+  cfg.channel  = {'MEG'};
   %cfg.hpfreq   = 60;
   data            = ft_preprocessing(cfg, data);
 
