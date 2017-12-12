@@ -30,7 +30,7 @@ trigAll     =[64,48,52,40,32,23,21,22,20,18,16,11,10];
 
 hdr    = cfgin.headerfile; %cfg.headerfile;
 fsr    = '1200'; %cfg.fsample;         % in Hz
-begtrl = cfgin.trialdef.prestim*1200;
+begtrl = -cfgin.trialdef.prestim*1200;
 endtrl = cfgin.trialdef.poststim*1200;
 
 

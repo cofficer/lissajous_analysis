@@ -61,8 +61,8 @@ try
           cfg.trialdef.prestim        = 3.5; % -2in seconds
           cfg.trialdef.poststim       = 7; % 1in seconds
         else
-          cfg.trialdef.prestim        = 2.25; % 2.25in seconds
-          cfg.trialdef.poststim       = 4.25; % 4.25in seconds
+          cfg.trialdef.prestim        = 2;%5.5; % 2.25in seconds
+          cfg.trialdef.poststim       = 2;%5; % 4.25in seconds
         end
         %Stores all the trial information
         cfg = ft_definetrial(cfg);
@@ -331,7 +331,7 @@ try
         freq            = ft_freqanalysis(cfgfreq, data);
         subplot(2,3,cnt);
         %loglog(freq.freq, freq.powspctrm, 'linewidth', 0.5); hold on;
-        loglog(freq.freq, squeeze(mean(freq.powspctrm)), 'k', 'linewidth', 1);
+        loglog(freq.freq, (freq.powspctrm), 'k', 'linewidth', 1);
         axis tight; axis square; box off; %ylim(ylims);
         set(gca, 'xtick', [10 50 100], 'tickdir', 'out');
 
@@ -355,7 +355,7 @@ try
         %Change folder and save approapriate data + figures
         lisdir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/preprocessed/',cfgin.blocktype);
         cd(lisdir)
-        name = sprintf('%s%s/',lisdir,datafile(1:3));
+        name = sprintf('%sP%s/',lisdir,datafile(2:3));
 
         %If the folder does not already exist, create it.
         if 7==exist(name,'dir')

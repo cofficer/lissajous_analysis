@@ -49,12 +49,13 @@ function plot_trial_behavior
   % block_end   = tot_info(:,14);
   %
   % T_info=table(stim_on,self_occ,stim_off,cue_on,resp,block_end);
-  % cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
-  % % save('Table_trialinfo.mat','T_info') %load('Table_trialinfo.mat')
+   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
+  % % save('Table_trialinfo.mat','T_info') %
+  load('Table_trialinfo.mat')
   %
-  % Cue_stimoff   = (T_info.cue_on-T_info.stim_off)./1200;
-  % RT_stimoff    = (T_info.resp-T_info.stim_off)./1200;
-  % S_onoff       = (T_info.block_end-T_info.stim_off)./1200;
+  Cue_stimoff   = (T_info.cue_on-T_info.stim_off)./1200;
+  RT_stimoff    = (T_info.resp-T_info.stim_off)./1200;
+  S_onoff       = (T_info.block_end-T_info.stim_off)./1200;
 
 
   %New way of saving Figure using gramm
@@ -69,10 +70,18 @@ function plot_trial_behavior
   clean_dat(clean_idx) =[];
   ind_RT(clean_idx)=[];
 
+  % ind_RT(length(ind_RT)+1:length(ind_RT)+length(all_blink))=4;
+  % clean_dat=[clean_dat,squeeze(abs(test_blink))];
+
+
+  test_blink=abs(all_blink).*((1:length(all_blink))./1200) %1.1 blinks at 1 sample. 0.01. 100/1200
+  clean_dat(1) %1 event at 1.3s.
+
   clear g;close all
-  g=gramm('x',clean_dat,'color',ind_RT);
-  % g.geom_jitter();
-  g.stat_bin('nbins',200,'dodge',0,'fill','transparent');
+  g(1,1)=gramm('x',clean_dat,'color',ind_RT);
+  g(2,1)=gramm('x',(1:length(all_blink))./1200,'y',abs(all_blink),'color',ones(1,length(all_blink)))  %(abs(all_blink).*(1:length(all_blink)))./500
+  g(2,1).geom_point();
+  g(1,1).stat_bin('nbins',200,'dodge',0,'fill','transparent');
   % g.stat_density()
   % g.geom_abline()
   g.set_names('column','Origin','x','Time (s)','color','Dists');
@@ -89,7 +98,10 @@ function plot_trial_behavior
   %g.facet_grid('space','free')
   figure('Position',[100 100 800 600]);
   g.draw();
-  g.facet_grid('scale','free')
+  g(1,1).results.color={'Cue','Resp','Onset'}
+  g(1,1).facet_axes_handles.XLim=[0.9 3];
+  g(2,1).facet_axes_handles.XLim=[0.9 3.3];
+  % g.facet_grid('scale','free')
 
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
   %Name of figure

@@ -23,13 +23,15 @@ for icfg = 1:length(restingpaths)
     %Define which blocks to run.
     cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
     cfgin{idx_cfg}.stim_self               = 'stim_off'; %For preproc_trial. Either stim or self. Or stim_off = data from when stimulus
+    %Define baseline period.
+
 
     idx_cfg = idx_cfg + 1;
     %cfgin=cfgin{4}
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -80,6 +82,8 @@ switch runcfg.execute
 
         %remove error participants.
         cfgin={cfgin{part_available}};
+        %This depends on the what the data is locked to.
+        cfgin{idx_cfg}.baseline                = [-0.5 -0.1];
       end
 
 
