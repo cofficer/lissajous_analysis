@@ -31,7 +31,7 @@ for icfg = 1:length(restingpaths)
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -50,7 +50,7 @@ switch runcfg.execute
 
     case 'freq'
         %restingPreprocNumbers(cfgin{1})
-        %cellfun(@freq_lissajous, cfgin);
+        %cellfun(@freq_lissajous, cfgin,'UniformOutput',false);
         runcfg.nnodes = 1;%64; % how many licenses?
         runcfg.stack = 1;%round(length(cfg1)/nnodes);
 

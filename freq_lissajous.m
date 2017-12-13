@@ -51,8 +51,8 @@ switch cfg.freqanalysistype
             cfg.foi = 36:2:110;
             % cfg.t_ftimwin = ones(length(cfg.foi),1) .* 0.5;
             % cfg.tapsmofrq = ones(length(cfg.foi),1) .* 8;
-            cfg.t_ftimwin = 0.2;%(20./cfg.foi);%ones(length(cfg.foi),1) .* 0.5; %(20./cfg.foi)
-            cfg.tapsmofrq = 10;%0.1 *cfg.foi; %ones(length(cfg.foi),1) .* 8; % 0.2 *cfg.foi
+            cfg.t_ftimwin = ones(length(cfg.foi),1)*0.2;%(20./cfg.foi);%ones(length(cfg.foi),1) .* 0.5; %(20./cfg.foi)
+            cfg.tapsmofrq = ones(length(cfg.foi),1)*10;%0.1 *cfg.foi; %ones(length(cfg.foi),1) .* 8; % 0.2 *cfg.foi
         case 'low'
             cfg.taper = 'hanning'; % low frequency-optimized analysis
             cfg.keeptrials  = 'yes'; % needed for fourier-output
