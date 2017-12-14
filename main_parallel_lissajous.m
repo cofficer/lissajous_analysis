@@ -34,7 +34,7 @@ for icfg = 1:length(restingpaths)
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -106,7 +106,7 @@ switch runcfg.execute
         %cfgin=cfgin{12}
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all
         %This depends on the what the data is locked to.
-        cfgin{icfgin}.baseline                = [-0.5 0];
+        cfgin{icfgin}.baseline                = [3.5 6];
       end
 
 
