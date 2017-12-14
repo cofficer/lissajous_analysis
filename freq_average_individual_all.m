@@ -14,10 +14,11 @@ cd(filepath)
 doplot     = 0;
 compSwitch = 0;
 if strcmp(cfgin.blocktype,'continuous')
-  freqpath   = dir(sprintf('*%s*-26-26*',cfgin.freqrange));
+  freqpath   = dir(sprintf('*freq_%s*-26-26*',cfgin.freqrange));
 else
-  freqpath   = dir(sprintf('*%s_stim_off*',cfgin.freqrange));
+  freqpath   = dir(sprintf('*freq_%s_stim_off*',cfgin.freqrange));
 end
+
 
 %Load the freq data
 disp(freqpath(cfgin.part_ID).name)

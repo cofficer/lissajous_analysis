@@ -87,7 +87,12 @@ try
         %Hard coded to deal with bad recording.
         if startblock==2 && strcmp(cfgin.restingfile(2:3),'04')
          cfg.trl=cfg.trl(2:end,:);
-        end
+
+       end
+
+       if cfg.trl(1,1)<0
+        cfg.trl(1,:)=[];
+       end
 
         %Load in raw data.
         cfg.channel    ={'all'};

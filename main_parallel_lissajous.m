@@ -16,6 +16,9 @@ restingpaths = restingpaths(1:end);
 %Loop all data files into seperate jobs
 idx_cfg=1;
 for icfg = 1:length(restingpaths)
+    % if ismember(icfg,[2])
+    %   continue
+    % end
 
     cfgin{idx_cfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
@@ -27,7 +30,7 @@ for icfg = 1:length(restingpaths)
 
 
     idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{4}
+    %cfgin=cfgin{8}
 end
 
 %Define script to run and whether to run on the torque
