@@ -28,6 +28,7 @@ for ifiles = 1:length(freqfiles)-1
   load(freqfiles(ifiles+1).name)
 end
 
+%remove part3
 
 freq.powspctrm=squeeze(nanmean(all_freq,1));
 
@@ -57,7 +58,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim12_high_TFR_Stim_off_baselineAll');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim12_high_TFR_Stim_off_baselineAll_1sResp');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -73,7 +74,7 @@ cfg.zlim         = [-5 5];
 cfg.ylim         = [60 90];
 % cfg.ylim         = [10 20];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [5.4 5.7];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [2.5 2.8];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO all participants gamma';
@@ -90,7 +91,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim11_high_TOPO_60-90Hz_T-all');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim12_high_TOPO_60-90Hz_baseAll_t25-28');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

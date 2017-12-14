@@ -30,7 +30,7 @@ for icfg = 1:length(restingpaths)
 
 
     idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{8}
+    %cfgin=cfgin{3}
 end
 
 %Define script to run and whether to run on the torque
@@ -105,6 +105,8 @@ switch runcfg.execute
         %Create topo of tfr plots
         %cfgin=cfgin{12}
         cfgin{icfgin}.topo_tfr = 'topo-all';
+        %This depends on the what the data is locked to.
+        cfgin{idx_cfg}.baseline                = [-0.5 0];
       end
 
 
