@@ -106,7 +106,7 @@ switch runcfg.execute
         %cfgin=cfgin{12}
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all
         %This depends on the what the data is locked to.
-        cfgin{icfgin}.baseline                = [3.5 6];
+        cfgin{icfgin}.baseline                = [4 4.5];
       end
 
 

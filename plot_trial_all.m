@@ -40,7 +40,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-10 10];
+cfg.zlim         = [-7 7];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -58,7 +58,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim12_high_TFR_Stim_off_baseline-050_1sResp');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim12_high_TFR_Stim_off_baseline_35-45s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -70,11 +70,11 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-10 10];
+cfg.zlim         = [-5 5];
 cfg.ylim         = [60 90];
 % cfg.ylim         = [10 20];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [0.1 0.4];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [4.6 4.8];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO all participants gamma';
@@ -91,7 +91,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim12_high_TOPO_60-90Hz_baseline-050_1sResp');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim12_high_stimOff_60-90Hz_base_35-45s_time_46-48s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

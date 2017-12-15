@@ -41,6 +41,23 @@ elseif strcmp(cfg.subtractmode,'within_norm')
 
   %Average over trials
   freq_base = squeeze(nanmean(freq_base,1));
+elseif strcmp(cfg.subtractmode,'norm_avg')
+  %use an average normalization instead of within each trial.
+  base_trl = squeeze(mean(freq.powspctrm(:,:,:,toi1:toi2),4));
+  base_trl = squeeze(mean(base_trl,1));
+  for itrl1 = 1:size(freq.powspctrm,1)
+    for ifreq = 1:size(freq.powspctrm,3)
+
+      freq_base(itrl1,:,ifreq,:) = ((squeeze(freq.powspctrm(itrl1,:,ifreq,:)) - base_trl(:,ifreq))./base_trl(:,ifreq))*100;
+
+    end
+
+
+  end
+
+  %Average over trials
+  freq_base = squeeze(nanmean(freq_base,1));
+
 end
 
 
