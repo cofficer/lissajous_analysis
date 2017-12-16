@@ -24,13 +24,13 @@ end
 disp(freqpath(cfgin.part_ID).name)
 load(freqpath(cfgin.part_ID).name)
 
-%Remove trials with response too close to stimulus onset.
-idx_trl = ((freq.trialinfo(:,9)-freq.trialinfo(:,7))./1200)>0.2;
-sum(idx_trl)
-
-cfg = [];
-cfg.trials = ~idx_trl;
-freq = ft_selectdata(cfg,freq);
+% %Remove trials with response too close to stimulus onset.
+% idx_trl = ((freq.trialinfo(:,9)-freq.trialinfo(:,7))./1200)>-0.2;
+% sum(idx_trl)
+%
+% cfg = [];
+% cfg.trials = ~idx_trl;
+% freq = ft_selectdata(cfg,freq);
 
 
 %Run within trial baseline

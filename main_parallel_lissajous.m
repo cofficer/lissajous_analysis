@@ -35,7 +35,7 @@ for icfg = 1:length(restingpaths)
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -100,14 +100,14 @@ switch runcfg.execute
       %settings for plotting and loading or creating average freq files.
       for icfgin = 1:length(cfgin)
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
-        cfgin{icfgin}.freqrange='low';
+        cfgin{icfgin}.freqrange='high';
         %Create new average freq or not.
         cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
         %Create topo of tfr plots
         %cfgin=cfgin{12}
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all
         %This depends on the what the data is locked to.
-        cfgin{icfgin}.baseline                = [4 4.5];
+        cfgin{icfgin}.baseline                = [-4 0.1];
       end
 
 
