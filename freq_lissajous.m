@@ -41,7 +41,7 @@ cfg.method      = 'mtmconvol';
 cfg.trigger     = cfgin.stim_self; %stim. selfoccl.
 cfg.channel     ='MEG'; %
 cfg.trials      = 'all';
-cfg.freqanalysistype = 'low';
+cfg.freqanalysistype = 'high';
 
 
 switch cfg.freqanalysistype
@@ -92,7 +92,7 @@ elseif strcmp(cfg.trigger,'stim')
   cfg.toi = -1.5:0.05:1.5;            %still to figure
 elseif strcmp(cfg.trigger,'stim_off')
 
-  cfg.toi = 3.5:0.05:6;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
+  cfg.toi = 1:0.05:4.5;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
 
 end
 
