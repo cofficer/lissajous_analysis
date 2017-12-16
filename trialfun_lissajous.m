@@ -78,7 +78,7 @@ for i=1:length(trgvalIndex)
 
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
-        case trigger.stim_start;
+        case trigger.self_occlusion %trigger.stim_start;
             %trl(trlN,1)=trlbeg;
             stimSample = event(trgvalIndex(i)).sample;
             trl(trlN,4)=event(trgvalIndex(i)).sample-stimSample;

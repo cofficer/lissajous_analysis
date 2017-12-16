@@ -27,14 +27,15 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
     cfgin{idx_cfg}.stim_self               = 'stim_off'; %For preproc_trial. Either stim or self. Or stim_off = data from when stimulus
     %Define baseline period.
-
+    cfgin{idx_cfg}.prestim = 5; %Before self_occlusion
+    cfgin{idx_cfg}.poststim = 0.5;
 
     idx_cfg = idx_cfg + 1;
     %cfgin=cfgin{3}
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -99,7 +100,7 @@ switch runcfg.execute
       %settings for plotting and loading or creating average freq files.
       for icfgin = 1:length(cfgin)
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
-        cfgin{icfgin}.freqrange='high';
+        cfgin{icfgin}.freqrange='low';
         %Create new average freq or not.
         cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
         %Create topo of tfr plots
