@@ -13,7 +13,7 @@ clear all
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average')
 
 
-freqfiles= dir('freqavgs_all_high*');
+freqfiles= dir('freqavgs_all_low*');
 load(freqfiles(1).name)
 
 
@@ -33,18 +33,25 @@ end
 freq.powspctrm=squeeze(nanmean(all_freq,1));
 
 %plot the TFR
-
+%TODO: find the IDX of all motor sensors, and use those to plot TFR.
 idx_occ=strfind(freq.label,'O');
 idx_occ=find(~cellfun(@isempty,idx_occ));
+idx_motor = {'MRC13','MRC14','MRC15','MRC16','MRC22','MRC23'...
+            'MRC24','MRC31','MRC41','MRF64','MRF65','MRF63'...
+            'MRF54','MRF55','MRF56','MRF66','MRF46'...
+            'MLC13','MLC14','MLC15','MLC16','MLC22','MLC23'...
+            'MLC24','MLC31','MLC41','MLF64','MLF65','MLF63'...
+            'MLF54','MLF55','MLF56','MLF66','MLF46'};
+
 hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-5 5];
+cfg.zlim         = [-30 30];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
-cfg.channel      = freq.label(idx_occ);
+cfg.channel      = idx_motor';%freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TFR all participants gamma';
 ft_singleplotTFR(cfg,freq);
@@ -58,7 +65,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim13_high_TFR_Stim_off_baseline_-275-225s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim13_low_TFR_Stim_off_baseline_-275-225s_motor_sensors');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -70,11 +77,11 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-5 5];
-cfg.ylim         = [60 90];%7 12
+cfg.zlim         = [-30 30];
+cfg.ylim         = [21 26];%7 12
 % cfg.ylim         = [10 20];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-2.1 -1.6];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-1.5 -1];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO all participants gamma';
@@ -91,7 +98,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim13_low_stimOff_baseAvg_-275-245s_-21-16s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim13_low-21-26Hz_stimOff_baseAvg_-275-245s_-15-1s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
