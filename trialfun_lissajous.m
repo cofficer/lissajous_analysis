@@ -73,6 +73,7 @@ trlN=1;
 %Define trloff (trial offset). Need to be a running value during each
 %trial.
 trloff=0;
+stimSample=0;
 
 for i=1:length(trgvalIndex)
 
