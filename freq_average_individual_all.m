@@ -25,8 +25,8 @@ disp(freqpath(cfgin.part_ID).name)
 load(freqpath(cfgin.part_ID).name)
 
 % %Remove trials with response too close to stimulus onset.
-idx_trl = ((freq.trialinfo(:,9)-freq.trialinfo(:,7))./1200)<1;
-sum(idx_trl)
+% idx_trl = ((freq.trialinfo(:,9)-freq.trialinfo(:,7))./1200)<1;
+% sum(idx_trl)
 
 cfg = [];
 cfg.trials = idx_trl;
@@ -46,10 +46,14 @@ if strcmp(cfgin.blocktype,'continuous')
 
 else
   %4.5=stim_off.
-  cfg.baselinewindow        = [cfgin.baseline(1) cfgin.baseline(2)]; %-0.4 -0.1
+  if strcmp(cfgin.baseline,'cue')
+    cfg.baselinewindow=[2.35 2.85];
+  else
+    cfg.baselinewindow        = [cfgin.baseline(1) cfgin.baseline(2)]; %-0.4 -0.1
+  end
 end
 
-[freq_base] = baseline_lissajous_all(freq,cfg);
+[freq_base] = baseline_lissajous_all(freq,cfg,cfgin);
 
 
 %Make the freq the trial average
