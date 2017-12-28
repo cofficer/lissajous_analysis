@@ -73,7 +73,7 @@ trlN=1;
 %Define trloff (trial offset). Need to be a running value during each
 %trial.
 trloff=0;
-stimSample=0;
+% stimSample=0;
 
 for i=1:length(trgvalIndex)
 
@@ -91,7 +91,7 @@ for i=1:length(trgvalIndex)
 
         case trigger.stim_start;%trigger.self_occlusion
             %Simulus onset trial offset
-            trl(trlN,6)=event(trgvalIndex(i)).sample-stimSample;
+            trl(trlN,6)=event(trgvalIndex(i)).sample;
             trl(trlN,5)=event(trgvalIndex(i)).value;
             %Trial start 2s before Stimulus onset
 
