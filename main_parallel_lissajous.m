@@ -25,10 +25,12 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
     cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
-    cfgin{idx_cfg}.stim_self               = 'stim_off'; %For preproc_trial. Either stim or self. Or stim_off = data from when stimulus
+    cfgin{idx_cfg}.stim_self               = 'baseline'; %For preproc_trial. Either stim or self.
+                                                         %Or stim_off = data from when stimulus offset.
+                                                         %Baseline = time-period 100-600ms after stim offset
     %Define baseline period.
-    cfgin{idx_cfg}.prestim = 5; %Before self_occlusion
-    cfgin{idx_cfg}.poststim = 0.5;
+    cfgin{idx_cfg}.prestim = 4.4; %Before self_occlusion
+    cfgin{idx_cfg}.poststim = 5.3;
 
     idx_cfg = idx_cfg + 1;
     %cfgin=cfgin{3}

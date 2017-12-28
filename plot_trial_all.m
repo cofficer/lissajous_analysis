@@ -65,7 +65,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim13_low_TFR_Stim_off_baseline_-275-225s_motor_sensors');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim13_low_TFR_Stim_off_baseline_-275-225s_motor_sensors_1s_resp');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -81,7 +81,7 @@ cfg.zlim         = [-30 30];
 cfg.ylim         = [21 26];%7 12
 % cfg.ylim         = [10 20];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-1.5 -1];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-0.5 -0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO all participants gamma';
@@ -98,7 +98,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim13_low-21-26Hz_stimOff_baseAvg_-275-245s_-15-1s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim13_low-21-26Hz_stimOff_baseAvg_-275-245s_-05-0s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

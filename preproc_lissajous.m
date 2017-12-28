@@ -60,6 +60,9 @@ try
         if strcmp(cfgin.stim_self,'stim')
           cfg.trialdef.prestim        = 3.5; % -2in seconds
           cfg.trialdef.poststim       = 7; % 1in seconds
+        elseif strcmp(cfgin.stim_self,'baseline')
+          cfg.trialdef.prestim        = -2.05; %200ms bf stimoff. Negative means after self-occlusion
+          cfg.trialdef.poststim       = 3.05;  %800ms after stimoff.
         else
           cfg.trialdef.prestim        = cfgin.prestim%1;%5.5; % 2.25in seconds
           cfg.trialdef.poststim       = cfgin.poststim%7;%5; % 4.25in seconds

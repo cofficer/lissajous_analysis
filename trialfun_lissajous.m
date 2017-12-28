@@ -88,7 +88,7 @@ for i=1:length(trgvalIndex)
             trl(trlN,1)=event(trgvalIndex(i)).sample+begtrl;
             trl(trlN,2)=event(trgvalIndex(i)).sample+endtrl;
 
-        case trigger.self_occlusion
+        case trigger.stim_start;%trigger.self_occlusion
             %Simulus onset trial offset
             trl(trlN,6)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,5)=event(trgvalIndex(i)).value;
