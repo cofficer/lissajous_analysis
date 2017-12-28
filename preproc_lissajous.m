@@ -98,23 +98,14 @@ try
        end
 
         %Load in raw data.
-        cfg.channel    ={'all'};
+        % cfg.channel    ={'all'};
+        cfg.channel = {'M*','UADC003',...
+        'UADC004','EEG058','EEG059',...
+        'HLC0011','HLC0012','HLC0013', ...
+        'HLC0021','HLC0022','HLC0023', ...
+        'HLC0031','HLC0032','HLC0033'};
         cfg.continuous = 'yes';
         data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
-
-        % if strcmp(cfgin.blocktype,'trial') %&& strcmp(cfgin.stim_self,'self')
-        %     %select the data around the self-occlusions
-        %     cfg              = [];
-        %     begsample        = 1;
-        %     endsample        = 4.5*1200+1; %4.5
-        %     cfg.begsample = ones(1,length(data.trial))';
-        %     cfg.endsample = ones(1,length(data.trial))'*endsample;
-        %
-        %     data = ft_redefinetrial(cfg,data);
-        % end
-
-        % ab=cellfun(@length,data.trial)
-
 
         %Resample raw data
         cfg3.resample = 'yes';
@@ -128,13 +119,7 @@ try
         cfg.channel  = {'all','-MEG'};
         dataNoMEG    = ft_selectdata(cfg,data);
 
-        %Get all MEG.
-       % cfg          = [];
-       % cfg.channel  = {'all','-EEG','-HLC','EEG058','EEG057'};
-       % data    = ft_selectdata(cfg,data);
-        %
 
-        %
         % plot a quick power spectrum
         % save those cfgs for later plotting
         cfgfreq             = [];
@@ -175,13 +160,13 @@ try
         % (z = [4 6]). Reject all trials that contain saccades before going further.
         % ==================================================================
 %
-        if ~strcmp(cfgin.stim_self,'stim_off')
-          blinkchannel = 'UADC003';%EEG058
-          [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
-
-          blinkchannel = 'EEG058';%EEG058
-          [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
-        end
+        % if ~strcmp(cfgin.stim_self,'stim_off')
+        %   blinkchannel = 'UADC003';%EEG058
+        %   [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+        %
+        %   blinkchannel = 'EEG058';%EEG058
+        %   [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+        % end
 
 %         %find pupil index.
 %         idx_blink = find(ismember(data.label,{'UADC003'})==1);
@@ -363,7 +348,7 @@ try
         %Change folder and save approapriate data + figures
         lisdir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/preprocessed/',cfgin.blocktype);
         cd(lisdir)
-        name = sprintf('%sP%s/',lisdir,datafile(2:3));
+        name = sprintf('%sP%s/%s/',lisdir,datafile(2:3),cfgin.stim_self);
 
         %If the folder does not already exist, create it.
         if 7==exist(name,'dir')
