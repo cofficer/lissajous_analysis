@@ -61,7 +61,7 @@ try
           cfg.trialdef.prestim        = 3.5; % -2in seconds
           cfg.trialdef.poststim       = 7; % 1in seconds
         elseif strcmp(cfgin.stim_self,'baseline')
-          cfg.trialdef.prestim        = 4.3; %200ms bf stimoff. Negative means after self-occlusion
+          cfg.trialdef.prestim        = -4.3; %200ms bf stimoff. Negative means after self-occlusion
           cfg.trialdef.poststim       = 5.3;  %800ms after stimoff.
         else
           cfg.trialdef.prestim        = cfgin.prestim%1;%5.5; % 2.25in seconds
