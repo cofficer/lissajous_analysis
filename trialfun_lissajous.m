@@ -35,7 +35,7 @@ endtrl = cfgin.trialdef.poststim*1200;
 
 
 %Store the events
-
+% example hdr = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P10/P10_lissajous_20170131_01.ds/P10_lissajous_20170131_01.res4'
 event = ft_read_event(hdr);%'headerformat',[],'eventformat',[],'dataformat',[]
 
 % start by selecting all events
@@ -45,7 +45,7 @@ trgvalIndex = find(trgval);
 
 %Find the first instance of stimulus start and use that
 
-first_stim_on = find([event(trgvalIndex).value]==11);
+first_stim_on = find([event(trgvalIndex).value]==21);
 
 %Only keep trgvalIndex after the first instance of stimulus onset.
 trgvalIndex=trgvalIndex(first_stim_on(1):end);
@@ -80,7 +80,7 @@ for i=1:length(trgvalIndex)
 
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
-        case trigger.trial_start
+        case trigger.stim_start 
             %trl(trlN,1)=trlbeg;
             stimSample = event(trgvalIndex(i)).sample;
             trl(trlN,4)=event(trgvalIndex(i)).sample-stimSample;
