@@ -79,7 +79,7 @@ for i=1:length(trgvalIndex)
 
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
-        case trigger.trial_start
+        case trigger.go_cue;
             %trl(trlN,1)=trlbeg;
             stimSample = event(trgvalIndex(i)).sample;
             trl(trlN,4)=event(trgvalIndex(i)).sample-stimSample;
