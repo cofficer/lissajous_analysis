@@ -45,7 +45,7 @@ trgvalIndex = find(trgval);
 
 %Find the first instance of stimulus start and use that
 
-first_stim_on = find([event(trgvalIndex).value]==21);
+first_stim_on = find([event(trgvalIndex).value]==11);
 
 %Only keep trgvalIndex after the first instance of stimulus onset.
 trgvalIndex=trgvalIndex(first_stim_on(1):end);
@@ -74,12 +74,13 @@ trlN=1;
 %trial.
 trloff=0;
 % stimSample=0;
+%TODO: Figure out a dynamic way of sorting trial data. Use P3 as test case.
 
 for i=1:length(trgvalIndex)
 
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
-        case trigger.go_cue;
+        case trigger.trial_start
             %trl(trlN,1)=trlbeg;
             stimSample = event(trgvalIndex(i)).sample;
             trl(trlN,4)=event(trgvalIndex(i)).sample-stimSample;
