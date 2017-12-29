@@ -79,7 +79,7 @@ end
 %Select the step sizes.
 if strcmp(cfg.trigger,'baseline')
 
-  cfg.toi = 2.35:0.05:2.85;
+  cfg.toi = 4.6:0.05:5.1;
 
 elseif strcmp(cfg.trigger,'selfoccl')
 
@@ -144,7 +144,7 @@ elseif strcmp(cfgin.stim_self,'baseline')
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/baseline')
 
   outputfile = sprintf('%sfreq_%s_%s_%s.mat',cfgin.restingfile(2:3),cfgin.stim_self,cfg.freqanalysistype,cfg.trigger);
-    
+
 else
   outputfile = sprintf('%sfreq_%s_%s.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger);
 end
