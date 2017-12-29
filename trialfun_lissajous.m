@@ -79,7 +79,7 @@ for i=1:length(trgvalIndex)
 
     %Start of a new trial.
     switch event(trgvalIndex(i)).value
-        case trigger.self_occlusion %trigger.stim_start;
+        case trigger.stim_start;
             %trl(trlN,1)=trlbeg;
             stimSample = event(trgvalIndex(i)).sample;
             trl(trlN,4)=event(trgvalIndex(i)).sample-stimSample;
@@ -89,7 +89,7 @@ for i=1:length(trgvalIndex)
             trl(trlN,1)=event(trgvalIndex(i)).sample+begtrl;
             trl(trlN,2)=event(trgvalIndex(i)).sample+endtrl;
 
-        case trigger.stim_start;%trigger.self_occlusion
+        case trigger.self_occlusion
             %Simulus onset trial offset
             trl(trlN,6)=event(trgvalIndex(i)).sample;
             trl(trlN,5)=event(trgvalIndex(i)).value;
