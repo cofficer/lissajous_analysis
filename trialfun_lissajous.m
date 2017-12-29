@@ -91,7 +91,7 @@ for i=1:length(trgvalIndex)
 
         case trigger.self_occlusion
             %Simulus onset trial offset
-            trl(trlN,6)=event(trgvalIndex(i)).sample;
+            trl(trlN,6)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,5)=event(trgvalIndex(i)).value;
             %Trial start 2s before Stimulus onset
 
