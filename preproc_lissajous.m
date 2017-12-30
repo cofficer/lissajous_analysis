@@ -58,8 +58,8 @@ try
         %TODO: save preprocessed data occuring before the stimulus onset.
         %Stim or selfocclusion is preprocessed
         if strcmp(cfgin.stim_self,'stim')
-          cfg.trialdef.prestim        = -5.5; % -2in seconds
-          cfg.trialdef.poststim       = 12; % 1in seconds
+          cfg.trialdef.prestim        = -4.5; % -2in seconds
+          cfg.trialdef.poststim       = 13; % 1in seconds
         elseif strcmp(cfgin.stim_self,'baseline')
           cfg.trialdef.prestim        = -4.3; %200ms bf stimoff. Negative means after self-occlusion
           cfg.trialdef.poststim       = 5.3;  %800ms after stimoff.
@@ -105,7 +105,7 @@ try
         'HLC0021','HLC0022','HLC0023', ...
         'HLC0031','HLC0032','HLC0033'};
         cfg.continuous = 'yes';
-        data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
+        data = ft_preprocessing(cfg); %data1=data;
 
         %redefine trial data.trialinfo(1,:)
         if strcmp(cfgin.stim_self,'stim')
@@ -118,11 +118,11 @@ try
           %The start of the stim on the next trial.
           beg_stim = (cfg.trl(2:end,1)+cfg.trialdef.prestim*1200);
 
-          cfg2.begsample = beg_stim-cfg.trl(1:end-1,1)-sample_before_stim;
-          cfg2.endsample = beg_stim-cfg.trl(1:end-1,1)+sample_after_stim;
-          beg_idx=find(cfg2.begsample>6000);
-          cfg2.begsample(cfg2.begsample>6000) = 900;
-          cfg2.endsample(cfg2.endsample>6000) = 2401;
+          cfg2.begsample = ((beg_stim-cfg.trl(1:end-1,1))'-sample_before_stim)';
+          cfg2.endsample = ((beg_stim-cfg.trl(1:end-1,1))'+sample_after_stim)';
+          beg_idx=find(cfg2.begsample>10000);
+          cfg2.begsample(cfg2.begsample>10000) = 900;
+          cfg2.endsample(cfg2.endsample>10000) = 2401;
           cfg2.begsample(end+1) = 900;
           cfg2.endsample(end+1) = 2401;
           % cfg2.offset = beg_stim-cfg.trl(1:end-1,1);
@@ -133,7 +133,7 @@ try
           cfg2=[];
           cfg2.offset = beg_stim-cfg.trl(1:end-1,1);
           cfg2.offset(end+1)=1000;
-          cfg2.offset=-cfg2.offset+(-5.5*1200);
+          cfg2.offset=-cfg2.offset+(cfg.trialdef.prestim*1200);
           data = ft_redefinetrial(cfg2,data)
 
           %remove trials near block end
