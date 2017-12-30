@@ -65,7 +65,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim14_Actuallow_TFR_Stim_off_baselineCue_short');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim15_Actuallow_TFR_Stim_off_baselineCue_short');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -78,7 +78,7 @@ ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
 cfg.zlim         = [-20 20];
-cfg.ylim         = [40 60];%7 12
+cfg.ylim         = [12 20];%7 12
 % cfg.ylim         = [10 20];
 cfg.layout       = 'CTF275_helmet.lay';
 cfg.xlim         = [0.3 0.6];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -98,7 +98,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim14_high-40-60Hz_baselineCue_0306s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim15_low-12-20Hz_baselineCue_0306s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
