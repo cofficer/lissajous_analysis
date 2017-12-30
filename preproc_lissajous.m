@@ -125,8 +125,17 @@ try
           cfg2.endsample(cfg2.endsample>6000) = 2401;
           cfg2.begsample(end+1) = 900;
           cfg2.endsample(end+1) = 2401;
+          % cfg2.offset = beg_stim-cfg.trl(1:end-1,1);
+          % cfg2.offset(end+1)=1000;
           data = ft_redefinetrial(cfg2,data)
 
+          %Change the offset time axis. data.time{1}(1) data1.time{1}(1)
+          cfg2=[];
+          cfg2.offset = beg_stim-cfg.trl(1:end-1,1);
+          cfg2.offset(end+1)=1000;
+          cfg2.offset=-cfg2.offset+(-5.5*1200);
+          data = ft_redefinetrial(cfg2,data)
+          
           %remove trials near block end
           cfg3 = [];
           cfg3.trials = logical([ones(1,length(cfg.trl)-1),0]');

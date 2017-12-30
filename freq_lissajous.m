@@ -137,6 +137,8 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/')
 fprintf('Saving %s from...\n %s\n', name, pathstr)
 
 if strcmp(cfgin.stim_self,'stim')
+  
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stim')
 
   outputfile = sprintf('%sfreq_stim_%s_%s.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger);
 
