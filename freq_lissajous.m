@@ -95,7 +95,7 @@ elseif strcmp(cfg.trigger,'cue')
 
 elseif strcmp(cfg.trigger,'stim')
 
-  cfg.toi = -1.5:0.05:1.5;            %still to figure
+  cfg.toi = -0.3:0.05:0.8;            %still to figure
 elseif strcmp(cfg.trigger,'stim_off')
 
   cfg.toi = -4:0.05:0.1;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
@@ -137,7 +137,7 @@ cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/')
 fprintf('Saving %s from...\n %s\n', name, pathstr)
 
 if strcmp(cfgin.stim_self,'stim')
-  
+
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stim')
 
   outputfile = sprintf('%sfreq_stim_%s_%s.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger);
