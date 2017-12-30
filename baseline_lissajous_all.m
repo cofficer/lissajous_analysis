@@ -47,6 +47,19 @@ elseif strcmp(cfg.subtractmode,'norm_avg')
   base_name = dir(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/baseline/%s*',cfgin.restingfile(2:3)))
   base_trl  = load(sprintf('%s/%s',base_name.folder,base_name.name));
   base_trl  = base_trl.freq;
+
+  %index trials present in both base and trial
+  freq_trl_idx = ismember(freq.trialinfo(:,12),base_trl.trialinfo(:,12));
+  base_trl_idx = ismember(base_trl.trialinfo(:,12),freq.trialinfo(:,12));
+
+  %redefine trials after index
+  cfg = [];
+  cfg.trials = freq_trl_idx;
+  freq = ft_selectdata(cfg,freq);
+  cfg = [];
+  cfg.trials = base_trl_idx;
+  base_trl = ft_selectdata(cfg,base_trl);
+
   %Average over time.
   base_trl  = squeeze(mean(base_trl.powspctrm(:,:,:,:),4));
   %Average over trials.
