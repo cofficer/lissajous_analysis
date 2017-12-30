@@ -58,8 +58,8 @@ try
         %TODO: save preprocessed data occuring before the stimulus onset.
         %Stim or selfocclusion is preprocessed
         if strcmp(cfgin.stim_self,'stim')
-          cfg.trialdef.prestim        = 3.5; % -2in seconds
-          cfg.trialdef.poststim       = 7; % 1in seconds
+          cfg.trialdef.prestim        = -5.5; % -2in seconds
+          cfg.trialdef.poststim       = 12; % 1in seconds
         elseif strcmp(cfgin.stim_self,'baseline')
           cfg.trialdef.prestim        = -4.3; %200ms bf stimoff. Negative means after self-occlusion
           cfg.trialdef.poststim       = 5.3;  %800ms after stimoff.
@@ -106,6 +106,33 @@ try
         'HLC0031','HLC0032','HLC0033'};
         cfg.continuous = 'yes';
         data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
+
+        %redefine trial data.trialinfo(1,:)
+        if strcmp(cfgin.stim_off,'stim')
+          %There might be way... cfg.trl(2,1)+cfg.trialdef.prestim*1200
+          %Find the sample of the next trials start of stimulus rotation.
+          cfg2=[];
+          cfg2.begsample = (cfg.trl(2:end,1)+cfg.trialdef.prestim*1200)-cfg.trl(1:end-1,1);
+          cfg2.endsample = (cfg.trl(2:end,1)+cfg.trialdef.prestim*1200)-cfg.trl(1:end-1,1)+1200;
+          cfg2.begsample(cfg2.begsample>6000) = 900;
+          cfg2.endsample(cfg2.begsample>6000) = 2401;
+          cfg2.begsample(end+1) = 900;
+          cfg2.endsample(end+1) = 2401;
+          data = ft_redefinetrial(cfg2,data)
+
+          %remove trials near block end
+          cfg3 = []
+          cfg3.trials = logical([ones(1,length(cfg.trl)-1),0]');
+          cfg3.trials(cfg2.begsample>6000) = 0;
+          data = ft_redefinetrial(cfg3,data)
+
+          for itrl = 1:length(cfg.trl)
+            ab=length(data.trial{itrl}(1,cfg2.begsample(itrl):cfg2.endsample(itrl)))
+
+          end
+
+
+        end
 
         %Resample raw data
         cfg3.resample = 'yes';
