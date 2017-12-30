@@ -44,7 +44,8 @@ elseif strcmp(cfg.subtractmode,'within_norm')
 elseif strcmp(cfg.subtractmode,'norm_avg')
 
   %use an average normalization instead of within each trial.
-  base_name = dir(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/baseline/%s*',cfgin.restingfile(2:3)))
+  base_name = dir(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/%s/%s*%s*',...
+                  cfgin.stim_self,cfgin.restingfile(2:3),cfgin.freqrange));
   base_trl  = load(sprintf('%s/%s',base_name.folder,base_name.name));
   base_trl  = base_trl.freq;
 
