@@ -108,29 +108,30 @@ try
         data = ft_preprocessing(cfg); %data.time{1}(1),data.time{1}(end)
 
         %redefine trial data.trialinfo(1,:)
-        if strcmp(cfgin.stim_off,'stim')
+        if strcmp(cfgin.stim_self,'stim')
           %There might be way... cfg.trl(2,1)+cfg.trialdef.prestim*1200
           %Find the sample of the next trials start of stimulus rotation.
           cfg2=[];
-          cfg2.begsample = (cfg.trl(2:end,1)+cfg.trialdef.prestim*1200)-cfg.trl(1:end-1,1);
-          cfg2.endsample = (cfg.trl(2:end,1)+cfg.trialdef.prestim*1200)-cfg.trl(1:end-1,1)+1200;
+          sample_before_stim = 0.5*1200;
+          sample_after_stim  = 1*1200;
+
+          %The start of the stim on the next trial.
+          beg_stim = (cfg.trl(2:end,1)+cfg.trialdef.prestim*1200);
+
+          cfg2.begsample = beg_stim-cfg.trl(1:end-1,1)-sample_before_stim;
+          cfg2.endsample = beg_stim-cfg.trl(1:end-1,1)+sample_after_stim;
+          beg_idx=find(cfg2.begsample>6000);
           cfg2.begsample(cfg2.begsample>6000) = 900;
-          cfg2.endsample(cfg2.begsample>6000) = 2401;
+          cfg2.endsample(cfg2.endsample>6000) = 2401;
           cfg2.begsample(end+1) = 900;
           cfg2.endsample(end+1) = 2401;
           data = ft_redefinetrial(cfg2,data)
 
           %remove trials near block end
-          cfg3 = []
+          cfg3 = [];
           cfg3.trials = logical([ones(1,length(cfg.trl)-1),0]');
-          cfg3.trials(cfg2.begsample>6000) = 0;
-          data = ft_redefinetrial(cfg3,data)
-
-          for itrl = 1:length(cfg.trl)
-            ab=length(data.trial{itrl}(1,cfg2.begsample(itrl):cfg2.endsample(itrl)))
-
-          end
-
+          cfg3.trials(beg_idx) = 0;
+          data = ft_redefinetrial(cfg3,data);
 
         end
 
