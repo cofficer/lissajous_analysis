@@ -136,6 +136,7 @@ try
         end
 
         %Resample raw data
+        cfg3=[];
         cfg3.resample = 'yes';
         cfg3.fsample = 1200;
         cfg3.resamplefs = 500;
