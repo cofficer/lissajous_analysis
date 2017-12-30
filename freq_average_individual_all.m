@@ -7,7 +7,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
+filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/%s',cfgin.blocktype,cfgin.stim_self)
 
 cd(filepath)
 
@@ -16,7 +16,11 @@ compSwitch = 0;
 if strcmp(cfgin.blocktype,'continuous')
   freqpath   = dir(sprintf('*freq_%s*-26-26*',cfgin.freqrange));
 else
-  freqpath   = dir(sprintf('*freq_%s_stim_off*',cfgin.freqrange));
+  if strcmp(cfgin.stim_self,'stim')
+    freqpath   = dir(sprintf('*freq_stim_%s*',cfgin.freqrange));
+  else
+    freqpath   = dir(sprintf('*freq_%s_stim_off*',cfgin.freqrange));
+  end
 end
 
 

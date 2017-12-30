@@ -51,7 +51,7 @@ cfg.zlim         = [-5 5];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
-cfg.channel      = idx_motor';%freq.label(idx_occ);
+cfg.channel      = freq.label(idx_occ);%idx_motor';%
 cfg.interactive = 'no';
 cfg.title='TFR all participants gamma';
 ft_singleplotTFR(cfg,freq);
@@ -65,7 +65,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim13_low_TFR_Stim_off_baselineCue_motor_sensors');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim13_low_TFR_Stim_off_baselineCue_short');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -81,7 +81,7 @@ cfg.zlim         = [-5 5];
 cfg.ylim         = [60 90];%7 12
 % cfg.ylim         = [10 20];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-3.2 -2.8];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-1.9 -1.6];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO all participants gamma';
@@ -98,7 +98,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim13_high-60-90Hz_baselineCue_motorresp_-32-28s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim13_high-60-90Hz_baselineCue_-19-16s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
