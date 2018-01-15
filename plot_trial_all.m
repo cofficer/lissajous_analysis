@@ -10,10 +10,12 @@ function plot_trial_all(~)
 %Load and average all averaged high data.
 clear all
 
-cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average')
+blocktype = 'continuous' %continuous or trial
+
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average',blocktype))
 
 
-freqfiles= dir('freqavgs_all_low*');
+freqfiles= dir('freqavgs_low*');
 load(freqfiles(1).name)
 
 
@@ -32,10 +34,14 @@ end
 
 freq.powspctrm=squeeze(nanmean(all_freq,1));
 
+%Load the sensors of interest
+load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_visual_sensors.mat')
+
 %plot the TFR
 %TODO: find the IDX of all motor sensors, and use those to plot TFR.
 idx_occ=strfind(freq.label,'O');
 idx_occ=find(~cellfun(@isempty,idx_occ));
+idx_lissajous = visual_sensors;
 idx_motor = {'MRC13','MRC14','MRC15','MRC16','MRC22','MRC23'...
             'MRC24','MRC31','MRC41','MRF64','MRF65','MRF63'...
             'MRF54','MRF55','MRF56','MRF66','MRF46'...
@@ -47,13 +53,13 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-20 20];
+cfg.zlim         = [-10 10];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
-%cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
-cfg.channel      = freq.label(idx_occ);%idx_motor';%
+cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.channel      = idx_lissajous;%freq.label(idx_occ);%idx_motor';%
 cfg.interactive = 'no';
-cfg.title='TFR all participants gamma';
+cfg.title='TFR all participants low freq';
 ft_singleplotTFR(cfg,freq);
 %ft_multiplotTFR(cfg,freq)
 %ft_topoplotTFR(cfg,freq)
@@ -61,11 +67,11 @@ ft_singleplotTFR(cfg,freq);
 colormap(ax2,flipud(brewermap(64,'RdBu')))
 
 
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures'))
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim15_Actuallow_TFR_Stim_off_baselineCue_short');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim4_lowfreq_sensorstrial_-225_225s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -77,11 +83,11 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-20 20];
-cfg.ylim         = [12 20];%7 12
+cfg.zlim         = [-10 10];
+cfg.ylim         = [20 35];%7 12
 % cfg.ylim         = [10 20];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [0.3 0.6];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO all participants gamma';
@@ -94,11 +100,11 @@ colormap(ax2,flipud(brewermap(64,'RdBu')))
 
 
 
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures'))
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim15_low-12-20Hz_baselineCue_0306s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim4_lowfreq_sensorstrial_TOPO_-225_0s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

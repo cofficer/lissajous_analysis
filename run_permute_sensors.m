@@ -4,6 +4,8 @@ function output = run_permute_sensors(cfgin)
   %Select sensors maximially activated by
   %rotation onset.
   %Created 29/11/2017.
+  %Change to compare the cue-period with interest.
+  %Edited 05/01/2018
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   clear all

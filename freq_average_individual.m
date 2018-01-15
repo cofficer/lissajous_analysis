@@ -125,7 +125,8 @@ else
   cfg.baselinewindow        = [switchTrial.time(1) switchTrial.time(11)];
 end
 
-[switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
+% CG commented out the baseline for now. 2018-01-15.
+% [switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
 
 
 %Make the freq the trial average
@@ -133,8 +134,18 @@ cfg =[];
 cfg.avgoverrpt = 'yes';
 freq = ft_selectdata(cfg,freq);
 
+%Make the freq the trial average
+cfg =[];
+cfg.avgoverrpt = 'yes';
+switchTrial = ft_selectdata(cfg,switchTrial);
+
+%Make the freq the trial average
+cfg =[];
+cfg.avgoverrpt = 'yes';
+stableTrial = ft_selectdata(cfg,stableTrial);
+
 %substitute powspctrm with own baselined data
-freq.powspctrm=squeeze(switchTrial)-squeeze(stableTrial);
+freq.powspctrm=squeeze(switchTrial.powspctrm)-squeeze(stableTrial.powspctrm);
 
 %Save the freq in new folder
 d_average = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/',cfgin.blocktype);
