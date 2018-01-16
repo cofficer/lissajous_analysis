@@ -165,7 +165,7 @@ for i=1:length(trgvalIndex)
             trl(trlN,5)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,6)=event(trgvalIndex(i)).value;
 
-        case {respVals}
+        case num2cell(respVals)
             %response triggers
             trl(trlN,7)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,8)=event(trgvalIndex(i)).value;
