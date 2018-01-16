@@ -51,7 +51,7 @@ cfg = ft_definetrial(cfg);
 event = ft_read_event(datafile);%'headerformat',[],'eventformat',[],'dataformat',[]
 
 
-
+event
 
 
 

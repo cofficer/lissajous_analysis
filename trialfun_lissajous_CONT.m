@@ -52,6 +52,18 @@ respSamp = [event(trgvalIndex2).sample];
 %add the two indices together to get all the data.
 trgvalIndex = sort([trgvalIndex trgvalIndex2(trgvalIndex2>trgvalIndex(2))]);
 
+%Find the first instance of trial start and self-occlusion start
+%Take whichever was first and ignore all other triggers before then. 
+
+first_self_occ = find([event(trgvalIndex).value]==10);
+first_trlstrt = find([event(trgvalIndex).value]==1);
+first_stim_on= sort([first_self_occ(1) first_trlstrt(1)]);
+
+
+%Only keep trgvalIndex after the first instance of stimulus onset.
+trgvalIndex=trgvalIndex(first_stim_on(1):end);
+
+
 %trlTA.responseValue(trlTA.responseValue==228)=225;
 %trlTA.responseValue(trlTA.responseValue==226)=232;
 
@@ -103,6 +115,7 @@ numBlockStarts=0;
 for i=1:length(trgvalIndex)
 
     %Start of a new trial.
+    %Starting at block_start is not preferred...
     switch event(trgvalIndex(i)).value
        case {trigger.block_start}
 

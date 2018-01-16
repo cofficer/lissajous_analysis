@@ -70,8 +70,8 @@ function data = preproc_lissajous(cfgin)
           cfg.trialdef.poststim       = cfgin.poststim%7;%5; % 4.25in seconds
         end
       else
-        cfg.trialdef.prestim          = 2.25
-        cfg.trialdef.poststim         = 2.25
+        cfg.trialdef.prestim          = 2.6
+        cfg.trialdef.poststim         = 2.6
       end
       %Stores all the trial information
       cfg = ft_definetrial(cfg);
@@ -116,7 +116,7 @@ function data = preproc_lissajous(cfgin)
       %redefine trial data.trialinfo(1,:)
       %Fairly complicated way of getting the data to be stimulus-locked to the
       %Following trial, instead of current trial.
-      %This way we can later compare cue-locked and stim-locked data. 
+      %This way we can later compare cue-locked and stim-locked data.
       if strcmp(cfgin.stim_self,'stim')
         %There might be way... cfg.trl(2,1)+cfg.trialdef.prestim*1200
         %Find the sample of the next trials start of stimulus rotation.
@@ -395,8 +395,11 @@ function data = preproc_lissajous(cfgin)
       %Change folder and save approapriate data + figures
       lisdir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/preprocessed/',cfgin.blocktype);
       cd(lisdir)
-      name = sprintf('%sP%s/%s/',lisdir,datafile(2:3),cfgin.stim_self);
-
+      if strcmp(cfgin.blocktype,'trial')
+        name = sprintf('%sP%s/%s/',lisdir,datafile(2:3),cfgin.stim_self);
+      else
+        name = sprintf('%sP%s/',lisdir,datafile(2:3));
+      end 
       %If the folder does not already exist, create it.
       if 7==exist(name,'dir')
         cd(name)
@@ -444,7 +447,7 @@ function data = preproc_lissajous(cfgin)
         %Save the artifacts
         artstore=sprintf('%dartifactsP%s.mat',iblock,datafile(2:3));
 
-        save(artstore,'artifact_eogHorizontal','artifact_Muscle') %Jumpos?
+        save(artstore,'artifact_Muscle') %Jumpos? eye artifact?
 
         %save the invisible figure
         figurestore=sprintf('%doverviewP%s.png',iblock,datafile(2:3));
