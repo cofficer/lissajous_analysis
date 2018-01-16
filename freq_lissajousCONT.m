@@ -21,7 +21,7 @@ function freq = freq_lissajousCONT(cfgin)
     cfg.trigger     = 'selfoccl';
     cfg.channel     ='MEG'; %
     cfg.trials      = 'all';
-    cfg.freqanalysistype = 'low';
+    cfg.freqanalysistype = 'high';
 
     cd(cfgin.dirpart)
     load(cfgin.iblock)
@@ -51,11 +51,18 @@ function freq = freq_lissajousCONT(cfgin)
 
       switch cfg.freqanalysistype
       case 'high'
+        % cfg.taper = 'dpss'; % high frequency-optimized analysis (smooth)
+        % cfg.keeptrials  = 'yes';
+        % cfg.foi = 35:5:150;
+        % cfg.t_ftimwin = (20./cfg.foi);%ones(length(cfg.foi),1) .* 0.5; %(20./cfg.foi)
+        % cfg.tapsmofrq = 0.2 *cfg.foi; %ones(length(cfg.foi),1) .* 8; % 0.2 *cfg.foi
         cfg.taper = 'dpss'; % high frequency-optimized analysis (smooth)
         cfg.keeptrials  = 'yes';
-        cfg.foi = 35:5:150;
-        cfg.t_ftimwin = (20./cfg.foi);%ones(length(cfg.foi),1) .* 0.5; %(20./cfg.foi)
-        cfg.tapsmofrq = 0.2 *cfg.foi; %ones(length(cfg.foi),1) .* 8; % 0.2 *cfg.foi
+        cfg.foi = 36:2:110;
+        % cfg.t_ftimwin = ones(length(cfg.foi),1) .* 0.5;
+        % cfg.tapsmofrq = ones(length(cfg.foi),1) .* 8;
+        cfg.t_ftimwin = ones(length(cfg.foi),1)*0.2;%(20./cfg.foi);%ones(length(cfg.foi),1) .* 0.5; %(20./cfg.foi)
+        cfg.tapsmofrq = ones(length(cfg.foi),1)*10;%0.1
       case 'low'
         cfg.taper = 'hanning'; % low frequency-optimized analysis
         cfg.keeptrials  = 'yes'; % needed for fourier-output
