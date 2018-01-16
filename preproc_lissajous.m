@@ -30,6 +30,8 @@ function data = preproc_lissajous(cfgin)
       startblock=2;
       if strcmp(cfgin.restingfile(2:3),'19')
         nblocks=6;
+      elseif strcmp(cfgin.restingfile(2:3),'8')
+
       end
       trldef = 'trialfun_lissajous_CONT';
     end
@@ -39,15 +41,15 @@ function data = preproc_lissajous(cfgin)
       datafile=datasets(iblock).name;
 
       %Hard coding P08 issues.
-      if iblock==3 && strcmp(cfgin.restingfile(2:3),'08')
-        continue
-      end
-      %Hard codgin P19 issues.
-      if iblock==3 && strcmp(cfgin.restingfile(2:3),'19')
-        continue
-      elseif iblock==4 && strcmp(cfgin.restingfile(2:3),'19')
-        continue
-      end
+      % if iblock==3 && strcmp(cfgin.restingfile(2:3),'08')
+      %   continue
+      % end
+      % %Hard codgin P19 issues.
+      % if iblock==3 && strcmp(cfgin.restingfile(2:3),'19')
+      %   continue
+      % elseif iblock==4 && strcmp(cfgin.restingfile(2:3),'19')
+      %   continue
+      % end
       %%
       %Load data into trial-based format.
       cfg                         = [];
@@ -399,7 +401,7 @@ function data = preproc_lissajous(cfgin)
         name = sprintf('%sP%s/%s/',lisdir,datafile(2:3),cfgin.stim_self);
       else
         name = sprintf('%sP%s/',lisdir,datafile(2:3));
-      end 
+      end
       %If the folder does not already exist, create it.
       if 7==exist(name,'dir')
         cd(name)
