@@ -15,14 +15,14 @@ function output = run_tmap_sensors_continuous(cfgin)
   cd(mainDir)
 
   %Store all the seperate data files
-  stim_paths = dir('freqavgs_high*'); %or freqavgs_high.
+  stim_paths = dir('freqavgs_low*'); %or freqavgs_high.
   load(stim_paths(1).name)
 
 
   %Create matrix for all participants.
   dims = size(freq.powspctrm);
-  all_stim = zeros(26,dims(1),dims(2),dims(3));
-  all_base = zeros(26,dims(1),dims(2),dims(3));
+  all_stim = zeros(28,dims(1),dims(2),dims(3));
+  all_base = zeros(28,dims(1),dims(2),dims(3));
 
   %Load all participants
   for ifiles = 1:length(stim_paths)-1
@@ -78,7 +78,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   cfg.layout       = 'CTF275_helmet.lay';
   %cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
   cfg.interactive = 'no';
-  cfg.title='TFR all participants high freq';
+  cfg.title='TFR all participants low freq';
   ft_singleplotTFR(cfg,freq);
   %ft_multiplotTFR(cfg,freq)
   %ft_topoplotTFR(cfg,freq)
@@ -90,7 +90,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim5_gamma_TFR_tmapsensorstrial_-25_25s');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim5_low_TFR_tmapsensorstrial_-235_235s');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   set(hf,'PaperpositionMode','Auto')
