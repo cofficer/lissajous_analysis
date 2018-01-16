@@ -81,7 +81,7 @@ function freq = freq_lissajousCONT(cfgin)
       elseif strcmp(cfg.trigger,'selfoccl')
 
         %cfg.toi = 0.25:0.05:4.25;
-        cfg.toi = -2.5:0.05:2.5;
+        cfg.toi = -2.35:0.05:2.35;
 
       elseif strcmp(cfg.trigger,'resp')
 
