@@ -104,7 +104,7 @@ function freq = freq_lissajousCONT(cfgin)
 
 
       %Fieltrip fourier
-      cfg.polyremoval = -1; %Detrend that data.
+      % cfg.polyremoval = -1; %Detrend that data. why?
       freq = ft_freqanalysis(cfg, data);
 
       %Combine planar
