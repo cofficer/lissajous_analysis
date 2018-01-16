@@ -31,7 +31,7 @@ function freq = freq_lissajousCONT(cfgin)
     cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/')
 
     %Only do analysis if file is missing
-    if exist(outputfile)==0
+    %if exist(outputfile)==0
 
 
       %Seperate the data into orthogonal sensors
@@ -131,7 +131,7 @@ function freq = freq_lissajousCONT(cfgin)
 
 
 
-    end
+    %end
 
   catch err
 
