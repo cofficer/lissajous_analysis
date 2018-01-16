@@ -119,7 +119,7 @@ for i=1:length(trgvalIndex)
             %it is the first trial or not, select the correct first
             %trial sample after blockstart
             %-edit 12/09/17. Making blockstart work with late recordings...
-            %Or if there are more then two blockstarts per dataset. 
+            %Or if there are more then two blockstarts per dataset.
             numBlockStarts = numBlockStarts+1;
             idx_bloktart = find([event(trgvalIndex).value]==1);
 
@@ -165,7 +165,7 @@ for i=1:length(trgvalIndex)
             trl(trlN,5)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,6)=event(trgvalIndex(i)).value;
 
-        case {respVals(1),respVals(2)}
+        case {respVals}
             %response triggers
             trl(trlN,7)=event(trgvalIndex(i)).sample-stimSample;
             trl(trlN,8)=event(trgvalIndex(i)).value;

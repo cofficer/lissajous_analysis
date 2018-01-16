@@ -40,10 +40,10 @@ clear g
 close
 figure(1),clf
 g = gramm('x',allRun);
-g.stat_bin('edges',1:25,'normalization','probability');
+g.stat_bin('edges',1:29,'normalization','probability');
 g.set_names('column','Origin','x','Mean percept duration (self-occlusion)','y','% of switches','color','# Cylinders');
 g.draw();
-saveas(gca,'behavHistGramm.png','png')
+saveas(gca,'mean_switchrate_behavHistGramm2.png','png')
 %%
 %Plot the coefficient of covariance against the mean
 clear g

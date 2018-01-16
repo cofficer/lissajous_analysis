@@ -21,7 +21,9 @@ function output = run_tmap_sensors(cfgin)
 
   clear all
 
-  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stim/';
+  blocktype = 'continuous';%continuous or trial
+
+  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stim/';
   cd(mainDir)
 
   %Store all the seperate data files
