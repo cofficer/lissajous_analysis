@@ -112,21 +112,21 @@ end
 
 %Run within trial baseline
 cfg                       = [];
-cfg.subtractmode          = 'within'; %what are the options?
+cfg.subtractmode          = 'within_norm'; %what are the options?
 %Find first nonnan timepoint in data, and use that before and after self-O
 %What if there are no nans at all...
 if strcmp(cfgin.blocktype,'continuous')
 idx_nan = ~isnan(switchTrial.powspctrm(1,1,1,:));
 idx_time=find(diff(idx_nan)==-1);
-switchTrial.time(idx_time)
-cfg.baselinewindow        = [-switchTrial.time(idx_time) switchTrial.time(idx_time)];
+% switchTrial.time(idx_time)
+cfg.baselinewindow        = [-2.25 -1.85];%[-switchTrial.time(idx_time) switchTrial.time(idx_time)];
 
 else
   cfg.baselinewindow        = [switchTrial.time(1) switchTrial.time(11)];
 end
 
 % CG commented out the baseline for now. 2018-01-15.
-% [switchTrial,stableTrial] = baseline_lissajous(switchTrial,stableTrial,cfg);
+[freq1,freq2] = baseline_lissajous(switchTrial,stableTrial,cfg);
 
 
 %Make the freq the trial average
@@ -138,11 +138,13 @@ freq = ft_selectdata(cfg,freq);
 cfg =[];
 cfg.avgoverrpt = 'yes';
 switchTrial = ft_selectdata(cfg,switchTrial);
+switchTrial.powspctrm = freq1;
 
 %Make the freq the trial average
 cfg =[];
 cfg.avgoverrpt = 'yes';
 stableTrial = ft_selectdata(cfg,stableTrial);
+stableTrial.powspctrm = freq2;
 
 %substitute powspctrm with own baselined data
 freq.powspctrm=squeeze(switchTrial.powspctrm)-squeeze(stableTrial.powspctrm);
