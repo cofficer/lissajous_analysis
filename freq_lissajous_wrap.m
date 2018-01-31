@@ -22,7 +22,7 @@ function freq = freq_lissajous_wrap(cfgin,runcfg)
       cfgin_exp{i_exp} = cfgin{ipart};
       cfgin_exp{i_exp}.dirpart=dirpart;
       cfgin_exp{i_exp}.iblock=dat_name(iblock).name; % needs to contain the block number as well.
-      %cfgin_exp=cfgin_exp{50};
+      %cfgin_exp=cfgin_exp{20};
       i_exp=i_exp+1;
     end
 

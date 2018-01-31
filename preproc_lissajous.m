@@ -188,7 +188,7 @@ function data = preproc_lissajous(cfgin)
         %Change the offset time axis. data.time{1}(1) data1.time{1}(1)
         cfg2=[];
         cfg2.offset = -(data.time{1}(1)+cfg.trialdef.prestim)*1200%(ones(1,length(data.time))*sample_before_resp)'
-        data1 = ft_redefinetrial(cfg2,data)
+        data = ft_redefinetrial(cfg2,data)
 
         %samples from trial start to response.
 
