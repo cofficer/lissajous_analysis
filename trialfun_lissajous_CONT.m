@@ -120,7 +120,7 @@ end
 %diff([event(trgvalIndex([event(trgvalIndex).value]==10)).sample])./1200
 numBlockStarts=0;
 
-for i=1:10%length(trgvalIndex)
+for i=1:length(trgvalIndex)
 
     %Start of a new trial.
     %Starting at block_start is not preferred...
