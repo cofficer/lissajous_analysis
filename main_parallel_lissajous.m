@@ -33,11 +33,11 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.poststim = 5.3;
 
     idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{21}
+    %cfgin=cfgin{22}
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 

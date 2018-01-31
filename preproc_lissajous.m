@@ -72,8 +72,8 @@ function data = preproc_lissajous(cfgin)
           cfg.trialdef.poststim       = cfgin.poststim%7;%5; % 4.25in seconds
         end
       elseif strcmp(cfgin.stim_self,'resp')
-        cfg.trialdef.prestim          = 0
-        cfg.trialdef.poststim         = 5
+        cfg.trialdef.prestim          = 1
+        cfg.trialdef.poststim         = 7
       else
         cfg.trialdef.prestim          = 2.6
         cfg.trialdef.poststim         = 2.6
@@ -157,15 +157,40 @@ function data = preproc_lissajous(cfgin)
         data = ft_redefinetrial(cfg3,data);
 
       elseif strcmp(cfgin.stim_self,'resp')
-        sample_before_resp = 2*1200;
-        sample_after_resp  = 1*1200;
+        sample_before_resp = 2*1200%+cfg.trialdef.prestim*1200;
+        sample_after_resp  = 1*1200%+cfg.trialdef.prestim*1200;
         cfg2=[];
         cfg2.trials=data.trialinfo(:,4)>0;
         data = ft_redefinetrial(cfg2,data)
         cfg2=[];
-        cfg2.begsample = data.trialinfo(:,4)-sample_before_resp
-        cfg2.endsample = data.trialinfo(:,4)+sample_after_resp
-        data = ft_redefinetrial(cfg2,data)
+        cfg2.begsample = data.trialinfo(:,4)+cfg.trialdef.prestim*1200-sample_before_resp
+        cfg2.endsample = data.trialinfo(:,4)+cfg.trialdef.prestim*1200+sample_after_resp
+        %Maybe do a safety check to make sure all samples are available.
+        %Check the samples of the data against the samples we are after
+        start_check = (data.sampleinfo(:,1)+cfg2.begsample)<data.sampleinfo(:,2);
+        stop_check  = (data.sampleinfo(:,2)-cfg2.endsample)>data.sampleinfo(:,1);
+        trials_available = logical(start_check.*stop_check);
+
+        %Select the data if all sample are available, otherwise remove the non-available.
+        if sum(trials_available)==length(trials_available)
+          data = ft_redefinetrial(cfg2,data)
+        else
+          %if there are trials that do not fit then remove those and preprocess
+          %the rest
+          cfg3=[]
+          cfg3.trials=trials_available;
+          data = ft_redefinetrial(cfg3,data)
+          cfg2.begsample=cfg2.begsample(trials_available);
+          cfg2.endsample=cfg2.endsample(trials_available);
+          data = ft_redefinetrial(cfg2,data)
+        end
+
+        %Change the offset time axis. data.time{1}(1) data1.time{1}(1)
+        cfg2=[];
+        cfg2.offset = -(data.time{1}(1)+cfg.trialdef.prestim)*1200%(ones(1,length(data.time))*sample_before_resp)'
+        data1 = ft_redefinetrial(cfg2,data)
+
+        %samples from trial start to response.
 
 
       end
