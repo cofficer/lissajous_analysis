@@ -39,14 +39,14 @@ load(freqpath(cfgin.part_ID).name)
 
 %Run within trial baseline
 cfg                       = [];
-cfg.subtractmode          = 'norm_avg'; % norm_avg within_norm, within
+cfg.subtractmode          = 'within_norm'; % norm_avg within_norm, within
 %Find first nonnan timepoint in data, and use that before and after self-O
 %What if there are no nans at all...
 if strcmp(cfgin.blocktype,'continuous')
-  idx_nan = ~isnan(switchTrial.powspctrm(1,1,1,:));
-  idx_time=find(diff(idx_nan)==-1);
-  switchTrial.time(idx_time)
-  cfg.baselinewindow        = [-switchTrial.time(idx_time) switchTrial.time(idx_time)];
+  idx_nan = ~isnan(freq.powspctrm(1,1,1,:));
+  % idx_time=find(diff(idx_nan)==-1);
+  % switchTrial.time(idx_time)
+  cfg.baselinewindow        = [freq.time(1) freq.time(end)];
 
 else
   %4.5=stim_off.
@@ -69,7 +69,7 @@ freq = ft_selectdata(cfg,freq);
 freq.powspctrm=freq_base;
 
 %Save the freq in new folder
-d_average = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/',cfgin.blocktype);
+d_average = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/resp',cfgin.blocktype);
 cd(d_average)
 freqtosave = sprintf('freqavgs_all_%s_%d',cfgin.freqrange,cfgin.part_ID);
 save(freqtosave,'freq')

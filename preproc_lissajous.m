@@ -33,7 +33,11 @@ function data = preproc_lissajous(cfgin)
       elseif strcmp(cfgin.restingfile(2:3),'8')
 
       end
-      trldef = 'trialfun_lissajous_CONT';
+      if strcmp(cfgin.stim_self,'resp')
+        trldef = 'trialfun_lissajous_CONT_resp';
+      else
+        trldef = 'trialfun_lissajous_CONT';
+      end
     end
 
     for iblock = startblock:nblocks
