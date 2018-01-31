@@ -99,7 +99,7 @@ function freq = freq_lissajousCONT(cfgin)
 
     elseif strcmp(cfg.trigger,'resp')
 
-      cfg.toi = -0.60:0.05:0;            %still to figure
+      cfg.toi = -0.75:0.05:1.75;            %still to figure
 
     elseif strcmp(cfg.trigger,'cue')
 
