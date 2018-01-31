@@ -15,7 +15,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   cd(mainDir)
 
   %Store all the seperate data files
-  stim_paths = dir('freqavgs_low*'); %or freqavgs_high.
+  stim_paths = dir('freqavgs_high*'); %or freqavgs_high.
   load(stim_paths(1).name)
 
 
@@ -51,14 +51,14 @@ function output = run_tmap_sensors_continuous(cfgin)
   %Find the timepoints of stim_freq of interest
   %Also define the freq of interest, and average over both?
 
-  stim_time = [stim_freq.time(13),stim_freq.time(19)];
+  % stim_time = [stim_freq.time(13),stim_freq.time(19)];
 
   [H,P,CI,STATS]=ttest(all_stim,all_base,'dim',1);
 
   STATS.tstat
 
 
-  tavalue = (STATS.tstat); %tavalue(1,:,:)=all_freq;
+  tavalue = (STATS.tstat); %tavalue(1,:,:)=all_freq; %tavalue(1,:,:)=nanmean(all_stim,1);
 
   %Plot the topo.
   %Make freq a vector
@@ -73,12 +73,12 @@ function output = run_tmap_sensors_continuous(cfgin)
   ax2=subplot(1,1,1)
   % freq.powspctrm = switchTrial;
   cfg=[];
-  cfg.zlim         = [-8 8];
+  cfg.zlim         = [-2 2];
   %cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
   %cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
   cfg.interactive = 'no';
-  cfg.title='TFR all participants low freq';
+  cfg.title='TFR all participants high freq';
   ft_singleplotTFR(cfg,freq);
   %ft_multiplotTFR(cfg,freq)
   %ft_topoplotTFR(cfg,freq)
@@ -90,7 +90,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim5_low_TFR_synch_sensorstrial_-235_235s_baselined');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim5_high_TFR_synch_switchonly_-235_235s_baselined_within');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   set(hf,'PaperpositionMode','Auto')

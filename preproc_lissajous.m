@@ -71,6 +71,9 @@ function data = preproc_lissajous(cfgin)
           cfg.trialdef.prestim        = cfgin.prestim%1;%5.5; % 2.25in seconds
           cfg.trialdef.poststim       = cfgin.poststim%7;%5; % 4.25in seconds
         end
+      elseif strcmp(cfgin.stim_self,'resp')
+        cfg.trialdef.prestim          = 0
+        cfg.trialdef.poststim         = 5
       else
         cfg.trialdef.prestim          = 2.6
         cfg.trialdef.poststim         = 2.6
@@ -152,6 +155,18 @@ function data = preproc_lissajous(cfgin)
         cfg3.trials = logical([ones(1,length(cfg.trl)-1),0]');
         cfg3.trials(beg_idx) = 0;
         data = ft_redefinetrial(cfg3,data);
+
+      elseif strcmp(cfgin.stim_self,'resp')
+        sample_before_resp = 2*1200;
+        sample_after_resp  = 1*1200;
+        cfg2=[];
+        cfg2.trials=data.trialinfo(:,4)>0;
+        data = ft_redefinetrial(cfg2,data)
+        cfg2=[];
+        cfg2.begsample = data.trialinfo(:,4)-sample_before_resp
+        cfg2.endsample = data.trialinfo(:,4)+sample_after_resp
+        data = ft_redefinetrial(cfg2,data)
+
 
       end
 
@@ -400,7 +415,11 @@ function data = preproc_lissajous(cfgin)
       if strcmp(cfgin.blocktype,'trial')
         name = sprintf('%sP%s/%s/',lisdir,datafile(2:3),cfgin.stim_self);
       else
-        name = sprintf('%sP%s/',lisdir,datafile(2:3));
+        if strcmp(cfgin.stim_self,'resp')
+          name = sprintf('%sP%s/resp/',lisdir,datafile(2:3));
+        else
+          name = sprintf('%sP%s/',lisdir,datafile(2:3));
+        end
       end
       %If the folder does not already exist, create it.
       if 7==exist(name,'dir')
@@ -443,6 +462,7 @@ function data = preproc_lissajous(cfgin)
         end
 
       elseif strcmp(cfgin.blocktype,'continuous')
+
         filestore=sprintf('%dpreproc26-26P%s.mat',iblock,datafile(2:3));
         save(filestore,'data','-v7.3')
 

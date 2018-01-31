@@ -33,7 +33,7 @@ fsr    = '1200'; %cfg.fsample;         % in Hz
 begtrl = 1; % in seconds cfg.trialdef.prestim
 endtrl = 2; % in seconds cfg.trialdef.poststim
 
-%'/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P21/P21_lissajous_20170224_02.ds'
+%cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P21/')%P21_lissajous_20170224_02.ds'
 %Store the events
 
 event = ft_read_event(hdr);%'headerformat',[],'eventformat',[],'dataformat',[]
@@ -53,7 +53,7 @@ respSamp = [event(trgvalIndex2).sample];
 trgvalIndex = sort([trgvalIndex trgvalIndex2(trgvalIndex2>trgvalIndex(2))]);
 
 %Find the first instance of trial start and self-occlusion start
-%Take whichever was first and ignore all other triggers before then. 
+%Take whichever was first and ignore all other triggers before then.
 
 first_self_occ = find([event(trgvalIndex).value]==10);
 first_trlstrt = find([event(trgvalIndex).value]==1);
@@ -64,8 +64,12 @@ first_stim_on= sort([first_self_occ(1) first_trlstrt(1)]);
 trgvalIndex=trgvalIndex(first_stim_on(1):end);
 
 
-%trlTA.responseValue(trlTA.responseValue==228)=225;
+%trlTA.responseValue(trlTA.responseValue==228)=225; diff([event(trgvalIndex(1609:1611)).sample])/1200
 %trlTA.responseValue(trlTA.responseValue==226)=232;
+%cue_off=((diff([event(trgvalIndex([event(trgvalIndex).value]==32)).sample]))/1200);
+%cue_off=cue_off(cue_off>0.5)
+%cue_off(136)=[];
+%max(cue_off)-min(cue_off)%is 0.76. Very close to the 0.75 which was defined! 
 
 %What order is desired:
 %First two columns, stimulus start sample and stimulus stop sample
