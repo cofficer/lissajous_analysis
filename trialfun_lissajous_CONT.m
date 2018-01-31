@@ -33,7 +33,10 @@ fsr    = '1200'; %cfg.fsample;         % in Hz
 begtrl = 1; % in seconds cfg.trialdef.prestim
 endtrl = 2; % in seconds cfg.trialdef.poststim
 
-%cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P21/')%P21_lissajous_20170224_02.ds'
+%cfgin.trialdef.poststim=cfg.trialdef.poststim
+%cfgin.trialdef.prestim=cfg.trialdef.prestim
+%cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P02/')%P02_lissajous_20161211_02.ds'
+%P21_lissajous_20170224_02.ds
 %Store the events
 
 event = ft_read_event(hdr);%'headerformat',[],'eventformat',[],'dataformat',[]
@@ -56,12 +59,12 @@ trgvalIndex = sort([trgvalIndex trgvalIndex2(trgvalIndex2>trgvalIndex(2))]);
 %Take whichever was first and ignore all other triggers before then.
 
 first_self_occ = find([event(trgvalIndex).value]==10);
-first_trlstrt = find([event(trgvalIndex).value]==1);
-first_stim_on= sort([first_self_occ(1) first_trlstrt(1)]);
+% first_trlstrt = find([event(trgvalIndex).value]==1);
+% first_stim_on= sort([first_self_occ(1) first_trlstrt(1)]);
 
 
 %Only keep trgvalIndex after the first instance of stimulus onset.
-trgvalIndex=trgvalIndex(first_stim_on(1):end);
+trgvalIndex=trgvalIndex(first_self_occ(1):end);
 
 
 %trlTA.responseValue(trlTA.responseValue==228)=225; diff([event(trgvalIndex(1609:1611)).sample])/1200
@@ -69,7 +72,7 @@ trgvalIndex=trgvalIndex(first_stim_on(1):end);
 %cue_off=((diff([event(trgvalIndex([event(trgvalIndex).value]==32)).sample]))/1200);
 %cue_off=cue_off(cue_off>0.5)
 %cue_off(136)=[];
-%max(cue_off)-min(cue_off)%is 0.76. Very close to the 0.75 which was defined! 
+%max(cue_off)-min(cue_off)%is 0.76. Very close to the 0.75 which was defined!
 
 %What order is desired:
 %First two columns, stimulus start sample and stimulus stop sample
@@ -114,12 +117,14 @@ end
 
 %Index how many times a new block is found and started.
 %Only needed beacuase of late start recordings, i.e. P04.
+%diff([event(trgvalIndex([event(trgvalIndex).value]==10)).sample])./1200
 numBlockStarts=0;
 
-for i=1:length(trgvalIndex)
+for i=1:10%length(trgvalIndex)
 
     %Start of a new trial.
     %Starting at block_start is not preferred...
+    %1    11    10    31    32    32   232    10
     switch event(trgvalIndex(i)).value
        case {trigger.block_start}
 
@@ -201,7 +206,7 @@ for i=1:length(trgvalIndex)
 
             %case {trigger.block_start,trigger.block_end}
             %    %trl(trlN,13)=event(trgvalIndex(i)).sample;
-            %    trl(trlN,13)=event(trgvalIndex(i)).value;
+            %    trl(trlN,13)=event(trgvalIndex(i)).value; trl(2,:)
 
     end
 end
