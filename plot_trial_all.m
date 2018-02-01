@@ -11,11 +11,11 @@ function plot_trial_all(~)
 clear all
 
 blocktype = 'continuous' %continuous or trial
+stim_self = ''; %'' or resp.
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/resp',blocktype))
 
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average',blocktype))
 
-
-freqfiles= dir('freqavgs_low*');
+freqfiles= dir('freqavgs_all_low*');
 load(freqfiles(1).name)
 
 
@@ -56,10 +56,10 @@ cfg=[];
 cfg.zlim         = [-10 10];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+% cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 cfg.channel      = idx_lissajous;%freq.label(idx_occ);%idx_motor';%
 cfg.interactive = 'no';
-cfg.title='TFR all participants low freq';
+cfg.title='Visual sensors only';
 ft_singleplotTFR(cfg,freq);
 %ft_multiplotTFR(cfg,freq)
 %ft_topoplotTFR(cfg,freq)
@@ -71,7 +71,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim4_lowfreq_sensorstrial_-225_225s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim4_lowfreq_-25-0s_wholebaseline_continuous_resp-locked_visual-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -90,7 +90,7 @@ cfg.layout       = 'CTF275_helmet.lay';
 cfg.xlim         = [-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
-cfg.title='TOPO all participants gamma';
+cfg.title='TOPO low freq 20-35';
 cfg.colorbar           = 'yes'
 % ft_singleplotTFR(cfg,freq);
 %ft_multiplotTFR(cfg,freq)
@@ -104,7 +104,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim4_lowfreq_sensorstrial_TOPO_-225_0s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim4_lowfreq_continuous_TOPO_-025_0s_wholebaseline');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
