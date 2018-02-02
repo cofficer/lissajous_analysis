@@ -20,6 +20,8 @@ function freq = freq_lissajousCONT(cfgin)
     cfg.method      = 'mtmconvol';
     if strcmp(cfgin.stim_self,'resp')
       cfg.trigger     = 'resp';
+    elseif strcmp(cfgin.stim_self,'cue')
+        cfg.trigger     = 'cue';
     else
       cfg.trigger     = 'selfoccl';
     end
@@ -107,7 +109,7 @@ function freq = freq_lissajousCONT(cfgin)
 
     elseif strcmp(cfg.trigger,'cue')
 
-      cfg.toi = -0.5:0.05:0.5;            %still to figure
+      cfg.toi = -2.5:0.05:0.7;          %still to figure
 
     end
 

@@ -90,7 +90,6 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
 
 
 
-
   %Save the freq in new folder
   d_average = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/%s/',cfgin.blocktype,cfgin.stim_self);
   cd(d_average)
