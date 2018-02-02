@@ -24,11 +24,13 @@ dims = size(freq.powspctrm);
 all_freq = zeros(29,dims(1),dims(2),dims(3));
 
 %Load all participants
-for ifiles = 1:length(freqfiles)-1
+for ifiles = 1:length(freqfiles)
+  disp((freqfiles(ifiles).name))
+  load(freqfiles(ifiles).name)
   all_freq(ifiles,:,:,:) = freq.powspctrm;
-  disp((freqfiles(ifiles+1).name))
-  load(freqfiles(ifiles+1).name)
+
 end
+
 
 %remove part3
 
@@ -53,7 +55,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-20 20];
+cfg.zlim         = [-5 5];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 % cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -71,7 +73,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim5_gamma_-25-075s_-15-1sbaseline_continuous_resp-locked_motor-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim5_gamma_-25-075s_-15-1sbaseline-avg_continuous_resp-locked_motor-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -88,7 +90,7 @@ cfg.zlim         = [-5 5];
 cfg.ylim         = [60 90];%7 12
 % cfg.ylim         = [10 20];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-0.1 0.2];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO high freq';
@@ -104,7 +106,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim4_part%s_gamma_continuous_TOPO_-025_0s-resp_wholebaseline',num2str(ipartn));%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim5_gamma_part%s_continuous_TOPO_-01_02s-resp_baseline-avg',num2str(ipartn));%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

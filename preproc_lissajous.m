@@ -195,7 +195,7 @@ function data = preproc_lissajous(cfgin)
 
         %samples from trial start to response.
       end
-      
+
       %Resample raw data
       cfg3=[];
       cfg3.resample = 'yes';
@@ -250,13 +250,13 @@ function data = preproc_lissajous(cfgin)
       % (z = [4 6]). Reject all trials that contain saccades before going further.
       % ==================================================================
       %
-      % if ~strcmp(cfgin.stim_self,'stim_off')
-      %   blinkchannel = 'UADC003';%EEG058
-      %   [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+      if ~strcmp(cfgin.stim_self,'stim_off')
+        blinkchannel = 'UADC003';%EEG058
+        [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
       %
-      %   blinkchannel = 'EEG058';%EEG058
-      %   [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
-      % end
+        % blinkchannel = 'EEG058';%EEG058
+        % [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+      end
 
       %         %find pupil index.
       %         idx_blink = find(ismember(data.label,{'UADC003'})==1);
