@@ -30,6 +30,8 @@ function freq = freq_lissajousCONT(cfgin)
     cd(cfgin.dirpart)
     if strcmp(cfgin.stim_self,'resp')
       cd('resp')
+    elseif strcmp(cfgin.stim_self,'cue')
+      cd('cue')
     end
 
     load(cfgin.iblock)
