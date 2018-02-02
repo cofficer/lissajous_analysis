@@ -73,7 +73,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim5_gamma_-25-075s_-15-1sbaseline-avg_continuous_resp-locked_motor-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim5_gamma_-25-075s_-15-1sbaseline-avg_continuous_resp-locked_motor-sensors_noblinks');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -106,7 +106,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim5_gamma_part%s_continuous_TOPO_-01_02s-resp_baseline-avg',num2str(ipartn));%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim5_gamma_part%s_continuous_TOPO_-01_02s-resp_baseline-avg_noblinks',num2str(ipartn));%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

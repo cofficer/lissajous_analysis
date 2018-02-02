@@ -35,6 +35,8 @@ function data = preproc_lissajous(cfgin)
       end
       if strcmp(cfgin.stim_self,'resp')
         trldef = 'trialfun_lissajous_CONT_resp';
+      elseif strcmp(cfgin.stim_self,'cue')
+        trldef = 'trialfun_lissajous_CONT_cue';
       else
         trldef = 'trialfun_lissajous_CONT';
       end
@@ -249,14 +251,14 @@ function data = preproc_lissajous(cfgin)
       % for the EOGV-based blinks detection. The z-threshold can be set a bit higher
       % (z = [4 6]). Reject all trials that contain saccades before going further.
       % ==================================================================
-      %
-      if ~strcmp(cfgin.stim_self,'stim_off')
-        blinkchannel = 'UADC003';%EEG058
-        [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
-      %
-        % blinkchannel = 'EEG058';%EEG058
-        % [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
-      end
+      % %
+      % if ~strcmp(cfgin.stim_self,'stim_off')
+      %   blinkchannel = 'UADC003';%EEG058
+      %   [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+      % %
+      %   % blinkchannel = 'EEG058';%EEG058
+      %   % [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+      % end
 
       %         %find pupil index.
       %         idx_blink = find(ismember(data.label,{'UADC003'})==1);
@@ -443,6 +445,8 @@ function data = preproc_lissajous(cfgin)
       else
         if strcmp(cfgin.stim_self,'resp')
           name = sprintf('%sP%s/resp/',lisdir,datafile(2:3));
+        elseif strcmp(cfgin.stim_self,'cue')
+          name = sprintf('%sP%s/cue/',lisdir,datafile(2:3));
         else
           name = sprintf('%sP%s/',lisdir,datafile(2:3));
         end
