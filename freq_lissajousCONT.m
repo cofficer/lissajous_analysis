@@ -41,6 +41,8 @@ function freq = freq_lissajousCONT(cfgin)
     cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/')
     if strcmp(cfgin.stim_self,'resp')
       cd('resp')
+    elseif strcmp(cfgin.stim_self,'cue')
+      cd('cue')
     end
 
     %Seperate the data into orthogonal sensors
