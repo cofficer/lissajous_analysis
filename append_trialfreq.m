@@ -7,6 +7,6 @@ function [switchTrial] = append_trialfreq(cfg,switchTrial,freqtmp)
 %Append powspctrm, cumtapcnt, trialinfo...
 switchTrial.powspctrm = [switchTrial.powspctrm;freqtmp.powspctrm];
 switchTrial.cumtapcnt = [switchTrial.cumtapcnt;freqtmp.cumtapcnt];
-switchTrial.trialinfo = [switchTrial.trialinfo(:,1:size(freqtmp.trialinfo,2));freqtmp.trialinfo];
+switchTrial.trialinfo = [switchTrial.trialinfo(:,1:6);freqtmp.trialinfo(:,1:6)];
 
 end
