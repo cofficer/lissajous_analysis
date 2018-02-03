@@ -21,13 +21,13 @@ function freq = freq_lissajousCONT(cfgin)
     if strcmp(cfgin.stim_self,'resp')
       cfg.trigger     = 'resp';
     elseif strcmp(cfgin.stim_self,'cue')
-        cfg.trigger     = 'cue';
+      cfg.trigger     = 'cue';
     else
       cfg.trigger     = 'selfoccl';
     end
     cfg.channel     ='MEG'; %
     cfg.trials      = 'all';
-    cfg.freqanalysistype = 'low';
+    cfg.freqanalysistype = 'high';
 
     cd(cfgin.dirpart)
     if strcmp(cfgin.stim_self,'resp')
