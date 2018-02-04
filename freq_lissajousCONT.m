@@ -47,6 +47,8 @@ function freq = freq_lissajousCONT(cfgin)
       cd('resp')
     elseif strcmp(cfgin.stim_self,'cue')
       cd('cue')
+    elseif strcmp(cfgin.stim_self,'self')
+      cd('self')
     end
 
     %Seperate the data into orthogonal sensors
