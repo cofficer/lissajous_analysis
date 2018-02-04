@@ -83,6 +83,9 @@ function data = preproc_lissajous(cfgin)
       elseif strcmp(cfgin.stim_self,'cue')
         cfg.trialdef.prestim          = 3
         cfg.trialdef.poststim         = 1
+      elseif strcmp(cfgin.stim_self,'self')
+        cfg.trialdef.prestim          = 2.6
+        cfg.trialdef.poststim         = 2.6
       else
         cfg.trialdef.prestim          = 2.6
         cfg.trialdef.poststim         = 2.6
@@ -450,6 +453,8 @@ function data = preproc_lissajous(cfgin)
           name = sprintf('%sP%s/resp/',lisdir,datafile(2:3));
         elseif strcmp(cfgin.stim_self,'cue')
           name = sprintf('%sP%s/cue/',lisdir,datafile(2:3));
+        elseif strcmp(cfgin.stim_self,'self')
+          name = sprintf('%sP%s/self/',lisdir,datafile(2:3));
         else
           name = sprintf('%sP%s/',lisdir,datafile(2:3));
         end

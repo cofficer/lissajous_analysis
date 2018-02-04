@@ -27,13 +27,15 @@ function freq = freq_lissajousCONT(cfgin)
     end
     cfg.channel     ='MEG'; %
     cfg.trials      = 'all';
-    cfg.freqanalysistype = 'high';
+    cfg.freqanalysistype = 'low';
 
     cd(cfgin.dirpart)
     if strcmp(cfgin.stim_self,'resp')
       cd('resp')
     elseif strcmp(cfgin.stim_self,'cue')
       cd('cue')
+    elseif strcmp(cfgin.stim_self,'self')
+      cd('self')
     end
 
     load(cfgin.iblock)
