@@ -64,7 +64,11 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
     idx_nan = ~isnan(freq.powspctrm(1,1,1,:));
     % idx_time=find(diff(idx_nan)==-1);
     % switchTrial.time(idx_time)
-    cfg.baselinewindow        = [freq.time(21) freq.time(31)];
+    if strcmp(cfgin.stim_self,'self')
+      cfg.baselinewindow        = [freq.time(1) freq.time(11)];
+    else
+      cfg.baselinewindow        = [freq.time(21) freq.time(31)];
+    end
 
   else
     %4.5=stim_off.
