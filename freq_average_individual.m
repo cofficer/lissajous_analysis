@@ -6,7 +6,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
+filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/%s/',cfgin.blocktype,cfgin.stim_self)
 
 cd(filepath)
 
@@ -117,9 +117,10 @@ cfg.subtractmode          = 'within'; %what are the options? %within within_norm
 %What if there are no nans at all...
 if strcmp(cfgin.blocktype,'continuous')
 idx_nan = ~isnan(switchTrial.powspctrm(1,1,1,:));
-idx_time=find(diff(idx_nan)==-1);
+% idx_time=find(diff(idx_nan)==-1);
 % switchTrial.time(idx_time)
-cfg.baselinewindow        = [-2.25 -1.85];%[-switchTrial.time(idx_time) switchTrial.time(idx_time)];
+% cfg.baselinewindow        = [-2.25 -1.85];%[-switchTrial.time(idx_time) switchTrial.time(idx_time)];
+cfg.baselinewindow        = [freq.time(1) freq.time(11)];
 
 else
   cfg.baselinewindow        = [switchTrial.time(1) switchTrial.time(11)];
@@ -150,9 +151,9 @@ stableTrial.powspctrm = freq2;
 freq.powspctrm=squeeze(switchTrial.powspctrm)-squeeze(stableTrial.powspctrm);
 
 %Save the freq in new folder
-d_average = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/',cfgin.blocktype);
+d_average = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/%s/',cfgin.blocktype,cfgin.stim_self);
 cd(d_average)
-freqtosave = sprintf('freqavgs_%s_%d',cfgin.freqrange,cfgin.part_ID);
+freqtosave = sprintf('freqavgs_switch_%s_%d',cfgin.freqrange,cfgin.part_ID);
 save(freqtosave,'freq','switchTrial','stableTrial')
 
 end
