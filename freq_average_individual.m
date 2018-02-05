@@ -116,12 +116,11 @@ cfg.subtractmode          = 'within'; %what are the options? %within within_norm
 %Find first nonnan timepoint in data, and use that before and after self-O
 %What if there are no nans at all...
 if strcmp(cfgin.blocktype,'continuous')
-idx_nan = ~isnan(switchTrial.powspctrm(1,1,1,:));
-% idx_time=find(diff(idx_nan)==-1);
-% switchTrial.time(idx_time)
-% cfg.baselinewindow        = [-2.25 -1.85];%[-switchTrial.time(idx_time) switchTrial.time(idx_time)];
-cfg.baselinewindow        = [freq.time(1) freq.time(11)];
-
+  idx_nan = ~isnan(switchTrial.powspctrm(1,1,1,:));
+  % idx_time=find(diff(idx_nan)==-1);
+  % switchTrial.time(idx_time)
+  % cfg.baselinewindow        = [-2.25 -1.85];%[-switchTrial.time(idx_time) switchTrial.time(idx_time)];
+  cfg.baselinewindow        = [freq.time(1) freq.time(11)];
 else
   cfg.baselinewindow        = [switchTrial.time(1) switchTrial.time(11)];
 end
