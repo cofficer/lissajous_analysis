@@ -126,7 +126,7 @@ else
 end
 
 % CG commented out the baseline for now. 2018-01-15.
-[freq1,freq2] = baseline_lissajous(switchTrial,stableTrial,cfg);
+[freq1,freq2] = baseline_lissajous(switchTrial,stableTrial,cfg,cfgin);
 
 
 %Make the freq the trial average

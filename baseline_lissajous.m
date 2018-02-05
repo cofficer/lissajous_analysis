@@ -1,4 +1,4 @@
-function [freq_base1,freq_base2]=baseline_lissajous(freq1,freq2,cfg)
+function [freq_base1,freq_base2]=baseline_lissajous(freq1,freq2,cfg,cfgin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load in already computed freq data
 %Compute the baseline according to cfg.
