@@ -14,14 +14,20 @@ blocktype = 'continuous' %continuous or trial
 stim_self = ''; %'' or resp.
 cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype))
 
+%Define if looking at switch vs no switch
+sw_vs_nsw = 1;
 
-freqfiles= dir('freqavgs*high*');
+freqfiles= dir('*switch*high*');
 load(freqfiles(1).name)
 
 
 %Create matrix for all participants.
 dims = size(freq.powspctrm);
 all_freq = zeros(29,dims(1),dims(2),dims(3));
+if sw_vs_nsw
+  all_sw = zeros(29,dims(1),dims(2),dims(3));
+  all_nsw = zeros(29,dims(1),dims(2),dims(3));
+end
 
 %Load all participants
 for ifiles = 1:length(freqfiles)
@@ -29,12 +35,22 @@ for ifiles = 1:length(freqfiles)
   load(freqfiles(ifiles).name)
   all_freq(ifiles,:,:,:) = freq.powspctrm;
 
+  %also store all the switch and no switch trial averages.
+  if sw_vs_nsw
+    all_sw(ifiles,:,:,:) = switchTrial.powspctrm;
+    all_nsw(ifiles,:,:,:) = stableTrial.powspctrm;
+  end
+
 end
 
 
 %remove part3
 
 freq.powspctrm=squeeze(nanmean(all_freq,1));
+
+if sw_vs_nsw
+  freq.powspctrm=(squeeze(nanmean(all_sw,1))-squeeze(nanmean(all_nsw,1)));
+end
 
 %Load the sensors of interest
 load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_visual_sensors.mat')
@@ -73,7 +89,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim7_gamma_-235-2355s_continuous_selfo-locked_visual-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim7_gamma_-235-2355s_continuous_selfo-locked_visual-sensors_switch');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -86,11 +102,11 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-5 5];
+cfg.zlim         = [-3 3];
 cfg.ylim         = [60 90];%7 12
 % cfg.ylim         = [15 25];
 cfg.layout       = 'CTF275_helmet.lay';
-cfg.xlim         = [0.3 0.6];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO gamma freq';
@@ -106,7 +122,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim7_gamma_continuous_TOPO_03-06s-cue_-235-185sbaseline');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim7_gamma_continuous_TOPO_-025-0s-selfo_-235-185sbaseline_switchvsnoswitch');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
