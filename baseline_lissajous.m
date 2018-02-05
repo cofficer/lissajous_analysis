@@ -32,16 +32,16 @@ if strcmp(cfg.subtractmode,'within')
   for ipart = 1:length(blocks_ID)
     load(freqpath(blocks_ID(ipart)).name)
     if ipart>1
-      cfg=[];
-      cfg.trials=freq.trialinfo(:,5)>0;
-      freqtmp = ft_selectdata(cfg,freq);
+      cfg2=[];
+      cfg2.trials=freq.trialinfo(:,5)>0;
+      freqtmp = ft_selectdata(cfg2,freq);
       %new function for appending data.
       freq12 = append_trialfreq([],freq12,freqtmp);
       freqtmp=[];
     else
-      cfg=[];
-      cfg.trials=freq.trialinfo(:,5)>0;
-      freq12 = ft_selectdata(cfg,freq);
+      cfg2=[];
+      cfg2.trials=freq.trialinfo(:,5)>0;
+      freq12 = ft_selectdata(cfg2,freq);
     end
   end
 
