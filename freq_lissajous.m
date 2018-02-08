@@ -16,6 +16,9 @@ elseif strcmp(cfgin.stim_self,'stim')
 elseif strcmp(cfgin.stim_self,'baseline')
 
   dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
+elseif strcmp(cfgin.stim_self,'cue')
+
+  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
 
 else
 
@@ -94,7 +97,7 @@ elseif strcmp(cfg.trigger,'resp')
 
 elseif strcmp(cfg.trigger,'cue')
 
-  cfg.toi = -0.5:0.05:0.5;            %still to figure
+  cfg.toi = -1.5:0.05:0.5;            %still to figure
 
 elseif strcmp(cfg.trigger,'stim')
 
@@ -147,6 +150,11 @@ if strcmp(cfgin.stim_self,'stim')
 
 elseif strcmp(cfgin.stim_self,'baseline')
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/baseline')
+
+  outputfile = sprintf('%sfreq_%s_%s_%s.mat',cfgin.restingfile(2:3),cfgin.stim_self,cfg.freqanalysistype,cfg.trigger);
+
+elseif strcmp(cfgin.stim_self,'cue')
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/cue')
 
   outputfile = sprintf('%sfreq_%s_%s_%s.mat',cfgin.restingfile(2:3),cfgin.stim_self,cfg.freqanalysistype,cfg.trigger);
 
