@@ -21,9 +21,9 @@ function output = run_tmap_sensors(cfgin)
 
   clear all
 
-  blocktype = 'continuous';%continuous or trial
+  blocktype = 'trial';%continuous or trial
 
-  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stim/';
+  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stim/');
   cd(mainDir)
 
   %Store all the seperate data files
@@ -38,13 +38,13 @@ function output = run_tmap_sensors(cfgin)
   all_stim = zeros(29,dims(1),dims(2),dims(3));
 
   %Load all participants
-  for ifiles = 1:length(stim_paths)-1
-    all_stim(ifiles,:,:,:) = freq.powspctrm;
-    disp((stim_paths(ifiles+1).name))
-    load(stim_paths(ifiles+1).name)
+  for ifiles = 1:length(stim_paths)
+    disp((stim_paths(ifiles).name))
+    load(stim_paths(ifiles).name)
     cfg =[];
     cfg.avgoverrpt = 'yes';
     freq = ft_selectdata(cfg,freq);
+    all_stim(ifiles,:,:,:) = freq.powspctrm;
   end
 
   %Average over time period and over frequency. Does it matter which order?
@@ -73,13 +73,13 @@ function output = run_tmap_sensors(cfgin)
   all_cue = zeros(29,dims(1),dims(2),dims(3));
 
   %Load all participants
-  for ifiles = 1:length(cue_paths)-1
-    all_cue(ifiles,:,:,:) = freq.powspctrm;
-    disp((cue_paths(ifiles+1).name))
-    load(cue_paths(ifiles+1).name)
+  for ifiles = 1:length(cue_paths)
+    disp((cue_paths(ifiles).name))
+    load(cue_paths(ifiles).name)
     cfg =[];
     cfg.avgoverrpt = 'yes';
     freq = ft_selectdata(cfg,freq);
+    all_cue(ifiles,:,:,:) = freq.powspctrm;
   end
 
   %Average over freq
@@ -94,7 +94,7 @@ function output = run_tmap_sensors(cfgin)
   %Find the timepoints of stim_freq of interest
   %Also define the freq of interest, and average over both?
 
-  stim_time = [stim_freq.time(13),stim_freq.time(19)];
+  % stim_time = [stim_freq.time(13),stim_freq.time(19)];
 
   [H,P,CI,STATS]=ttest(all_stim,all_cue,'dim',1);
 
@@ -124,7 +124,7 @@ function output = run_tmap_sensors(cfgin)
   % cfg.channel      = freq.label(idx_occ);
   cfg.interactive = 'no';
   cfg.highlight          = 'on'
-  cfg.highlightchannel=freq.label(tavalue>4);
+  cfg.highlightchannel=freq.label(abs(tavalue)>4);
   cfg.colorbar           = 'yes'
   cfg.highlightcolor =[0 0 0];
   cfg.highlightsize=12;

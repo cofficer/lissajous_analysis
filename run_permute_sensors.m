@@ -8,27 +8,74 @@ function output = run_permute_sensors(cfgin)
   %Edited 05/01/2018
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  clear all
 
   %Load all the average data, make subj into trls.
 
 
-  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/';
+  % mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/';
+  % cd(mainDir)
+  %
+  % %Store all the seperate data files
+  % freq_paths = dir('*freqavgs_all_high*'); %or freqavgs_high.
+
+  clear all
+  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stim/');
   cd(mainDir)
 
   %Store all the seperate data files
-  freq_paths = dir('*freqavgs_all_high*'); %or freqavgs_high.
+  stim_paths = dir('*stim_low*'); %or freqavgs_high.
+  % load(stim_paths(1).name)
+  % cfg =[];
+  % cfg.avgoverrpt = 'yes';
+  % freq = ft_selectdata(cfg,freq);
+  %
+  % %Create matrix for all participants.
+  % dims = size(freq.powspctrm);
+  % all_stim = zeros(29,dims(1),dims(2),dims(3));
 
-  %new_powspctrm=zeros(29,274,38,61);
-  %Loop all data files into seperate jobs
-  for ipath = 1:length(freq_paths)
-
-    disp(freq_paths(ipath).name)
-    load(freq_paths(ipath).name)
-    allsubjLJ{ipath}=freq;
-    %new_powspctrm(ipath,:,:,:)=freq.powspctrm;
-
+  %Load all participants
+  for ifiles = 1:length(stim_paths)
+    disp((stim_paths(ifiles).name))
+    load(stim_paths(ifiles).name)
+    cfg =[];
+    cfg.avgoverrpt = 'yes';
+    freq = ft_selectdata(cfg,freq);
+    % all_stim(ifiles,:,:,:) = freq.powspctrm;
+    allsubjStim{ifiles}=freq;
   end
+
+  %Decide on which frequency to use:
+  %Start with beta, alpha, theta, etc.
+  freq_ind1=13;
+  freq_ind2=33;
+
+  % all_stim=squeeze(nanmean(all_stim(:,:,13:28,:),3));
+  %Second time average
+  % all_stim=squeeze(nanmean(all_stim(:,:,13:19,:),3));
+
+  %Load the baseline freq data.
+  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/baseline/';
+  cd(mainDir)
+
+  %Store all the seperate data files
+  cue_paths = dir('*baseline_low*');
+
+  %Load all participants
+  for ifiles = 1:length(stim_paths)
+    disp((cue_paths(ifiles).name))
+    load(cue_paths(ifiles).name)
+    cfg =[];
+    cfg.avgoverrpt = 'yes';
+    freq = ft_selectdata(cfg,freq);
+    % all_stim(ifiles,:,:,:) = freq.powspctrm;
+    allsubjCue{ifiles}=freq;
+  end
+
+  %Average over freq
+  % all_cue=squeeze(nanmean(all_cue(:,:,13:28,:),3));
+
+  %Average over time
+  % all_cue=squeeze(nanmean(all_cue(:,:,:),3));
 
 
   %Insert new data in freq struct.
@@ -36,8 +83,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [freq.time(21) freq.time(29)];
-  time1 = [freq.time(37) freq.time(45)];
+  time0 = [allsubjStim{ifiles}.time(27) allsubjStim{ifiles}.time(33)]; %13, 19
+  time1 = [allsubjCue{ifiles}.time(1) allsubjCue{ifiles}.time(end-2)];
 
   %Trying the orginal baseline comparison...
   % time0 = [freq.time(1) freq.time(11)];
@@ -46,12 +93,12 @@ function output = run_permute_sensors(cfgin)
   cfg = [];
   cfg.keepindividual = 'yes';
   cfg.toilim =time0;
-  dat_time0= ft_freqgrandaverage(cfg,allsubjLJ{:})
+  dat_time0= ft_freqgrandaverage(cfg,allsubjStim{:})
 
   cfg = [];
   cfg.keepindividual = 'yes';
   cfg.toilim =time1;
-  dat_time1= ft_freqgrandaverage(cfg,allsubjLJ{:})
+  dat_time1= ft_freqgrandaverage(cfg,allsubjCue{:})
 
   % dat_time0.time = dat_time1.time;
 
@@ -60,7 +107,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time0.time(1), dat_time0.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[60 90];
+  cfg.frequency =[15 35];
   dat_time0 = ft_selectdata(cfg,dat_time0);
 
 
@@ -68,7 +115,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[60 90];
+  cfg.frequency =[15 35];
   cfg.latency = time1;
   dat_time1 = ft_selectdata(cfg,dat_time1);
 
@@ -76,9 +123,9 @@ function output = run_permute_sensors(cfgin)
 
   cfg = [];
   cfg.channel          = {'MEG'};
-  cfg.latency          = [0.3 0.7];
+  % cfg.latency          = [0.3 0.7];
   cfg.method           = 'montecarlo';
-  cfg.frequency        = 75;
+  % cfg.frequency        = 75;
   cfg.statistic        = 'ft_statfun_depsamplesT';
   cfg.correctm         = 'cluster';
   cfg.clusteralpha     = 0.05; %Normal 0.05
@@ -106,8 +153,21 @@ function output = run_permute_sensors(cfgin)
   cfg.design   = design;
   cfg.uvar     = 1;
   cfg.ivar     = 2;
-  [stat] = ft_freqstatistics(cfg, dat_time1, dat_time0);
+  [stat] = ft_freqstatistics(cfg, dat_time0, dat_time1);
   sum(stat.mask)
+
+
+
+
+  %Plotting
+  cfg =[];
+  cfg.avgoverfreq = 'yes';
+  freq = ft_selectdata(cfg,freq);
+  cfg =[];
+  cfg.avgovertime = 'yes';
+  freq = ft_selectdata(cfg,freq);
+
+  freq.powspctrm=stat.stat;
 
   hf=figure(1),clf
   %ax1=subplot(2,2,1)
@@ -127,7 +187,7 @@ function output = run_permute_sensors(cfgin)
   cfg.colorbar           = 'yes'
   cfg.highlightcolor =[0 0 0];
   cfg.highlightsize=12;
-  ft_topoplotTFR(cfg,dat_time1)
+  ft_topoplotTFR(cfg,freq)
   %ft_hastoolbox('brewermap', 1);
   colormap(hf,flipud(brewermap(64,'RdBu')))
 
@@ -135,12 +195,12 @@ function output = run_permute_sensors(cfgin)
   cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
-  todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim10_checking_wholebaseline_60-90Hz');%Stage of analysis, frequencies, type plot, baselinewindow
+    todaystr = datestr(now,formatOut);
+    namefigure = sprintf('prelim16_cuebaseline_permutation_stimonset_15-35Hz');%Stage of analysis, frequencies, type plot, baselinewindow
 
-  figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
-  % set(gca,'PaperpositionMode','Auto')
-  saveas(gca,figurefreqname,'png')
+    figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
+    % set(gca,'PaperpositionMode','Auto')
+    saveas(gca,figurefreqname,'png')
 
 
-end
+  end
