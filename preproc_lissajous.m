@@ -24,6 +24,8 @@ function data = preproc_lissajous(cfgin)
       %if continuous then there will be several datasets to analyze
       if strcmp(cfgin.stim_self,'cue')
         trldef = 'trialfun_lissajous_TRIAL_cue';
+      if strcmp(cfgin.stim_self,'self')
+        trldef = 'trialfun_lissajous_TRIAL_self';
       else
         trldef = 'trialfun_lissajous';
       end
@@ -77,6 +79,9 @@ function data = preproc_lissajous(cfgin)
         elseif strcmp(cfgin.stim_self,'cue')
           cfg.trialdef.prestim        = 2; %200ms bf stimoff. Negative means after self-occlusion
           cfg.trialdef.poststim       = 1;  %800ms after stimoff.
+        elseif strcmp(cfgin.stim_self,'self')
+          cfg.trialdef.prestim          = 3
+          cfg.trialdef.poststim         = 1
 
         else
           cfg.trialdef.prestim        = cfgin.prestim%1;%5.5; % 2.25in seconds

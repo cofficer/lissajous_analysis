@@ -19,11 +19,11 @@ function output = run_permute_sensors(cfgin)
   % freq_paths = dir('*freqavgs_all_high*'); %or freqavgs_high.
 
   clear all
-  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stim/');
+  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/stim/');
   cd(mainDir)
 
   %Store all the seperate data files
-  stim_paths = dir('*stim_low*'); %or freqavgs_high.
+  stim_paths = dir('*low*'); %or freqavgs_high.
   % load(stim_paths(1).name)
   % cfg =[];
   % cfg.avgoverrpt = 'yes';
@@ -37,9 +37,9 @@ function output = run_permute_sensors(cfgin)
   for ifiles = 1:length(stim_paths)
     disp((stim_paths(ifiles).name))
     load(stim_paths(ifiles).name)
-    cfg =[];
-    cfg.avgoverrpt = 'yes';
-    freq = ft_selectdata(cfg,freq);
+    % cfg =[];
+    % cfg.avgoverrpt = 'yes';
+    % freq = ft_selectdata(cfg,freq);
     % all_stim(ifiles,:,:,:) = freq.powspctrm;
     allsubjStim{ifiles}=freq;
   end
@@ -54,19 +54,19 @@ function output = run_permute_sensors(cfgin)
   % all_stim=squeeze(nanmean(all_stim(:,:,13:19,:),3));
 
   %Load the baseline freq data.
-  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/cue/';
+  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/cue/';
   cd(mainDir)
 
   %Store all the seperate data files
-  cue_paths = dir('*cue_low*');
+  cue_paths = dir('*low*');
 
   %Load all participants
   for ifiles = 1:length(stim_paths)
     disp((cue_paths(ifiles).name))
     load(cue_paths(ifiles).name)
-    cfg =[];
-    cfg.avgoverrpt = 'yes';
-    freq = ft_selectdata(cfg,freq);
+    % cfg =[];
+    % cfg.avgoverrpt = 'yes';
+    % freq = ft_selectdata(cfg,freq);
     % all_stim(ifiles,:,:,:) = freq.powspctrm;
     allsubjCue{ifiles}=freq;
   end
@@ -83,7 +83,7 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(31) allsubjStim{ifiles}.time(39)]; %13, 19
+  time0 = [allsubjStim{ifiles}.time(17) allsubjStim{ifiles}.time(25)]; %13, 19
   time1 = [allsubjCue{ifiles}.time(23) allsubjCue{ifiles}.time(31)];
 
   %Trying the orginal baseline comparison...

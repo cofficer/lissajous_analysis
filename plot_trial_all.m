@@ -10,14 +10,14 @@ function plot_trial_all(~)
 %Load and average all averaged high data.
 clear all
 
-blocktype = 'continuous' %continuous or trial
+blocktype = 'trial' %continuous or trial
 stim_self = ''; %'' or resp.
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/resp',blocktype))
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/stim',blocktype))
 
 %Define if looking at switch vs no switch
-sw_vs_nsw = 1;
+sw_vs_nsw = 0;
 
-freqfiles= dir('*switch*high*');
+freqfiles= dir('*low*');
 load(freqfiles(1).name)
 
 
@@ -73,7 +73,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-3 3];
+cfg.zlim         = [-50 50];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 % cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -87,11 +87,11 @@ ft_singleplotTFR(cfg,freq);
 colormap(ax2,flipud(brewermap(64,'RdBu')))
 
 
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures'))
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figures',blocktype))
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim8_gamma_-235-2355s_cont_selfo-locked_cuebaseline_visual-sensors_switch');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim8_lowfreq_trial_stim-locked_cuebaseline-04-0s_visual-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
