@@ -18,6 +18,8 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
   else
     if strcmp(cfgin.stim_self,'stim')
       freqpath   = dir(sprintf('*freq_stim_%s*',cfgin.freqrange));
+    elseif strcmp(cfgin.stim_self,'cue')
+      freqpath   = dir(sprintf('*freq_cue_%s*',cfgin.freqrange));
     else
       freqpath   = dir(sprintf('*freq_%s_stim_off*',cfgin.freqrange));
     end

@@ -25,7 +25,7 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
     cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
-    cfgin{idx_cfg}.stim_self               = 'stim'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
+    cfgin{idx_cfg}.stim_self               = 'cue'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
                                                          %Or stim_off = data from when stimulus offset.
                                                          %Baseline = time-period 100-600ms after stim offset
     %Define baseline period.
