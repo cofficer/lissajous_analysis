@@ -54,11 +54,11 @@ function output = run_permute_sensors(cfgin)
   % all_stim=squeeze(nanmean(all_stim(:,:,13:19,:),3));
 
   %Load the baseline freq data.
-  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/baseline/';
+  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/cue/';
   cd(mainDir)
 
   %Store all the seperate data files
-  cue_paths = dir('*baseline_low*');
+  cue_paths = dir('*cue_low*');
 
   %Load all participants
   for ifiles = 1:length(stim_paths)
@@ -83,8 +83,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(27) allsubjStim{ifiles}.time(33)]; %13, 19
-  time1 = [allsubjCue{ifiles}.time(1) allsubjCue{ifiles}.time(end-2)];
+  time0 = [allsubjStim{ifiles}.time(27) allsubjStim{ifiles}.time(35)]; %13, 19
+  time1 = [allsubjCue{ifiles}.time(23) allsubjCue{ifiles}.time(31)];
 
   %Trying the orginal baseline comparison...
   % time0 = [freq.time(1) freq.time(11)];

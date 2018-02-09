@@ -33,7 +33,7 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.poststim = 5.3;
 
     idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{1}
+    %cfgin=cfgin{3}
 end
 
 %Define script to run and whether to run on the torque

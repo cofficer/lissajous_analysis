@@ -72,8 +72,8 @@ function data = preproc_lissajous(cfgin)
 
       if ~strcmp(cfgin.blocktype,'continuous')
         if strcmp(cfgin.stim_self,'stim')
-          cfg.trialdef.prestim        = -4.5; % -2in seconds
-          cfg.trialdef.poststim       = 13; % 1in seconds
+          cfg.trialdef.prestim        = 1; % -2in seconds
+          cfg.trialdef.poststim       = 2; % 1in seconds
         elseif strcmp(cfgin.stim_self,'cue')
           cfg.trialdef.prestim        = 2; %200ms bf stimoff. Negative means after self-occlusion
           cfg.trialdef.poststim       = 1;  %800ms after stimoff.
@@ -141,36 +141,36 @@ function data = preproc_lissajous(cfgin)
       if strcmp(cfgin.stim_self,'stim')
         %There might be way... cfg.trl(2,1)+cfg.trialdef.prestim*1200
         %Find the sample of the next trials start of stimulus rotation.
-        cfg2=[];
-        sample_before_stim = 1.25*1200;
-        sample_after_stim  = 3*1200;
-
-        %The start of the stim on the next trial.
-        beg_stim = (cfg.trl(2:end,1)+cfg.trialdef.prestim*1200);
-
-        cfg2.begsample = ((beg_stim-cfg.trl(1:end-1,1))'-sample_before_stim)';
-        cfg2.endsample = ((beg_stim-cfg.trl(1:end-1,1))'+sample_after_stim)';
-        beg_idx=find(cfg2.begsample>10000);
-        cfg2.begsample(cfg2.begsample>10000) = 900;
-        cfg2.endsample(cfg2.endsample>10000) = 2401;
-        cfg2.begsample(end+1) = 900;
-        cfg2.endsample(end+1) = 2401;
+        % cfg2=[];
+        % sample_before_stim = 1.25*1200;
+        % sample_after_stim  = 3*1200;
+        %
+        % %The start of the stim on the next trial.
+        % beg_stim = (cfg.trl(2:end,1)+cfg.trialdef.prestim*1200);
+        %
+        % cfg2.begsample = ((beg_stim-cfg.trl(1:end-1,1))'-sample_before_stim)';
+        % cfg2.endsample = ((beg_stim-cfg.trl(1:end-1,1))'+sample_after_stim)';
+        % beg_idx=find(cfg2.begsample>10000);
+        % cfg2.begsample(cfg2.begsample>10000) = 900;
+        % cfg2.endsample(cfg2.endsample>10000) = 2401;
+        % cfg2.begsample(end+1) = 900;
+        % cfg2.endsample(end+1) = 2401;
+        % % cfg2.offset = beg_stim-cfg.trl(1:end-1,1);
+        % % cfg2.offset(end+1)=1000;
+        % data = ft_redefinetrial(cfg2,data)
+        %
+        % %Change the offset time axis. data.time{1}(1) data1.time{1}(1)
+        % cfg2=[];
         % cfg2.offset = beg_stim-cfg.trl(1:end-1,1);
         % cfg2.offset(end+1)=1000;
-        data = ft_redefinetrial(cfg2,data)
-
-        %Change the offset time axis. data.time{1}(1) data1.time{1}(1)
-        cfg2=[];
-        cfg2.offset = beg_stim-cfg.trl(1:end-1,1);
-        cfg2.offset(end+1)=1000;
-        cfg2.offset=-cfg2.offset+(cfg.trialdef.prestim*1200);
-        data = ft_redefinetrial(cfg2,data)
-
-        %remove trials near block end
-        cfg3 = [];
-        cfg3.trials = logical([ones(1,length(cfg.trl)-1),0]');
-        cfg3.trials(beg_idx) = 0;
-        data = ft_redefinetrial(cfg3,data);
+        % cfg2.offset=-cfg2.offset+(cfg.trialdef.prestim*1200);
+        % data = ft_redefinetrial(cfg2,data)
+        %
+        % %remove trials near block end
+        % cfg3 = [];
+        % cfg3.trials = logical([ones(1,length(cfg.trl)-1),0]');
+        % cfg3.trials(beg_idx) = 0;
+        % data = ft_redefinetrial(cfg3,data);
 
         % elseif strcmp(cfgin.stim_self,'resp')
         %   sample_before_resp = 2*1200%+cfg.trialdef.prestim*1200;
