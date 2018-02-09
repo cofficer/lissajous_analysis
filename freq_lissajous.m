@@ -13,6 +13,10 @@ elseif strcmp(cfgin.stim_self,'stim')
 
   dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
 
+elseif strcmp(cfgin.stim_self,'self')
+
+  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_self_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
+
 elseif strcmp(cfgin.stim_self,'baseline')
 
   dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
@@ -53,7 +57,7 @@ cfg.method      = 'mtmconvol';
 cfg.trigger     = cfgin.stim_self; %stim. selfoccl.
 cfg.channel     ='MEG'; %
 cfg.trials      = 'all';
-cfg.freqanalysistype = 'high';
+cfg.freqanalysistype = 'low';
 
 
 switch cfg.freqanalysistype
@@ -90,6 +94,10 @@ if strcmp(cfg.trigger,'baseline')
 elseif strcmp(cfg.trigger,'selfoccl')
 
   cfg.toi = 0.5:0.05:4;
+
+elseif strcmp(cfg.trigger,'self')
+
+  cfg.toi = -2.5:0.05:0.5;
 
 elseif strcmp(cfg.trigger,'resp')
 
@@ -155,6 +163,11 @@ elseif strcmp(cfgin.stim_self,'baseline')
 
 elseif strcmp(cfgin.stim_self,'cue')
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/cue')
+
+  outputfile = sprintf('%sfreq_%s_%s_%s.mat',cfgin.restingfile(2:3),cfgin.stim_self,cfg.freqanalysistype,cfg.trigger);
+
+elseif strcmp(cfgin.stim_self,'self')
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/self')
 
   outputfile = sprintf('%sfreq_%s_%s_%s.mat',cfgin.restingfile(2:3),cfgin.stim_self,cfg.freqanalysistype,cfg.trigger);
 
