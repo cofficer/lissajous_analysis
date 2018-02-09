@@ -33,11 +33,11 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.poststim = 5.3;
 
     idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{1}
+    %cfgin=cfgin{11}
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -72,29 +72,6 @@ switch runcfg.execute
     case 'freq_plot'
 
 
-      %remove some participants from plotting.
-      %
-      % part_available = str2num(cfgin{1}.restingfile(2:3)):str2num(cfgin{end}.restingfile(2:3));
-      % remove_part = ones(1,length(part_available));
-      %
-      % if strcmp(cfgin{1}.blocktype,'continuous')
-      %   remove_part(1)=0; % Only one reponse
-      %   remove_part(8)=0;
-      %   remove_part(11)=0;
-      %   remove_part(16)=0;
-      %   cfg =[];
-      %   part_available(logical(~remove_part))=[];
-      %   cfg.part_available=part_available;
-      %
-      %   %remove error participants.
-      %   cfgin={cfgin{part_available}};
-      %   %This depends on the what the data is locked to.
-      %   cfgin{idx_cfg}.baseline                = [-0.5 -0.1];
-      % end
-
-
-
-      %cfgin.blocktype='trial';
 
       filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
       cd(filepath)
@@ -102,15 +79,15 @@ switch runcfg.execute
       %settings for plotting and loading or creating average freq files.
       for icfgin = 1:length(cfgin)
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
-        cfgin{icfgin}.freqrange='high';
+        cfgin{icfgin}.freqrange='low';
         %Create new average freq or not.
-        cfgin{icfgin}.load_avg   = 'createSwitch'; %switch,createSwitch,createAll, loadAll
+        cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
         %Create topo of tfr plots
         %cfgin=cfgin{6}
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
         %This depends on the what the data is locked to.
         %If baseline cue then load the precue data as basline.
-        cfgin{icfgin}.baseline                = 'resp'; %[-2.75 -2.25];
+        cfgin{icfgin}.baseline                = 'cue'; %[-2.75 -2.25];
       end
 
 

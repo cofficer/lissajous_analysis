@@ -73,7 +73,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
   else
     %4.5=stim_off.
     if strcmp(cfgin.baseline,'cue')
-      cfg.baselinewindow=[2.35 2.85];
+      cfg.baselinewindow=[-0.4 0];
     else
       cfg.baselinewindow        = [cfgin.baseline(1) cfgin.baseline(2)]; %-0.4 -0.1
     end

@@ -83,7 +83,7 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(27) allsubjStim{ifiles}.time(35)]; %13, 19
+  time0 = [allsubjStim{ifiles}.time(31) allsubjStim{ifiles}.time(39)]; %13, 19
   time1 = [allsubjCue{ifiles}.time(23) allsubjCue{ifiles}.time(31)];
 
   %Trying the orginal baseline comparison...
@@ -107,7 +107,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time0.time(1), dat_time0.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[15 35];
+  cfg.frequency =[7 12];
   dat_time0 = ft_selectdata(cfg,dat_time0);
 
 
@@ -115,7 +115,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[15 35];
+  cfg.frequency =[7 12];
   cfg.latency = time1;
   dat_time1 = ft_selectdata(cfg,dat_time1);
 
@@ -196,7 +196,7 @@ function output = run_permute_sensors(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
-    namefigure = sprintf('prelim16_cuebaseline_permutation_stimonset_15-35Hz');%Stage of analysis, frequencies, type plot, baselinewindow
+    namefigure = sprintf('prelim17_cuebaseline_permutation_stimonset_stim-1-14s_7-12Hz');%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
     % set(gca,'PaperpositionMode','Auto')

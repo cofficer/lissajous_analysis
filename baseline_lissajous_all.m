@@ -13,9 +13,13 @@ toi2 = find(round(freq.time,2)==round(cfg.baselinewindow(2),2));
 
 %Compute the average signal for combined baseline
 if strcmp(cfg.subtractmode,'within')
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/cue')
+  freqpath   = dir(sprintf('*%s*',cfgin.freqrange));
+  baseline = load(freqpath(cfgin.part_ID).name);
+
   cfg2      = [];
   cfg2.avgoverrpt = 'yes';
-  freq12    = ft_selectdata(cfg2,freq);
+  freq12    = ft_selectdata(cfg2,baseline.freq);
   freq12 = nanmean(freq12.powspctrm(:,:,toi1:toi2),3);
 %Compute baseline, subtracting using freq of interest
 end
