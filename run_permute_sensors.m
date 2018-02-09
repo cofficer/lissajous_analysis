@@ -19,7 +19,7 @@ function output = run_permute_sensors(cfgin)
   % freq_paths = dir('*freqavgs_all_high*'); %or freqavgs_high.
 
   clear all
-  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/stim/');
+  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/self/');
   cd(mainDir)
 
   %Store all the seperate data files
@@ -37,9 +37,9 @@ function output = run_permute_sensors(cfgin)
   for ifiles = 1:length(stim_paths)
     disp((stim_paths(ifiles).name))
     load(stim_paths(ifiles).name)
-    % cfg =[];
-    % cfg.avgoverrpt = 'yes';
-    % freq = ft_selectdata(cfg,freq);
+    cfg =[];
+    cfg.avgoverrpt = 'yes';
+    freq = ft_selectdata(cfg,freq);
     % all_stim(ifiles,:,:,:) = freq.powspctrm;
     allsubjStim{ifiles}=freq;
   end
@@ -54,7 +54,7 @@ function output = run_permute_sensors(cfgin)
   % all_stim=squeeze(nanmean(all_stim(:,:,13:19,:),3));
 
   %Load the baseline freq data.
-  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/cue/';
+  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/cue/';
   cd(mainDir)
 
   %Store all the seperate data files
@@ -64,9 +64,9 @@ function output = run_permute_sensors(cfgin)
   for ifiles = 1:length(stim_paths)
     disp((cue_paths(ifiles).name))
     load(cue_paths(ifiles).name)
-    % cfg =[];
-    % cfg.avgoverrpt = 'yes';
-    % freq = ft_selectdata(cfg,freq);
+    cfg =[];
+    cfg.avgoverrpt = 'yes';
+    freq = ft_selectdata(cfg,freq);
     % all_stim(ifiles,:,:,:) = freq.powspctrm;
     allsubjCue{ifiles}=freq;
   end
@@ -83,8 +83,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(17) allsubjStim{ifiles}.time(25)]; %13, 19
-  time1 = [allsubjCue{ifiles}.time(23) allsubjCue{ifiles}.time(31)];
+  time0 = [allsubjStim{ifiles}.time(47) allsubjStim{ifiles}.time(55)]; %13, 19
+  time1 = [allsubjCue{ifiles}.time(7) allsubjCue{ifiles}.time(15)];
 
   %Trying the orginal baseline comparison...
   % time0 = [freq.time(1) freq.time(11)];
@@ -107,7 +107,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time0.time(1), dat_time0.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[7 12];
+  cfg.frequency =[20 35];
   dat_time0 = ft_selectdata(cfg,dat_time0);
 
 
@@ -115,7 +115,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[7 12];
+  cfg.frequency =[20 35];
   cfg.latency = time1;
   dat_time1 = ft_selectdata(cfg,dat_time1);
 
@@ -195,12 +195,12 @@ function output = run_permute_sensors(cfgin)
   cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
-    todaystr = datestr(now,formatOut);
-    namefigure = sprintf('prelim17_cuebaseline_permutation_stimonset_stim-1-14s_7-12Hz');%Stage of analysis, frequencies, type plot, baselinewindow
+  todaystr = datestr(now,formatOut);
+  namefigure = sprintf('prelim17_cuebaseline-12-08_permutation_self-locked-0202s_20-35Hz');%Stage of analysis, frequencies, type plot, baselinewindow
 
-    figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
-    % set(gca,'PaperpositionMode','Auto')
-    saveas(gca,figurefreqname,'png')
+  figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
+  % set(gca,'PaperpositionMode','Auto')
+  saveas(gca,figurefreqname,'png')
 
 
   end

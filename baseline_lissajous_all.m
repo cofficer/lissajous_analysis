@@ -11,7 +11,7 @@ function [freq_base]=baseline_lissajous_all(freq,cfg,cfgin)
 toi1 = find(round(freq.time,2)==round(cfg.baselinewindow(1),2));
 toi2 = find(round(freq.time,2)==round(cfg.baselinewindow(2),2));
 
-%Compute the average signal for combined baseline
+%Compute the percent change using the average cue-locked baseline
 if strcmp(cfg.subtractmode,'within')
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/cue')
   freqpath   = dir(sprintf('*%s*',cfgin.freqrange));
@@ -23,6 +23,27 @@ if strcmp(cfg.subtractmode,'within')
   freq12 = nanmean(freq12.powspctrm(:,:,toi1:toi2),3);
 %Compute baseline, subtracting using freq of interest
 end
+
+%Compute the percent change using the average within trial baseline
+if strcmp(cfg.subtractmode,'within_trial')
+
+  baseline = freq;
+
+  cfg2      = [];
+  cfg2.avgoverrpt = 'yes';
+  freq12    = ft_selectdata(cfg2,baseline);
+  freq12 = nanmean(freq12.powspctrm(:,:,:),3);
+  %loop over all trials for each switch and stable trials
+  for itrl1 = 1:size(freq.powspctrm,1)
+    freq_base(itrl1,:,:,:) = ((squeeze(freq.powspctrm(itrl1,:,:,:)) - freq12)./freq12)*100;
+  end
+
+  %Average over trials
+  freq_base = squeeze(nanmean(freq_base,1));
+
+%Compute baseline, subtracting using freq of interest
+end
+
 if strcmp(cfg.subtractmode,'within')
 
   %loop over all trials for each switch and stable trials
