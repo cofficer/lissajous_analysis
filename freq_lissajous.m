@@ -9,6 +9,9 @@ function data = freq_lissajous(cfgin)
 if strcmp(cfgin.stim_self,'stim_off')
   dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.restingfile);
 
+elseif strcmp(cfgin.stim_self,'stimoff')
+  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
+
 elseif strcmp(cfgin.stim_self,'stim')
 
   dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
@@ -113,6 +116,9 @@ elseif strcmp(cfg.trigger,'stim')
 elseif strcmp(cfg.trigger,'stim_off')
 
   cfg.toi = -4:0.05:0.1;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
+elseif strcmp(cfg.trigger,'stimoff')
+
+  cfg.toi = -1.5:0.05:1.5;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
 
 end
 
