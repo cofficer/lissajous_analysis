@@ -20,6 +20,8 @@ if strcmp(cfg.subtractmode,'within')
   cfg2      = [];
   cfg2.avgoverrpt = 'yes';
   freq12    = ft_selectdata(cfg2,baseline.freq);
+  toi1 = find(round(freq12.time,2)==round(cfg.baselinewindow(1),2));
+  toi2 = find(round(freq12.time,2)==round(cfg.baselinewindow(2),2));
   freq12 = nanmean(freq12.powspctrm(:,:,toi1:toi2),3);
 %Compute baseline, subtracting using freq of interest
 end
