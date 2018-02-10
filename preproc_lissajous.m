@@ -25,9 +25,11 @@ function data = preproc_lissajous(cfgin)
       if strcmp(cfgin.stim_self,'cue')
         trldef = 'trialfun_lissajous_TRIAL_cue';
       elseif strcmp(cfgin.stim_self,'self')
-          trldef = 'trialfun_lissajous_TRIAL_self';
+        trldef = 'trialfun_lissajous_TRIAL_self';
+      elseif strcmp(cfgin.stim_self,'stimoff')
+        trldef = 'trialfun_lissajous_TRIAL_stimoff';
       else
-          trldef = 'trialfun_lissajous';
+        trldef = 'trialfun_lissajous';
       end
 
     elseif strcmp(cfgin.blocktype,'continuous')
