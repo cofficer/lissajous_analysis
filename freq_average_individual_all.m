@@ -61,7 +61,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
 
   %Run within trial baseline
   cfg                       = [];
-  cfg.subtractmode          = 'within_trial'; % norm_avg within_norm, within, within_trial
+  cfg.subtractmode          = 'within'; % norm_avg within_norm, within, within_trial
   %Find first nonnan timepoint in data, and use that before and after self-O
   %What if there are no nans at all...
   if strcmp(cfgin.blocktype,'continuous')
@@ -77,7 +77,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
   else
     %4.5=stim_off.
     if strcmp(cfgin.baseline,'cue')
-      cfg.baselinewindow=[-0.4 0];
+      cfg.baselinewindow=[-0.7 -0.3];
     else
       cfg.baselinewindow        = [cfgin.baseline(1) cfgin.baseline(2)]; %-0.4 -0.1
     end

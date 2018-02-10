@@ -12,7 +12,7 @@ clear all
 
 blocktype = 'trial' %continuous or trial
 stim_self = ''; %'' or resp.
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/stim',blocktype))
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/cue',blocktype))
 
 %Define if looking at switch vs no switch
 sw_vs_nsw = 0;
@@ -73,7 +73,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-50 50];
+cfg.zlim         = [-10 10];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 % cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -91,7 +91,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim8_lowfreq_trial_stim-locked_cuebaseline-04-0s_visual-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim8_lowfreq_trial_cue-locked_within_trial-baseline_visual-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
