@@ -22,6 +22,8 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
       freqpath   = dir(sprintf('*freq_cue_%s*',cfgin.freqrange));
     elseif strcmp(cfgin.stim_self,'self')
       freqpath   = dir(sprintf('*freq_self_%s*',cfgin.freqrange));
+    elseif strcmp(cfgin.stim_self,'stimoff')
+      freqpath   = dir(sprintf('*freq_%s_stimoff*',cfgin.freqrange));
     else
       freqpath   = dir(sprintf('*freq_%s_stim_off*',cfgin.freqrange));
     end
@@ -61,7 +63,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
 
   %Run within trial baseline
   cfg                       = [];
-  cfg.subtractmode          = 'within'; % norm_avg within_norm, within, within_trial
+  cfg.subtractmode          = 'within_trial'; % norm_avg within_norm, within, within_trial
   %Find first nonnan timepoint in data, and use that before and after self-O
   %What if there are no nans at all...
   if strcmp(cfgin.blocktype,'continuous')

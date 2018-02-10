@@ -167,7 +167,7 @@ elseif strcmp(cfgin.stim_self,'baseline')
 
   outputfile = sprintf('%sfreq_%s_%s_%s.mat',cfgin.restingfile(2:3),cfgin.stim_self,cfg.freqanalysistype,cfg.trigger);
 
-elseif strcmp(cfgin.stim_self,'baseline')
+elseif strcmp(cfgin.stim_self,'stimoff')
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/stimoff')
 
   outputfile = sprintf('%sfreq_%s_%s_%s.mat',cfgin.restingfile(2:3),cfgin.stim_self,cfg.freqanalysistype,cfg.trigger);
