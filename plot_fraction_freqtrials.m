@@ -9,15 +9,15 @@ function [BP1,BP2] = plot_fraction_freqtrials(do_plot)
   %11-Sep-2017, CG.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  cfgin.blocktype='continuous';
-  filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
+  cfgin.blocktype='trial';
+  filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/cue',cfgin.blocktype)
 
   cd(filepath)
 
   freqrange  = 'low';
   doplot     = 0;
   compSwitch = 0;
-  freqpath   = dir(sprintf('*%s*-26-26*',freqrange));
+  freqpath   = dir(sprintf('*%s*',freqrange));
 
   %Remove participant nr 10, super weird artifacts.
   namecell = {freqpath.name};
@@ -37,6 +37,11 @@ function [BP1,BP2] = plot_fraction_freqtrials(do_plot)
     partInfo(ipart).trialinfo = freq.trialinfo;
     partInfo(ipart).ID        = namecell{ipart}(1:2);
   end
+
+  %Avg time between stimulus offset and response.
+  %5 = stimulus offest, 9 = response.
+  %mean((partInfo(ipart).trialinfo(:,5)-partInfo(ipart).trialinfo(:,9)))/1200
+
 
   %Make this per participant instead of per block.
   lastID=partInfo(1).ID(1:2);
