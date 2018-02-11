@@ -12,7 +12,7 @@ clear all
 
 blocktype = 'trial' %continuous or trial
 stim_self = ''; %'' or resp.
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype))
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/stimoff',blocktype))
 
 %Define if looking at switch vs no switch
 sw_vs_nsw = 0;
@@ -69,13 +69,13 @@ idx_motor = {'MRC13','MRC14','MRC15','MRC16','MRC22','MRC23'...
             'MLC24','MLC31','MLC41','MLF64','MLF65','MLF63'...
             'MLF54','MLF55','MLF56','MLF66','MLF46'};
 
-for ipartn =1:29
+% for ipartn =1:29
 
 hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-40 40];
+cfg.zlim         = [-20 20];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 % cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -84,7 +84,7 @@ cfg.interactive = 'no';
 cfg.title='Motor sensors only';
 %%%%%%%%%%%%%%%%%%%%%%%
 %temporary loop
-freq.powspctrm=squeeze(all_freq(ipartn,:,:,:));
+% freq.powspctrm=squeeze(all_freq(ipartn,:,:,:));
 %%%%%%%%%%%%%%%%%%%%%%%
 ft_singleplotTFR(cfg,freq);
 %ft_multiplotTFR(cfg,freq)
@@ -97,12 +97,12 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim9_part%s_lowfreq_trial_self-locked_cue-baseline_motor-sensors',num2str(ipartn));%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim9_lowfreq_trial_stimoff-locked_wholebaseline_motor-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
 saveas(hf,figurefreqname,'png')
-end
+% end
 %plot the TOPO
 for ipartn =1:29
 %Loop over each participant test

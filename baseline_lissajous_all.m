@@ -13,7 +13,7 @@ toi2 = find(round(freq.time,2)==round(cfg.baselinewindow(2),2));
 
 %Compute the percent change using the average cue-locked baseline
 if strcmp(cfg.subtractmode,'within')
-  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/cue')
+  cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/%s',cfgin.baseline))
   freqpath   = dir(sprintf('*%s*',cfgin.freqrange));
   baseline = load(freqpath(cfgin.part_ID).name);
 

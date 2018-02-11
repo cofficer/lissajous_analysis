@@ -83,11 +83,11 @@ switch runcfg.execute
         %Create new average freq or not.
         cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
         %Create topo of tfr plots
-        %cfgin=cfgin{6}
+        %cfgin=cfgin{29}
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
         %This depends on the what the data is locked to.
         %If baseline cue then load the precue data as basline.
-        cfgin{icfgin}.baseline                = 'cue'; %[-2.75 -2.25];
+        cfgin{icfgin}.baseline                = 'stimoff'; %[-2.75 -2.25];
       end
 
 
