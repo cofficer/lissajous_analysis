@@ -60,7 +60,7 @@ cfg.method      = 'mtmconvol';
 cfg.trigger     = cfgin.stim_self; %stim. selfoccl.
 cfg.channel     ='MEG'; %
 cfg.trials      = 'all';
-cfg.freqanalysistype = 'low';
+cfg.freqanalysistype = 'high';
 
 
 switch cfg.freqanalysistype
