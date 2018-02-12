@@ -97,7 +97,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim9_lowfreq_trial_self-locked_stimoff-baseline-05-0s_motor-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim9_lowfreq_trial_self-locked_stimoff-baseline-1-05s_motor-sensors');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
