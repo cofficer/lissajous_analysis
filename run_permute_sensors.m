@@ -23,7 +23,7 @@ function output = run_permute_sensors(cfgin)
   cd(mainDir)
 
   %Store all the seperate data files
-  stim_paths = dir('*low*'); %or freqavgs_high.
+  stim_paths = dir('*high*'); %or freqavgs_high.
   % load(stim_paths(1).name)
   % cfg =[];
   % cfg.avgoverrpt = 'yes';
@@ -58,7 +58,7 @@ function output = run_permute_sensors(cfgin)
   cd(mainDir)
 
   %Store all the seperate data files
-  cue_paths = dir('*low*');
+  cue_paths = dir('*high*');
 
   %Load all participants
   for ifiles = 1:length(stim_paths)
@@ -83,7 +83,7 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(53) allsubjStim{ifiles}.time(61)]; %13, 19
+  time0 = [allsubjStim{ifiles}.time(15) allsubjStim{ifiles}.time(23)]; %13, 19
   time1 = [allsubjCue{ifiles}.time(33) allsubjCue{ifiles}.time(41)];
 
   %Trying the orginal baseline comparison...
