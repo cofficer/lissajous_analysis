@@ -100,8 +100,8 @@ function data = preproc_lissajous(cfgin)
         cfg.trialdef.prestim          = 3
         cfg.trialdef.poststim         = 1
       elseif strcmp(cfgin.stim_self,'self')
-        cfg.trialdef.prestim          = 2.6
-        cfg.trialdef.poststim         = 2.6
+        cfg.trialdef.prestim          = 3
+        cfg.trialdef.poststim         = 3
       else
         cfg.trialdef.prestim          = 2.6
         cfg.trialdef.poststim         = 2.6
@@ -221,6 +221,15 @@ function data = preproc_lissajous(cfgin)
         title('No jumps')
       end
 
+      % ==================================================================
+      % 5. REMOVE DATA WITH EYE ARTIFACTS.
+      % ==================================================================
+      % if ~strcmp(cfgin.blocktype,'continuous')
+      %   blinkchannel = 'UADC003';%EEG058	+        blinkchannel = 'UADC003';%EEG058
+      %   [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);	+        [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+      %   blinkchannel = 'EEG058';%EEG058	+        %
+      %   [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);	+        % [data,cnt]=preproc_eye_artifact(data,cnt,blinkchannel);
+      % end
 
       %%
       % ==================================================================
@@ -285,19 +294,8 @@ function data = preproc_lissajous(cfgin)
       %Change folder and save approapriate data + figures
       lisdir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/preprocessed/',cfgin.blocktype);
       cd(lisdir)
-      if strcmp(cfgin.blocktype,'trial')
-        name = sprintf('%sP%s/%s/',lisdir,datafile(2:3),cfgin.stim_self);
-      else
-        if strcmp(cfgin.stim_self,'resp')
-          name = sprintf('%sP%s/resp/',lisdir,datafile(2:3));
-        elseif strcmp(cfgin.stim_self,'cue')
-          name = sprintf('%sP%s/cue/',lisdir,datafile(2:3));
-        elseif strcmp(cfgin.stim_self,'self')
-          name = sprintf('%sP%s/self/',lisdir,datafile(2:3));
-        else
-          name = sprintf('%sP%s/',lisdir,datafile(2:3));
-        end
-      end
+      name = sprintf('%sP%s/%s/',lisdir,datafile(2:3),cfgin.stim_self);
+
       %If the folder does not already exist, create it.
       if 7==exist(name,'dir')
         cd(name)
@@ -306,52 +304,18 @@ function data = preproc_lissajous(cfgin)
         cd(name)
       end
 
+      filestore=sprintf('preproc_%s_P%s.mat',cfgin.stim_self,datafile(2:3));
+      save(filestore,'data','-v7.3')
 
+      %Save the artifacts
+      artstore=sprintf('artifacts_%s_P%s.mat',cfgin.stim_self,datafile(2:3));
+      save(artstore,'artifact_Jump','artifact_Muscle') %Jumpos?
 
-      if strcmp(cfgin.blocktype,'trial')
+      %save the invisible figure
+      figurestore=sprintf('Overview_%s_P%s.png',cfgin.stim_self,datafile(2:3));
+      saveas(gca,figurestore,'png')
+      trldef = 'trialfun_lissajous';
 
-
-        if strcmp(cfgin.stim_self,'self')
-          filestore=sprintf('preproc_self_P%s.mat',datafile(2:3));
-          save(filestore,'data','-v7.3')
-
-          %Save the artifacts
-          artstore=sprintf('artifacts_self_P%s.mat',datafile(2:3));
-          save(artstore,'artifact_Jump','artifact_Muscle') %Jumpos?
-
-          %save the invisible figure
-          figurestore=sprintf('Overview_self_P%s.png',datafile(2:3));
-          saveas(gca,figurestore,'png')
-          trldef = 'trialfun_lissajous';
-
-        else
-          filestore=sprintf('preproc_stim_P%s.mat',datafile(2:3));
-          save(filestore,'data','-v7.3')
-
-          %Save the artifacts
-          artstore=sprintf('artifacts_stim_P%s.mat',datafile(2:3));
-          save(artstore,'artifact_Jump','artifact_Muscle') %Jumpos?
-
-          %save the invisible figure
-          figurestore=sprintf('Overview_stim_P%s.png',datafile(2:3));
-          saveas(gca,figurestore,'png')
-          trldef = 'trialfun_lissajous';
-        end
-
-      elseif strcmp(cfgin.blocktype,'continuous')
-
-        filestore=sprintf('%dpreproc26-26P%s.mat',iblock,datafile(2:3));
-        save(filestore,'data','-v7.3')
-
-        %Save the artifacts
-        artstore=sprintf('%dartifactsP%s.mat',iblock,datafile(2:3));
-
-        save(artstore,'artifact_Muscle') %Jumpos? eye artifact?
-
-        %save the invisible figure
-        figurestore=sprintf('%doverviewP%s.png',iblock,datafile(2:3));
-        saveas(gca,figurestore,'png')
-      end
 
     end
 

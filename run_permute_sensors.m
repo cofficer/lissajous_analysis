@@ -107,7 +107,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time0.time(1), dat_time0.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[20 30];
+  cfg.frequency =[60 90];
   dat_time0 = ft_selectdata(cfg,dat_time0);
 
 
@@ -115,7 +115,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[20 30];
+  cfg.frequency =[60 90];
   cfg.latency = time1;
   dat_time1 = ft_selectdata(cfg,dat_time1);
 
@@ -196,7 +196,7 @@ function output = run_permute_sensors(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim17_stimoffbaseline-01-05_permutation_self-locked0105s_20-30Hz');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim17_stimoffbaseline-01-05_permutation_self-locked0105s_60-90Hz');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   % set(gca,'PaperpositionMode','Auto')
