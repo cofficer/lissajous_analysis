@@ -27,7 +27,7 @@ function freq = freq_lissajousCONT(cfgin)
     end
     cfg.channel     ='MEG'; %
     cfg.trials      = 'all';
-    cfg.freqanalysistype = 'high';
+    cfg.freqanalysistype = 'low';
 
     cd(cfgin.dirpart)
     if strcmp(cfgin.stim_self,'resp')
@@ -40,7 +40,7 @@ function freq = freq_lissajousCONT(cfgin)
 
     load(cfgin.iblock)
 
-    outputfile = sprintf('%sfreq_%s_%sBlock%s-26-26.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,cfgin.iblock(1));
+    outputfile = sprintf('%sfreq_%s_%sBlock%s.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,cfgin.iblock(1));
 
     cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/')
     if strcmp(cfgin.stim_self,'resp')
@@ -105,7 +105,7 @@ function freq = freq_lissajousCONT(cfgin)
     elseif strcmp(cfg.trigger,'selfoccl')
 
       %cfg.toi = 0.25:0.05:4.25;
-      cfg.toi = -2.35:0.05:2.35;
+      cfg.toi = -2.5:0.05:2.5;
 
     elseif strcmp(cfg.trigger,'resp')
 
