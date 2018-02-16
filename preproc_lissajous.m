@@ -137,7 +137,8 @@ function data = preproc_lissajous(cfgin)
 
       %Load in raw data.
       % cfg.channel    ={'all'};
-      cfg.channel = {'M*','UADC003',...
+      cfg.channel = {'M*','UADC001',...
+      'UADC002','UADC003',...
       'UADC004','EEG058','EEG059',...
       'HLC0011','HLC0012','HLC0013', ...
       'HLC0021','HLC0022','HLC0023', ...
@@ -306,6 +307,11 @@ function data = preproc_lissajous(cfgin)
 
       filestore=sprintf('preproc_%s_P%s.mat',cfgin.stim_self,datafile(2:3));
       save(filestore,'data','-v7.3')
+
+      filestore=sprintf('preproc_noMEG_%s_P%s.mat',cfgin.stim_self,datafile(2:3));
+      save(filestore,'dataNoMEG','-v7.3')
+
+      
 
       %Save the artifacts
       artstore=sprintf('artifacts_%s_P%s.mat',cfgin.stim_self,datafile(2:3));
