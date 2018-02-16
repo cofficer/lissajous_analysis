@@ -320,7 +320,6 @@ function data = preproc_lissajous(cfgin)
       %save the invisible figure
       figurestore=sprintf('Overview_%s_P%s_block%d.png',cfgin.stim_self,datafile(2:3),iblock);
       saveas(gca,figurestore,'png')
-      trldef = 'trialfun_lissajous';
 
 
     end
