@@ -308,17 +308,17 @@ function data = preproc_lissajous(cfgin)
       filestore=sprintf('preproc_%s_P%s_block%d.mat',cfgin.stim_self,datafile(2:3),iblock);
       save(filestore,'data','-v7.3')
 
-      filestore=sprintf('preproc_noMEG_%s_P%s_block%d.mat',cfgin.stim_self,datafile(2:3));
+      filestore=sprintf('preproc_noMEG_%s_P%s_block%d.mat',cfgin.stim_self,datafile(2:3),iblock);
       save(filestore,'dataNoMEG','-v7.3')
 
 
 
       %Save the artifacts
-      artstore=sprintf('artifacts_%s_P%s_block%d.mat',cfgin.stim_self,datafile(2:3));
+      artstore=sprintf('artifacts_%s_P%s_block%d.mat',cfgin.stim_self,datafile(2:3),iblock);
       save(artstore,'artifact_Jump','artifact_Muscle') %Jumpos?
 
       %save the invisible figure
-      figurestore=sprintf('Overview_%s_P%s_block%d.png',cfgin.stim_self,datafile(2:3));
+      figurestore=sprintf('Overview_%s_P%s_block%d.png',cfgin.stim_self,datafile(2:3),iblock);
       saveas(gca,figurestore,'png')
       trldef = 'trialfun_lissajous';
 
