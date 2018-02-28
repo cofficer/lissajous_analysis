@@ -168,6 +168,7 @@ function data = preproc_lissajous(cfgin)
       cfgfreq.taper       = 'hanning';
       cfgfreq.channel     = 'MEG';
       cfgfreq.foi         = 1:130;
+      % cfgfreq.fsample     = 800;
       cfgfreq.keeptrials  = 'no';
       freq                = ft_freqanalysis(cfgfreq, data); %Should only be done on MEG channels.
 

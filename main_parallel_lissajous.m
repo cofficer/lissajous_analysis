@@ -37,7 +37,7 @@ for icfg = 1:length(restingpaths)
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'filter'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -97,6 +97,36 @@ switch runcfg.execute
       %cellfun(@main_individual_freq, cfgin,'UniformOutput',false);
       qsubcellfun(@main_individual_freq, cfgin, 'compile', 'no', ...
         'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+
+
+
+    case 'filter'
+
+      filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
+      cd(filepath)
+
+      %settings for plotting and loading or creating average freq files.
+      for icfgin = 1:length(cfgin)
+        cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
+        cfgin{icfgin}.freqrange='high';
+        %Create new average freq or not.
+        cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
+        %Create topo of tfr plots
+        %cfgin=cfgin{29}
+        cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
+        %This depends on the what the data is locked to.
+        %If baseline cue then load the precue data as basline.
+        cfgin{icfgin}.baseline                = 'stimoff'; %[-2.75 -2.25];
+      end
+
+
+
+      runcfg.nnodes = 1;%64; % how many licenses?
+      runcfg.stack = 1;%round(length(cfg1)/nnodes);
+      %cellfun(@main_individual_freq, cfgin,'UniformOutput',false);
+      qsubcellfun(@freq_filter, cfgin, 'compile', 'no', ...
+      'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+
 
 end
 

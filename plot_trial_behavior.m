@@ -4,6 +4,36 @@ function plot_trial_behavior
   %Created 23/11/2017.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+  %load the cont trial information stored in freq data.
+  clear all
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/cue')
+
+  freqpaths = dir('*low*.mat');
+
+  for ifreq = 1:length(freqpaths)
+    disp(ifreq)
+    load(freqpaths(ifreq).name)
+    event = freq.trialinfo;
+    if ifreq==1
+        fullevent=event(:,1:6);
+    else
+        %add all datasets together.
+        fullevent=[fullevent;event(:,1:6)];
+
+    end
+  end
+
+  resp=fullevent(:,4);%-fullevent(:,2);
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior/')
+  close all;
+  resp(resp==0)=[];
+  resp=resp(resp<10000);%sum(resp<10000)
+  %plot(resp')
+  resp(resp<1000)=resp(resp<1000)+(2.25*1200);
+  histogram((resp./1200),100)
+  saveas(gca,'CONT_actual_resp-selfoccl.png')
+
+
   %Load all of the eyelink  data
   clear all
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior/blinks')
@@ -52,10 +82,17 @@ function plot_trial_behavior
    cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
   % % save('Table_trialinfo.mat','T_info') %
   load('Table_trialinfo.mat')
+  %load('Table_continfo.mat')
   %
   Cue_stimoff   = (T_info.cue_on-T_info.stim_off)./1200;
   RT_stimoff    = (T_info.resp-T_info.stim_off)./1200;
   S_onoff       = (T_info.block_end-T_info.stim_off)./1200;
+
+  %mean(T_info.self_occ-2700)
+  %vals=(trlTA.CueOnsetSample(trlTA.CueOnsetSample>200)-trlTA.SelfOcclusionSample(trlTA.CueOnsetSample>200))./1200;
+  % close all;
+  % histogram(Cue_stimoff(Cue_stimoff<2),10)
+  % saveas(gca,'Trial_stimoff-cue.png')
 
 
   %New way of saving Figure using gramm

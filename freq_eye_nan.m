@@ -19,14 +19,31 @@ load('preproc_noMEG_self_P28_block2.mat')
 %2. Highpass filter the freq data.
 %3. Nanmean freq data into averages. No baseline
 
+%The only way to highpass might be to do so continuously...
+t_start = 1;
+t_stop  = 95;
+for itrl = 1:size(freq.powspctrm,1)
+
+  freq_concat(:,:,t_start:t_stop) = squeeze(freq.powspctrm(itrl,:,:,:));
+  % time_concat(1,appropriate time indices) = data.time{itrl}(:);
+  t_start = t_start+95;
+  t_stop  = t_stop+95;
+end
+
+cfg =[];
+cfg.avgoverrpt = 'yes';
+freq = ft_selectdata(cfg,freq);
+
+freq.powspctrm = freq_concat;
+freq.time      = -2.35:0.05:1242.1;%num  size(freq_concat) 24890
+
 %Highpass using FIR-method.
 cfg = [];
-cfg.fsample  = 500;
+cfg.fsample  = 20;
 cfg.hpfreq     = 0.2;
 cfg.type     = 'fir';
 cfg.hpfilter ='yes';
-freq = ft_preprocessing(cfg,freq);
-
+freq2 = ft_preprocessing(cfg,freq);
 
 %What is the ideal solution to get rid eye blinks and keep the data continuous?
 %I will attempt to keep the data in trials and just assume 2.25s +/- is fine.
@@ -36,6 +53,14 @@ cfg = [];
 cfg.toilim = [-2.35 2.35];
 dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)
 
+%Remove trials that are not present in the freq data.
+cfg = [];
+cfg.trials = zeros(1,length(dataNoMEG.time));
+cfg.trials(freq.trialinfo(:,6))=1;
+cfg.trials=logical(cfg.trials);
+dataNoMEG = ft_selectdata(cfg,dataNoMEG);
+
+%Eye artifact detection.
 cfg                              = [];
 cfg.continuous                   = 'no'; % data has been epoched
 
@@ -68,27 +93,36 @@ cfg.artfctdef.zvalue.cutoff     = 1; % to detect all blinks, be strict
 start_blink = artifact_eog(:,1)-125;
 end_blink   = artifact_eog(:,2)+125;
 
+
 freq_nan = freq.powspctrm;
+
+%predefine variables
+sample_from_start   = zeros(1,length(start_blink));
+sample_from_stop    = zeros(1,length(start_blink));
+num_bins_start      = zeros(1,length(start_blink));
+num_bins_stop       = zeros(1,length(start_blink));
+
 
 %I need to figure out which time-bins are affected in which trials.
 %Perhaps a for-look for mod(3001) would work
 for iblinks = 1:length(start_blink)
   %find trial of the blink.
   %insert nan at the time-freq been affected.
-  trl=floor(start_blink(iblinks)/3001);
+  trl=floor(start_blink(iblinks)/length(dataNoMEG.time{1}));
   %How do find the affect tbins?
   %How many samples in each tbin? 25. 1 sample = 0.002s. 1 bin = 0.05.
-  sample_from_start       = mod(start_blink(iblinks),3001);
-  sample_from_stop        = mod(end_blink(iblinks),3001);
-  num_bins_start          = floor(sample_from_start/25);
-  num_bins_stop           = ceil(sample_from_stop/25);
+  sample_from_start(iblinks)       = mod(start_blink(iblinks),length(dataNoMEG.time{1}));
+  sample_from_stop(iblinks)        = mod(end_blink(iblinks),length(dataNoMEG.time{1}));
+  num_bins_start(iblinks)          = floor(sample_from_start(iblinks)/length(dataNoMEG.time{1}));
+  num_bins_stop(iblinks)           = ceil(sample_from_stop(iblinks)/length(dataNoMEG.time{1}));
   %the num_bins_start, until num_bins_stop
+  if num_bins_start(iblinks)<1;num_bins_start(iblinks)=1;end
 
-  freq_nan(trl,:,:,num_bins_start:num_bins_stop)=NaN;
+  freq_nan(trl,:,:,num_bins_start(iblinks):num_bins_stop(iblinks))=NaN;
 
 end
 
-%nanmean and save the averages.
+  %nanmean and save the averages.
 
   %Append data, by taking the average
   %Make the freq the trial average
@@ -96,8 +130,9 @@ end
   cfg.avgoverrpt = 'yes';
   freq = ft_selectdata(cfg,freq);
 
-  %substitute powspctrm with nanned data. 
-  freq.powspctrm=nanmean(freq_nan,1);
+
+  %substitute powspctrm with nanned data.
+  freq.powspctrm=squeeze(nanmean(freq_nan,1));
 
   %Save the freq in new folder
   d_average = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/%s/',cfgin.blocktype,cfgin.stim_self);
