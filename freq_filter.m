@@ -87,7 +87,8 @@ for ipart = 1:length(blocks_ID)
       x = [squeeze(freq_concat(ichan,ifreq,:))',squeeze(freq_concat(ichan,ifreq,:))',...
       squeeze(freq_concat(ichan,ifreq,:))'];
 
-      nbt_filter_firHp(x,0.2,20,10)
+      x=nbt_filter_firHp(x,0.2,20,10);
+      x=x';
       % y = filtfilt(d,x);
 
       freq_concat(ichan,ifreq,:)=x((size(x,2)/3)+1:end-(size(x,2)/3));
