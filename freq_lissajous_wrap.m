@@ -13,8 +13,8 @@ function freq = freq_lissajous_wrap(cfgin,runcfg)
   %expand the cfgin three times.
   for ipart = 1:length(cfgin)
   %  i_exp=i_exp+1;
-    dirpart = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/%s/',...
-    cfgin{ipart}.restingfile(1:3),cfgin{ipart}.stim_self);
+    dirpart = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/preprocessed/%s/',...
+    cfgin{ipart}.restingfile(1:3));
     cd(dirpart)
 
     dat_name = dir(sprintf('preproc_%s*.mat',cfgin{ipart}.stim_self));
