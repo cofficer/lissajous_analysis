@@ -154,36 +154,51 @@ for ipart = 1:length(blocks_ID)
     currNum = partnum(ipart);
 
     %select trials,
-    cfg   = [];
-    cfg.trials = logical([idx_switch;0]); %add a 0 for the last trial.
     cfg.avgoverrpt = 'no';
-    switchTrial  = ft_selectdata(cfg,freq);
-
+    cfg.trials = logical([idx_switch;0]);
+    if ipart>1
+      freqtmp = ft_selectdata(cfg,freq);
+      %new function for appending data.
+      switchTrial = append_trialfreq([],switchTrial,freqtmp);
+      freqtmp=[];
+    else
+      switchTrial  = ft_selectdata(cfg,freq);
+    end
     %select trials
     cfg   = [];
     cfg.trials = logical([idx_noswitch;0]); %add a 0 for the last trial.
     cfg.avgoverrpt = 'no';
-    stableTrial  = ft_selectdata(cfg,freq);
+    if ipart>1
+      freqtmp = ft_selectdata(cfg,freq);
+      %new function for appending data.
+      stableTrial = append_trialfreq([],stableTrial,freqtmp);
+      freqtmp=[];
+    else
+      stableTrial  = ft_selectdata(cfg,freq);
+    end
 
     cfg =[];
     cfg.avgoverrpt = 'yes';
     freq = ft_selectdata(cfg,freq);
 
-    %Make the freq the trial average
-    cfg =[];
-    cfg.avgoverrpt = 'yes';
-    switchTrial = ft_selectdata(cfg,switchTrial);
 
-    %Make the freq the trial average
-    cfg =[];
-    cfg.avgoverrpt = 'yes';
-    stableTrial = ft_selectdata(cfg,stableTrial);
-
-    %Save the freq in new folder
-    freqtosave = sprintf('freqs_%s_%d_block%d.mat',cfgin.freqrange,cfgin.part_ID,ipart);
-    save(freqtosave,'freq','switchTrial','stableTrial')
 
 end
+
+%Make the freq the trial average
+cfg =[];
+cfg.avgoverrpt = 'yes';
+switchTrial = ft_selectdata(cfg,switchTrial);
+
+%Make the freq the trial average
+cfg =[];
+cfg.avgoverrpt = 'yes';
+stableTrial = ft_selectdata(cfg,stableTrial);
+
+%Save the freq in new folder
+freqtosave = sprintf('freqs_%s_%d.mat',cfgin.freqrange,cfgin.part_ID);
+save(freqtosave,'freq','switchTrial','stableTrial')
+
 %Procedures:
 %1. Identify blinks and insert nans in freq data.
 %2. Highpass filter the freq data.
