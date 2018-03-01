@@ -27,7 +27,7 @@ function freq = freq_lissajousCONT(cfgin)
     end
     cfg.channel     ='MEG'; %
     cfg.trials      = 'all';
-    cfg.freqanalysistype = 'low';
+    cfg.freqanalysistype = 'high';
 
     cd(cfgin.dirpart)
 
