@@ -185,6 +185,8 @@ for ipart = 1:length(blocks_ID)
 
 end
 
+%Remove blinks and muscle then average the filtered freq data.
+
 %Make the freq the trial average
 cfg =[];
 cfg.avgoverrpt = 'yes';

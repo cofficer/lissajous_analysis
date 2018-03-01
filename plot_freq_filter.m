@@ -3,7 +3,7 @@ function out = plot_freq_filter(~)
 
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/filtered')
 
-freqpath   = dir('*.mat');
+freqpath   = dir('*low*.mat');
 
 
   namecell = {freqpath.name};
@@ -12,12 +12,11 @@ freqpath   = dir('*.mat');
 
   partnum = cellfun(@str2num,partnum,'UniformOutput',false);
 
-  blocks_ID = find(ismember([partnum{:}],cfgin.part_ID));
 
 
 %pre-store variables
-all_switch = zeros(length(freqpath),274,38,91);
-all_stable = zeros(length(freqpath),274,38,91);
+all_switch = zeros(length(freqpath),274,33,91);
+all_stable = zeros(length(freqpath),274,33,91);
 
 for ipath = 1:length(freqpath)
 
@@ -32,8 +31,8 @@ for ipath = 1:length(freqpath)
 end
 
 %average over freq switch and stable
-all_switch=squeeze(mean(all_switch(:,:,13:28,:),3));
-all_stable=squeeze(mean(all_stable(:,:,13:28,:),3));
+all_switch=squeeze(mean(all_switch(:,:,13:18,:),3));
+all_stable=squeeze(mean(all_stable(:,:,13:18,:),3));
 
 all_switch=squeeze(mean(all_switch(:,:,36:46),3));
 all_stable=squeeze(mean(all_stable(:,:,36:46),3));
@@ -50,7 +49,7 @@ cfg.avgovertime = 'yes';
 freq = ft_selectdata(cfg,freq);
 
 
-freq.powspctrm = STATS.tstat';
+freq.powspctrm = (STATS.tstat'); %freq.powspctrm = squeeze(STATS.tstat);
 
 %Load the sensors of interest
 load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_visual_sensors.mat')
@@ -74,9 +73,9 @@ ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
 cfg.zlim         = [-3 3];
-%cfg.ylim         = [3 35];
+% cfg.ylim         = [60 90];
 cfg.layout       = 'CTF275_helmet.lay';
-% cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+% cfg.xlim         = [-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = idx_lissajous;%freq.label(idx_occ);%idx_motor';%
 cfg.interactive = 'no';
 cfg.title='Visual sensors only';
@@ -86,6 +85,7 @@ cfg.title='Visual sensors only';
 %%%%%%%%%%%%%%%%%%%%%%%
 % ft_singleplotTFR(cfg,freq);
 %ft_multiplotTFR(cfg,freq)
+cfg.colorbar = 'yes'
 ft_topoplotTFR(cfg,freq)
 %ft_hastoolbox('brewermap', 1);
 colormap(ax2,flipud(brewermap(64,'RdBu')))
@@ -96,7 +96,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim10_highfreq_cont_self-locked_filteredTOPO');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim10_15-20Hzfreq_cont_self-locked_filtered_t-05-0s_TOPO');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

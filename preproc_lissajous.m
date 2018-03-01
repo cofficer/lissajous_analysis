@@ -218,8 +218,9 @@ function data = preproc_lissajous(cfgin)
         idx_trials = ones(1,length(data.trial));
         idx_trials(idx_jump) = 0;
         cfg.trials = find(idx_trials');
-        data       = ft_selectdata(cfg,data);
+        % data       = ft_selectdata(cfg,data);
       else
+        idx_jump=[];
         title('No jumps')
       end
 
@@ -272,10 +273,11 @@ function data = preproc_lissajous(cfgin)
       cfg.artfctdef.zvalue.cutoff      = 30;
       [~, artifact_Muscle]             = ft_artifact_zvalue(cfg, data);
 
-      cfg                              = [];
-      cfg.artfctdef.reject             = 'complete';
-      cfg.artfctdef.muscle.artifact    = artifact_Muscle;
-      data                             = ft_rejectartifact(cfg,data);
+      % cfg                              = [];
+      % cfg.artfctdef.reject             = 'complete'; %But identify where.
+      %102/103 718826, compare artifact_Muscle samples against the sampleinfo...
+      % cfg.artfctdef.muscle.artifact    = artifact_Muscle;
+      % data2                             = ft_rejectartifact(cfg,data);
       %
       % % plot final power spectrum
       freq            = ft_freqanalysis(cfgfreq, data);
@@ -316,7 +318,7 @@ function data = preproc_lissajous(cfgin)
 
       %Save the artifacts
       artstore=sprintf('artifacts_%s_P%s_block%d.mat',cfgin.stim_self,datafile(2:3),iblock);
-      save(artstore,'artifact_Jump','artifact_Muscle') %Jumpos?
+      save(artstore,'artifact_Jump','idx_jump','artifact_Muscle') %Jumpos?
 
       %save the invisible figure
       figurestore=sprintf('Overview_%s_P%s_block%d.png',cfgin.stim_self,datafile(2:3),iblock);
