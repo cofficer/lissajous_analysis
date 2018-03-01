@@ -37,9 +37,9 @@ for icfg = 1:length(restingpaths)
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'filter'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
-runcfg.parallel        = 'local';  %local or torque
+runcfg.parallel        = 'torque';  %local or torque
 
 
 %Execute jobs on the torque
