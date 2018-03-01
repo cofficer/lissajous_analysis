@@ -48,10 +48,10 @@ partnum = cellfun(@str2num,partnum,'UniformOutput',false);
 blocks_ID = find(ismember([partnum{:}],cfgin.part_ID));
 
 %Define which filter settings to use.
-d=designfilt('highpassfir', 'PassbandFrequency', 10,...
-      'PassbandRipple',0.5,'StopbandFrequency',0.02 ,...
-      'StopbandAttenuation',65,'SampleRate',20,...
-      'DesignMethod','equiripple');
+% d=designfilt('highpassfir', 'PassbandFrequency', 10,...
+%       'PassbandRipple',0.5,'StopbandFrequency',0.02 ,...
+%       'StopbandAttenuation',65,'SampleRate',20,...
+%       'DesignMethod','equiripple');
 
 
 suplot = 0;
@@ -87,7 +87,8 @@ for ipart = 1:length(blocks_ID)
       x = [squeeze(freq_concat(ichan,ifreq,:))',squeeze(freq_concat(ichan,ifreq,:))',...
       squeeze(freq_concat(ichan,ifreq,:))'];
 
-      y = filtfilt(d,x);
+      nbt_filter_firHp(x,0.2,20,10)
+      % y = filtfilt(d,x);
 
       freq_concat(ichan,ifreq,:)=x((size(x,2)/3)+1:end-(size(x,2)/3));
     end
