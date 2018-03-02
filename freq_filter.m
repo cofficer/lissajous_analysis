@@ -54,10 +54,8 @@ blocks_ID = find(ismember([partnum{:}],cfgin.part_ID));
 %       'DesignMethod','equiripple');
 
 
-suplot = 0;
 %Loop over participant 3 seperate blocks
 for ipart = 1:length(blocks_ID)
-  suplot=suplot+1;
   cd(filepath)
   %Load the freq data
   load(freqpath(blocks_ID(ipart)).name)
@@ -185,7 +183,11 @@ for ipart = 1:length(blocks_ID)
 
 end
 
-%Remove blinks and muscle then average the filtered freq data.
+%Remove blinks and muscle and jumps then average the filtered freq data.
+
+
+
+
 
 %Make the freq the trial average
 cfg =[];
