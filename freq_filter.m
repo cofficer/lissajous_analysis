@@ -42,18 +42,11 @@ partnum = cellfun(@(x) x(1:2),namecell,'UniformOutput',false);
 
 partnum = cellfun(@str2num,partnum,'UniformOutput',false);
 
-
-%part_ID = 5;
-
 blocks_ID = find(ismember([partnum{:}],cfgin.part_ID));
 
-%Define which filter settings to use.
-% d=designfilt('highpassfir', 'PassbandFrequency', 10,...
-%       'PassbandRipple',0.5,'StopbandFrequency',0.02 ,...
-%       'StopbandAttenuation',65,'SampleRate',20,...
-%       'DesignMethod','equiripple');
-
-
+%Decide to plot the power spectrum before and after filterering.
+doplot_freq_filt = 0;
+doplot_freq_timecourse = 1;
 %Loop over participant 3 seperate blocks
 for ipart = 1:length(blocks_ID)
   cd(filepath)
@@ -76,8 +69,19 @@ for ipart = 1:length(blocks_ID)
     t_stop  = t_stop+91;
   end
 
+  if doplot_freq_timecourse
+    %Plot the figure
+    figure(1),clf
+    subplot(2,1,1)
+    % loglog(freq.freq, freq.powspctrm, 'linewidth', 0.1); hold on; 22=1s.
+    ab = squeeze(freq_concat(100,10,1:1000));
+    ab(500:600)=NaN;
+    plot(ab, 'k', 'linewidth', 1);
+    ntitle('Unfiltered freq powspctrm','location','northeast','fontsize',10,'edgecolor','k')
 
-  %Loop over each chan and each freq, and run the defined filtering.
+  end
+
+  %Loop over each chan and each freq, and run the defined filtering. 1.2497e-26
   for ichan = 1:length(freq.label)
     disp(ichan)
     for ifreq = 1:length(freq.freq)
@@ -93,10 +97,34 @@ for ipart = 1:length(blocks_ID)
     end
   end
 
+  if doplot_freq_timecourse
+    %Plot the 2nd filtered figure
+    subplot(2,1,2)
+    % loglog(freq.freq, freq.powspctrm, 'linewidth', 0.1); hold on;
+    ab = squeeze(freq_concat(100,10,1:1000));
+    ab(500:600)=NaN;
+    plot(ab, 'k', 'linewidth', 1);
+    ntitle('Filtered freq powspctrm','location','northeast','fontsize',10,'edgecolor','k')
+    cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
+    saveas(gca,'testing_diff_timecource_filt_freq_continuous.png')
+  end
+
   %Now the question is how we re-assemble the data where it belongs:
   %Into the original trials... The question is also if all trials are
   %still present. Looks like some trials are indeed missing.
   %and its not due to no resp. Its 10 in total.
+
+  if doplot_freq_filt
+      %Plot the figure
+      figure(1),clf
+      subplot(1,2,1)
+      % loglog(freq.freq, freq.powspctrm, 'linewidth', 0.1); hold on;
+      loglog(freq.freq, squeeze(mean(mean(mean(freq.powspctrm,1),4),2)), 'k', 'linewidth', 1);
+      xlim([1 33])
+      ntitle('Unfiltered freq powspctrm','location','northeast','fontsize',10,'edgecolor','k')
+
+
+  end
 
   freq.powspctrm = zeros(size(freq.powspctrm,1),size(freq.powspctrm,2),...
                     size(freq.powspctrm,3),91);
@@ -109,6 +137,17 @@ for ipart = 1:length(blocks_ID)
     t_start = t_start+91;
     t_stop  = t_stop+91;
 
+  end
+
+  if doplot_freq_filt
+      %Plot the figure
+      subplot(1,2,2)
+      % loglog(freq.freq, freq.powspctrm, 'linewidth', 0.1); hold on;
+      loglog(freq.freq, squeeze(mean(mean(mean(freq.powspctrm,1),4),2))', 'k', 'linewidth', 1);
+      xlim([1 33])
+      ntitle('Filtered freq powspctrm','location','northeast','fontsize',10,'edgecolor','k')
+      cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
+      saveas(gca,'testing_diff_filt_freq_continuous.png')
   end
 
   freq.time=freq.time(6):0.05:freq.time(97);

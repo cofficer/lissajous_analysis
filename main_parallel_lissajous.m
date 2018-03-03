@@ -62,7 +62,7 @@ switch runcfg.execute
 
         %Set freqrange
         for icfg = 1:length(restingpaths)
-          cfgin{icfg}.freqrange = 'low';
+          cfgin{icfg}.freqrange = 'high';
         end
         if strcmp(cfgin{1}.blocktype,'continuous')
 
