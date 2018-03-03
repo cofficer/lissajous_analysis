@@ -105,7 +105,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     sample_from_stop(iblinks)        = mod(end_blink(iblinks),length(dataNoMEG.time{1}));
 
     %convert num samples to num bins. 25samples = 1 bin
-    num_bins_start(iblinks)          = floor(sample_from_start(iblinks)/25);
+    num_bins_start(iblinks)          = ceil(sample_from_start(iblinks)/25);
     num_bins_stop(iblinks)           = ceil(sample_from_stop(iblinks)/25);
 
     if num_bins_start(iblinks)<1;num_bins_start(iblinks)=1;end
