@@ -30,10 +30,10 @@ function freq = freq_lissajousCONT(cfgin)
     cfg.freqanalysistype = cfgin.freqrange;
 
     cd(cfgin.dirpart)
-    preproc_path = dir(sprintf('preproc_%s*%d.mat',cfgin.stim_self,cfgin.iblock));
+    preproc_path = dir(sprintf('preproc_%s*%d.mat',cfgin.stim_self,cfgin.iblock+1));
     load(preproc_path.name)
 
-    outputfile = sprintf('%sfreq_%s_%sBlock%d.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,cfgin.iblock(1));
+    outputfile = sprintf('%sfreq_%s_%sBlock%d.mat',cfgin.restingfile(2:3),cfg.freqanalysistype,cfg.trigger,cfgin.iblock(1)+1);
 
     cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/')
     if strcmp(cfgin.stim_self,'resp')
