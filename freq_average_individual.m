@@ -33,7 +33,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
   %Loop over participant 3 seperate blocks
   for ipart = 1:length(blocks_ID)
     suplot=suplot+1;
-
+    cd(filepath)
     %Load the freq data
     load(freqpath(blocks_ID(ipart)).name)
     disp(freqpath(blocks_ID(ipart)).name)

@@ -79,6 +79,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   %but 250ms (500/4 samples) for low.
 
   start_blink = artifact_eog(:,1)-125;
+  start_blink(start_blink<1)=1;
   end_blink   = artifact_eog(:,2)+125;
 
 
@@ -96,16 +97,20 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   for iblinks = 1:length(start_blink)
     %find trial of the blink.
     %insert nan at the time-freq been affected.
-    trl=floor(start_blink(iblinks)/length(dataNoMEG.time{1}));
+    trl=ceil(start_blink(iblinks)/length(dataNoMEG.time{1}));
+
     %How do find the affect tbins?
     %How many samples in each tbin? 25. 1 sample = 0.002s. 1 bin = 0.05.
     sample_from_start(iblinks)       = mod(start_blink(iblinks),length(dataNoMEG.time{1}));
     sample_from_stop(iblinks)        = mod(end_blink(iblinks),length(dataNoMEG.time{1}));
-    num_bins_start(iblinks)          = floor(sample_from_start(iblinks)/length(dataNoMEG.time{1}));
-    num_bins_stop(iblinks)           = ceil(sample_from_stop(iblinks)/length(dataNoMEG.time{1}));
-    %the num_bins_start, until num_bins_stop
+
+    %convert num samples to num bins. 25samples = 1 bin
+    num_bins_start(iblinks)          = floor(sample_from_start(iblinks)/25);
+    num_bins_stop(iblinks)           = ceil(sample_from_stop(iblinks)/25);
+
     if num_bins_start(iblinks)<1;num_bins_start(iblinks)=1;end
 
+    %the num_bins_start, until num_bins_stop
     freq_nan(trl,:,:,num_bins_start(iblinks):num_bins_stop(iblinks))=NaN;
 
   end
