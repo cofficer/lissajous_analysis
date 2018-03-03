@@ -60,6 +60,10 @@ switch runcfg.execute
         runcfg.nnodes = 1;%64; % how many licenses?
         runcfg.stack = 1;%round(length(cfg1)/nnodes);
 
+        %Set freqrange
+        for icfg = 1:length(restingpaths)
+          cfgin{icfg}.freqrange = 'low';
+        end
         if strcmp(cfgin{1}.blocktype,'continuous')
 
           freq_lissajous_wrap(cfgin,runcfg)

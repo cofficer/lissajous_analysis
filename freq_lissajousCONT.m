@@ -27,7 +27,7 @@ function freq = freq_lissajousCONT(cfgin)
     end
     cfg.channel     ='MEG'; %
     cfg.trials      = 'all';
-    cfg.freqanalysistype = 'low';
+    cfg.freqanalysistype = cfgin.freqrange;
 
     cd(cfgin.dirpart)
     preproc_path = dir(sprintf('preproc_%s*%d.mat',cfgin.stim_self,cfgin.iblock));
