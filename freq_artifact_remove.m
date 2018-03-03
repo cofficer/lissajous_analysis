@@ -41,12 +41,6 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   cfg.toilim = [-2.25 2.25];
   dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)
 
-  %Remove trials that are not present in the freq data.
-  cfg = [];
-  cfg.trials = zeros(1,length(dataNoMEG.time));
-  cfg.trials(freq.trialinfo(:,6))=1;
-  cfg.trials=logical(cfg.trials);
-  dataNoMEG = ft_selectdata(cfg,dataNoMEG);
 
   %Eye artifact detection.
   cfg                              = [];
