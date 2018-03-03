@@ -31,7 +31,7 @@ cd(filepath)
 doplot     = 0;
 compSwitch = 0;
 if strcmp(cfgin.blocktype,'continuous')
-  freqpath   = dir(sprintf('*%s*-26-26*',cfgin.freqrange));
+  freqpath   = dir(sprintf('*%s*.mat',cfgin.freqrange));
 else
   freqpath   = dir(sprintf('*stim_%s*',cfgin.freqrange));
 end
@@ -70,7 +70,7 @@ for ipart = 1:length(blocks_ID)
   t_stop  = 91;
   for itrl = 1:size(freq.powspctrm,1)
 
-    freq_concat(:,:,t_start:t_stop) = squeeze(freq.powspctrm(itrl,:,:,3:93));
+    freq_concat(:,:,t_start:t_stop) = squeeze(freq.powspctrm(itrl,:,:,6:96));
     % time_concat(1,appropriate time indices) = data.time{itrl}(:);
     t_start = t_start+91;
     t_stop  = t_stop+91;
@@ -111,7 +111,7 @@ for ipart = 1:length(blocks_ID)
 
   end
 
-  freq.time=freq.time(3):0.05:freq.time(94);
+  freq.time=freq.time(6):0.05:freq.time(97);
 
   %Save, average switch and no switch and save as switch trials.
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/filtered')
@@ -147,9 +147,19 @@ for ipart = 1:length(blocks_ID)
 
 
     %Remove the trials where there is no buttonpress.
-    idx_noswitch(nopress(length(idx_noswitch)))=0;
-    idx_switch(nopress(length(idx_switch)))=0;
+    idx_noswitch(nopress)=0;
+    idx_switch(nopress)=0;
     currNum = partnum(ipart);
+
+    %Remove the trials where there are artifacts.
+    %Call function for all artifacts.
+    %inputs: participant nr, and iblock, freq.
+    %outputs: full freq, but with nans. and idx of
+    %trials to remove.
+    [idx_artifacts, freq]         = freq_artifact_remove(freq,cfgin,ipart);
+    idx_noswitch(idx_artifacts)   = 0;
+    idx_switch(idx_artifacts)     = 0;
+
 
     %select trials,
     cfg.avgoverrpt = 'no';
