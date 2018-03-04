@@ -4,7 +4,7 @@
 %Set paths
 warning off
 
-whichFieldtrip = '2017-3';%'2017-2';
+whichFieldtrip = 'git';%'2017-2';
 
 if strcmp(whichFieldtrip,'2015')
 
@@ -55,6 +55,17 @@ elseif strcmp(whichFieldtrip,'2017-3')
     addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous'))
     addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos'))
     ft_defaults
+
+  elseif strcmp(whichFieldtrip,'git')
+
+
+      % addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/code/'))
+      addpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/fieldtrip/')
+      addpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/fieldtrip/qsub')
+      addpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/fieldtrip/qsubcellfun')
+      addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous'))
+      addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos'))
+      ft_defaults
 
 
 end

@@ -21,35 +21,36 @@ if strcmp(cfg.subtractmode,'within')
   freq12    = append_trialfreq([],freq1,freq2);
   %instead of using the average of the two inputs, one could load
   %cue-locked data.
-  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/cue')
-  freqpath   = dir(sprintf('*%s*-26-26*',cfgin.freqrange));
-
-  namecell = {freqpath.name};
-  partnum = cellfun(@(x) x(1:2),namecell,'UniformOutput',false);
-  partnum = cellfun(@str2num,partnum,'UniformOutput',false);
-  blocks_ID = find(ismember([partnum{:}],cfgin.part_ID));
-
-  for ipart = 1:length(blocks_ID)
-    load(freqpath(blocks_ID(ipart)).name)
-    if ipart>1
-      cfg2=[];
-      cfg2.trials=freq.trialinfo(:,5)>0;
-      freqtmp = ft_selectdata(cfg2,freq);
-      %new function for appending data.
-      freq12 = append_trialfreq([],freq12,freqtmp);
-      freqtmp=[];
-    else
-      cfg2=[];
-      cfg2.trials=freq.trialinfo(:,5)>0;
-      freq12 = ft_selectdata(cfg2,freq);
-    end
-  end
+  % cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/cue')
+  % freqpath   = dir(sprintf('*%s*-26-26*',cfgin.freqrange));
+  %
+  % namecell = {freqpath.name};
+  % partnum = cellfun(@(x) x(1:2),namecell,'UniformOutput',false);
+  % partnum = cellfun(@str2num,partnum,'UniformOutput',false);
+  % blocks_ID = find(ismember([partnum{:}],cfgin.part_ID));
+  %
+  % for ipart = 1:length(blocks_ID)
+  %   load(freqpath(blocks_ID(ipart)).name)
+  %   if ipart>1
+  %     cfg2=[];
+  %     cfg2.trials=freq.trialinfo(:,5)>0;
+  %     freqtmp = ft_selectdata(cfg2,freq);
+  %     %new function for appending data.
+  %     freq12 = append_trialfreq([],freq12,freqtmp);
+  %     freqtmp=[];
+  %   else
+  %     cfg2=[];
+  %     cfg2.trials=freq.trialinfo(:,5)>0;
+  %     freq12 = ft_selectdata(cfg2,freq);
+  %   end
+  % end
 
   %Average the loaded cue data.
   cfg2      = [];
   cfg2.avgoverrpt = 'yes';
+  cfg2.nanmean = 'yes';
   freq12    = ft_selectdata(cfg2,freq12);
-  freq12 = nanmean(freq12.powspctrm(:,:,41:51),3);
+  freq12 = nanmean(freq12.powspctrm(:,:,:),3);
 
 elseif strcmp(cfg.subtractmode,'combine') %not sure about the combine.
 

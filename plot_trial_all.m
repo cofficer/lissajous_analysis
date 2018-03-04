@@ -12,12 +12,12 @@ clear all
 
 blocktype = 'continuous' %continuous or trial
 stim_self = ''; %'' or resp.
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average',blocktype))
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype))
 
 %Define if looking at switch vs no switch
 sw_vs_nsw = 1;
 
-freqfiles= dir('*high*');
+freqfiles= dir('*switch_low*');
 load(freqfiles(1).name)
 
 
@@ -78,7 +78,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-3 3];
+cfg.zlim         = [-3e-28 3e-28];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 % cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -100,7 +100,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim9_highfreq_CONT_TFR_zlim3_sensorsRightTemporal_60-90Hz_switch');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim9_lowfreq_CONT_TFR_zlim3_switch');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -113,10 +113,10 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-4 4];
-cfg.ylim         = [4 8];%7 12
+cfg.zlim         = [-3e-28 3e-28];
+cfg.ylim         = [7 12];%7 12
 % cfg.ylim         = [15 25];
-% cfg.layout       = 'CTF275_helmet.mat';
+cfg.layout       = 'CTF275_helmet.mat';
 cfg.xlim         = [-0.5 -0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
@@ -133,7 +133,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/f
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim9_4-8Hzfreq_CONT_TOPO_t-05-0s_zlim4');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim10_7-12Hzfreq_CONT_TOPO_t-05-0s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

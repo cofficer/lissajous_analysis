@@ -19,11 +19,14 @@ function output = run_permute_sensors(cfgin)
   % freq_paths = dir('*freqavgs_all_high*'); %or freqavgs_high.
 
   clear all
-  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/self/');
+
+  blocktype = 'continuous';
+
+  mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self/',blocktype);
   cd(mainDir)
 
   %Store all the seperate data files
-  stim_paths = dir('*high*'); %or freqavgs_high.
+  stim_paths = dir('*switch_high*'); %or freqavgs_high.
   % load(stim_paths(1).name)
   % cfg =[];
   % cfg.avgoverrpt = 'yes';
@@ -41,7 +44,8 @@ function output = run_permute_sensors(cfgin)
     % cfg.avgoverrpt = 'yes';
     % freq = ft_selectdata(cfg,freq);
     % all_stim(ifiles,:,:,:) = freq.powspctrm;
-    allsubjStim{ifiles}=freq;
+    allsubjStim{ifiles}=switchTrial;
+    allsubjCue{ifiles}=stableTrial;
   end
 
   %Decide on which frequency to use:
@@ -54,11 +58,11 @@ function output = run_permute_sensors(cfgin)
   % all_stim=squeeze(nanmean(all_stim(:,:,13:19,:),3));
 
   %Load the baseline freq data.
-  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/stimoff/';
+  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average/stimoff/';
   cd(mainDir)
 
   %Store all the seperate data files
-  cue_paths = dir('*high*');
+  cue_paths = dir('*low_switch*');
 
   %Load all participants
   for ifiles = 1:length(stim_paths)
@@ -83,8 +87,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(15) allsubjStim{ifiles}.time(23)]; %13, 19
-  time1 = [allsubjCue{ifiles}.time(33) allsubjCue{ifiles}.time(41)];
+  time0 = [allsubjStim{ifiles}.time(46) allsubjStim{ifiles}.time(51)]; %13, 19
+  time1 = [allsubjCue{ifiles}.time(46) allsubjCue{ifiles}.time(51)];
 
   %Trying the orginal baseline comparison...
   % time0 = [freq.time(1) freq.time(11)];
@@ -172,7 +176,7 @@ function output = run_permute_sensors(cfgin)
   hf=figure(1),clf
   %ax1=subplot(2,2,1)
   cfg=[];
-  cfg.zlim         = [-5 5];
+  cfg.zlim         = [-3 3];
   %cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
   %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -192,11 +196,11 @@ function output = run_permute_sensors(cfgin)
   colormap(hf,flipud(brewermap(64,'RdBu')))
 
 
-  cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
+  cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures'))
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim17_stimoffbaseline-01-05_permutation_self-locked0105s_60-90Hz');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim10_60-90Hz_switchvsnoswitch_nobaseline_-25-0s');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   % set(gca,'PaperpositionMode','Auto')

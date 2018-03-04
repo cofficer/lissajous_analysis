@@ -72,11 +72,11 @@ for ipart = 1:length(blocks_ID)
   if doplot_freq_timecourse
     %Plot the figure
     figure(1),clf
-    subplot(2,1,1)
+    subplot(2,1,1) % unfilt=freq_concat;
     % loglog(freq.freq, freq.powspctrm, 'linewidth', 0.1); hold on; 22=1s.
-    ab = squeeze(freq_concat(100,10,1:1000));
-    ab(500:600)=NaN;
-    plot(ab, 'k', 'linewidth', 1);
+    ab1 = squeeze(unfilt(100,10,1000:1400));
+    % ab(500:600)=NaN;
+    plot(ab1, 'k', 'linewidth', 1);
     ntitle('Unfiltered freq powspctrm','location','northeast','fontsize',10,'edgecolor','k')
 
   end
@@ -99,14 +99,23 @@ for ipart = 1:length(blocks_ID)
 
   if doplot_freq_timecourse
     %Plot the 2nd filtered figure
-    subplot(2,1,2)
+    subplot(2,1,2) %filt = freq_concat;
     % loglog(freq.freq, freq.powspctrm, 'linewidth', 0.1); hold on;
-    ab = squeeze(freq_concat(100,10,1:1000));
-    ab(500:600)=NaN;
-    plot(ab, 'k', 'linewidth', 1);
+    ab2 = squeeze(filt(100,10,1100:1500));
+    % ab(500:600)=NaN;
+    plot(ab2, 'k', 'linewidth', 1);
     ntitle('Filtered freq powspctrm','location','northeast','fontsize',10,'edgecolor','k')
     cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures')
     saveas(gca,'testing_diff_timecource_filt_freq_continuous.png')
+
+    [acor,lag]=xcorr(squeeze(filt(100,10,:)),squeeze(unfilt(100,10,:)));
+    [~,I] = max(abs(acor));
+    lagDiff = lag(I)
+    figure
+    plot(lag,acor)
+    xlim([-500 500])
+    saveas(gca,'testing_diff_timecource_filt_freq_continuous_error.png')
+
   end
 
   %Now the question is how we re-assemble the data where it belongs:
