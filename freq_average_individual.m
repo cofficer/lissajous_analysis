@@ -137,7 +137,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
 
   if ~strcmp(cfg2.subtractmode,'no')
     % CG commented out the baseline for now. 2018-01-15.
-    [freq1,freq2] = baseline_lissajous(switchTrial,stableTrial,cfg,cfgin);
+    [freq1,freq2] = baseline_lissajous(switchTrial,stableTrial,cfg2,cfgin);
   end
 
   %Make the freq the trial average
