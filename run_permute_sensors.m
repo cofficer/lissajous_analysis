@@ -36,6 +36,10 @@ function output = run_permute_sensors(cfgin)
   % dims = size(freq.powspctrm);
   % all_stim = zeros(29,dims(1),dims(2),dims(3));
 
+  %exclude 8 and 19.
+  % stim_paths(28)=[];
+  % stim_paths(11)=[];
+
   %Load all participants
   for ifiles = 1:length(stim_paths)
     disp((stim_paths(ifiles).name))
@@ -87,8 +91,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(46) allsubjStim{ifiles}.time(51)]; %13, 19
-  time1 = [allsubjCue{ifiles}.time(46) allsubjCue{ifiles}.time(51)];
+  time0 = [allsubjStim{ifiles}.time(39) allsubjStim{ifiles}.time(45)]; %13, 19
+  time1 = [allsubjCue{ifiles}.time(39) allsubjCue{ifiles}.time(45)];
 
   %Trying the orginal baseline comparison...
   % time0 = [freq.time(1) freq.time(11)];
@@ -111,7 +115,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time0.time(1), dat_time0.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[60 90];
+  cfg.frequency =[60 100];
   dat_time0 = ft_selectdata(cfg,dat_time0);
 
 
@@ -119,7 +123,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[60 90];
+  cfg.frequency =[60 100];
   cfg.latency = time1;
   dat_time1 = ft_selectdata(cfg,dat_time1);
 
@@ -137,13 +141,13 @@ function output = run_permute_sensors(cfgin)
   cfg.minnbchan        = 2;
   cfg.tail             = 0;
   cfg.clustertail      = 0;
-  cfg.alpha            = 0.025;
+  cfg.alpha            = 0.05;
   cfg.numrandomization = 500;
   % prepare_neighbours determines what sensors may form clusters
   cfg_neighb.method    = 'distance';
   cfg.neighbours       = ft_prepare_neighbours(cfg_neighb, freq);
 
-  subj = 29;
+  subj = size(dat_time0.powspctrm,1);
   design = zeros(2,2*subj);
   for i = 1:subj
     design(1,i) = i;
@@ -200,7 +204,7 @@ function output = run_permute_sensors(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim10_60-90Hz_switchvsnoswitch_nobaseline_-25-0s');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim10_60-100Hz_switchvsnoswitch_wholetrialbaseline_-06-03s');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   % set(gca,'PaperpositionMode','Auto')
