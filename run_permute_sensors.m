@@ -26,7 +26,7 @@ function output = run_permute_sensors(cfgin)
   cd(mainDir)
 
   %Store all the seperate data files
-  stim_paths = dir('*switch_high*'); %or freqavgs_high.
+  stim_paths = dir('*switch_low*'); %or freqavgs_high.
   % load(stim_paths(1).name)
   % cfg =[];
   % cfg.avgoverrpt = 'yes';
@@ -91,8 +91,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(39) allsubjStim{ifiles}.time(45)]; %13, 19
-  time1 = [allsubjCue{ifiles}.time(39) allsubjCue{ifiles}.time(45)];
+  time0 = [allsubjStim{ifiles}.time(41) allsubjStim{ifiles}.time(51)]; %13, 19
+  time1 = [allsubjCue{ifiles}.time(41) allsubjCue{ifiles}.time(51)];
 
   %Trying the orginal baseline comparison...
   % time0 = [freq.time(1) freq.time(11)];
@@ -115,7 +115,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time0.time(1), dat_time0.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[60 100];
+  cfg.frequency =[15 20];
   dat_time0 = ft_selectdata(cfg,dat_time0);
 
 
@@ -123,7 +123,7 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[60 100];
+  cfg.frequency =[15 20];
   cfg.latency = time1;
   dat_time1 = ft_selectdata(cfg,dat_time1);
 
@@ -204,7 +204,7 @@ function output = run_permute_sensors(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim10_60-100Hz_switchvsnoswitch_wholetrialbaseline_-06-03s');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim10_4-8Hz_switchvsnoswitch_wholetrialbaseline_1-15s');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   % set(gca,'PaperpositionMode','Auto')
