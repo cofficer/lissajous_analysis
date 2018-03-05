@@ -10,17 +10,16 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   cd(sprintf('%s%s/preprocessed/%s/%s/',cfgin.fullpath(1:56),...
   cfgin.blocktype,cfgin.restingfile,cfgin.stim_self))
   if strcmp(cfgin.blocktype,'trial')
-    preproc_path = dir(sprintf('preproc*%s.mat',cfgin.restingfile));
+    preproc_path = dir(sprintf('*noMEG*%s*block1.mat',cfgin.restingfile));
     load(preproc_path.name) %dataNoMEG
-
-    %Get all data except for the MEG.
-    cfg          = [];
-    cfg.channel  = {'all','-MEG'};
-    dataNoMEG    = ft_selectdata(cfg,data);
 
     cfg = [];
     cfg.toilim = [-2.25 0.5];
-    dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)
+    dataNoMEG = ft_redefinetrial(cfg,dataNoMEG);
+
+    cfg = [];
+    cfg.trials = freq.trialinfo(:,12);
+    dataNoMEG = ft_selectdata(cfg,dataNoMEG);
 
   else
     preproc_path = dir(sprintf('*noMEG*%d.mat',ipart+1));
