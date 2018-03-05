@@ -20,7 +20,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     cfg = [];
     cfg.trials = freq.trialinfo(:,12);
     dataNoMEG = ft_selectdata(cfg,dataNoMEG);
-
+    idx_artifacts=[];
   else
     preproc_path = dir(sprintf('*noMEG*%d.mat',ipart+1));
     load(preproc_path.name) %dataNoMEG

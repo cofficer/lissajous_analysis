@@ -88,7 +88,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
   end
 
   %Remove eye artifacts:
-  freqAll = freq_artifact_remove(freqAll,cfgin,[]);
+  [~,freqAll] = freq_artifact_remove(freqAll,cfgin,[]);
 
   [freq_base] = baseline_lissajous_all(freqAll,cfg,cfgin);
 
