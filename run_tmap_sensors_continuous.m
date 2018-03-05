@@ -15,7 +15,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   cd(mainDir)
 
   %Store all the seperate data files
-  stim_paths = dir('freqavgs_switch_high*'); %or freqavgs_high.
+  stim_paths = dir('freqavgs_switch_low*'); %or freqavgs_high.
   load(stim_paths(1).name)
 
 
@@ -55,7 +55,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   %Average over the sensors.
   %Average over time period and over frequency. Does it matter which order?
   %First freq average all_stimA= all_stim; all_baseA=all_base;
-  %all_stim=all_stimA; all_base=all_baseA;
+  %all_stim=all_stimA; all_base=all_baseA; idx_lissajous=freq.label(stat.mask)
   % all_stim=squeeze(nanmean(all_stim(:,idx_trialsens,:,:),2));
   all_stim=squeeze(nanmean(all_stim(:,:,13:28,:),3));
   all_stim=squeeze(nanmean(all_stim(:,:,41:51),3));
@@ -75,7 +75,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   STATS.tstat;
 
 
-  tavalue = (STATS.tstat'); %tavalue(1,:,:)=all_freq; %tavalue(1,:,:)=nanmean(all_stim,1);
+  tavalue = squeeze(STATS.tstat); %tavalue(1,:,:)=all_freq; %tavalue(1,:,:)=nanmean(all_stim,1);
   %tavalue = squeeze(STATS.tstat);
   %Plot the topo.
   %Make freq a vector
@@ -130,7 +130,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   cfg.interactive = 'no';
   cfg.channel      = idx_lissajous;%freq.label(idx_occ);%idx_motor';%
   cfg.colorbar           = 'yes'
-  cfg.title='Topo all participants high freq';
+  cfg.title='Topo all participants low freq';
   ft_singleplotTFR(cfg,freq)
   %ft_multiplotTFR(cfg,freq)
   % ft_topoplotTFR(cfg,freq)
@@ -142,7 +142,7 @@ function output = run_tmap_sensors_continuous(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim10_tmap_highFreq_TFR_switchvsnoswitch_nobaseline_60-90HzVisualSensors');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim10_tmap_lowfreq_TFR_switchvsnoswitch_wholebaseline_15-20HzVisualSensors');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   set(hf,'PaperpositionMode','Auto')

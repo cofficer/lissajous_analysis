@@ -10,14 +10,14 @@ function plot_trial_all(~)
 %Load and average all averaged high data.
 clear all
 
-blocktype = 'continuous' %continuous or trial
+blocktype = 'trial' %continuous or trial
 stim_self = ''; %'' or resp.
 cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype))
 
 %Define if looking at switch vs no switch
-sw_vs_nsw = 1;
+sw_vs_nsw = 0;
 
-freqfiles= dir('*switch_low*');
+freqfiles= dir('*all_low*');
 load(freqfiles(1).name)
 
 

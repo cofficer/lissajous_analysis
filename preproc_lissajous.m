@@ -218,7 +218,7 @@ function data = preproc_lissajous(cfgin)
         idx_trials = ones(1,length(data.trial));
         idx_trials(idx_jump) = 0;
         cfg.trials = find(idx_trials');
-        % data       = ft_selectdata(cfg,data);
+        data       = ft_selectdata(cfg,data);
       else
         idx_jump=[];
         title('No jumps')
@@ -273,12 +273,12 @@ function data = preproc_lissajous(cfgin)
       cfg.artfctdef.zvalue.cutoff      = 30;
       [~, artifact_Muscle]             = ft_artifact_zvalue(cfg, data);
 
-      % cfg                              = [];
-      % cfg.artfctdef.reject             = 'complete'; %But identify where.
-      %102/103 718826, compare artifact_Muscle samples against the sampleinfo...
-      % cfg.artfctdef.muscle.artifact    = artifact_Muscle;
-      % data2                             = ft_rejectartifact(cfg,data);
-      %
+      cfg                              = [];
+      cfg.artfctdef.reject             = 'complete'; %But identify where.
+      % 102/103 718826, compare artifact_Muscle samples against the sampleinfo...
+      cfg.artfctdef.muscle.artifact    = artifact_Muscle;
+      data2                             = ft_rejectartifact(cfg,data);
+
       % % plot final power spectrum
       freq            = ft_freqanalysis(cfgfreq, data);
       subplot(2,3,cnt);

@@ -24,7 +24,7 @@ for icfg = 1:length(restingpaths)
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
     cfgin{idx_cfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin{idx_cfg}.blocktype               = 'continuous'; % trial or continuous.
+    cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
     cfgin{idx_cfg}.stim_self               = 'self'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
                                                          %Or stim_off = data from when stimulus offset.
                                                          %Baseline = time-period 100-600ms after stim offset
@@ -37,7 +37,7 @@ for icfg = 1:length(restingpaths)
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -85,7 +85,7 @@ switch runcfg.execute
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
         cfgin{icfgin}.freqrange='low';
         %Create new average freq or not.
-        cfgin{icfgin}.load_avg   = 'createSwitch'; %switch,createSwitch,createAll, loadAll
+        cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
         %Create topo of tfr plots
         %cfgin=cfgin{29}
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot

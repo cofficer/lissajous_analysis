@@ -20,13 +20,13 @@ function output = run_permute_sensors(cfgin)
 
   clear all
 
-  blocktype = 'continuous';
+  blocktype = 'trial';
 
   mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self/',blocktype);
   cd(mainDir)
 
   %Store all the seperate data files
-  stim_paths = dir('*switch_low*'); %or freqavgs_high.
+  stim_paths = dir('*all_high*'); %or freqavgs_high.
   % load(stim_paths(1).name)
   % cfg =[];
   % cfg.avgoverrpt = 'yes';
@@ -48,8 +48,9 @@ function output = run_permute_sensors(cfgin)
     % cfg.avgoverrpt = 'yes';
     % freq = ft_selectdata(cfg,freq);
     % all_stim(ifiles,:,:,:) = freq.powspctrm;
-    allsubjStim{ifiles}=switchTrial;
-    allsubjCue{ifiles}=stableTrial;
+    allsubjStim{ifiles}=freq;
+    % allsubjStim{ifiles}=switchTrial;
+    % allsubjCue{ifiles}=stableTrial;
   end
 
   %Decide on which frequency to use:
@@ -57,16 +58,16 @@ function output = run_permute_sensors(cfgin)
   freq_ind1=13;
   freq_ind2=33;
 
-  % all_stim=squeeze(nanmean(all_stim(:,:,13:28,:),3));
+  all_stim=squeeze(nanmean(all_stim(:,:,13:18,:),3));
   %Second time average
-  % all_stim=squeeze(nanmean(all_stim(:,:,13:19,:),3));
+  all_stim=squeeze(nanmean(all_stim(:,:,13:19),3));
 
   %Load the baseline freq data.
-  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/average/stimoff/';
+  mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/stimoff/';
   cd(mainDir)
 
   %Store all the seperate data files
-  cue_paths = dir('*low_switch*');
+  cue_paths = dir('*all_high*');
 
   %Load all participants
   for ifiles = 1:length(stim_paths)
@@ -80,10 +81,10 @@ function output = run_permute_sensors(cfgin)
   end
 
   %Average over freq
-  % all_cue=squeeze(nanmean(all_cue(:,:,13:28,:),3));
+  all_cue=squeeze(nanmean(all_cue(:,:,13:18,:),3));
 
   %Average over time
-  % all_cue=squeeze(nanmean(all_cue(:,:,:),3));
+  all_cue=squeeze(nanmean(all_cue(:,:,15:23),3));
 
 
   %Insert new data in freq struct.
@@ -91,8 +92,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   % Select data for time of interest.
-  time0 = [allsubjStim{ifiles}.time(41) allsubjStim{ifiles}.time(51)]; %13, 19
-  time1 = [allsubjCue{ifiles}.time(41) allsubjCue{ifiles}.time(51)];
+  time0 = [allsubjStim{ifiles}.time(12) allsubjStim{ifiles}.time(18)]; %13, 19,   41 51
+  time1 = [allsubjCue{ifiles}.time(33) allsubjCue{ifiles}.time(41)];
 
   %Trying the orginal baseline comparison...
   % time0 = [freq.time(1) freq.time(11)];
@@ -101,11 +102,13 @@ function output = run_permute_sensors(cfgin)
   cfg = [];
   cfg.keepindividual = 'yes';
   cfg.toilim =time0;
+  % cfg.channel=visual_sensors;
   dat_time0= ft_freqgrandaverage(cfg,allsubjStim{:})
 
   cfg = [];
   cfg.keepindividual = 'yes';
   cfg.toilim =time1;
+  % cfg.channel=visual_sensors;
   dat_time1= ft_freqgrandaverage(cfg,allsubjCue{:})
 
   % dat_time0.time = dat_time1.time;
@@ -115,7 +118,8 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time0.time(1), dat_time0.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[15 20];
+  cfg.frequency =[60 90];
+  % cfg.avgoverchan ='yes';
   dat_time0 = ft_selectdata(cfg,dat_time0);
 
 
@@ -123,20 +127,29 @@ function output = run_permute_sensors(cfgin)
   cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
   cfg.avgovertime ='yes';
   cfg.avgoverfreq ='yes';
-  cfg.frequency =[15 20];
-  cfg.latency = time1;
+  cfg.frequency =[60 90];
+  % cfg.latency = time1;
+  % cfg.avgoverchan ='yes';
   dat_time1 = ft_selectdata(cfg,dat_time1);
 
   dat_time0.time = dat_time1.time;
 
+  dat_time1.powspctrm = squeeze(dat_time1.powspctrm);
+  dat_time0.powspctrm = squeeze(dat_time0.powspctrm);
+  dat_time1.dimord = 'subj_freq_time';
+  dat_time0.dimord = 'subj_freq_time';
+
+  %Try doing TFR cluster stats.
+  load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_visual_sensors.mat')
+
   cfg = [];
-  cfg.channel          = {'MEG'};
+  cfg.channel          =  {'MEG'}; % visual_sensors; %
   % cfg.latency          = [0.3 0.7];
   cfg.method           = 'montecarlo';
   % cfg.frequency        = 75;
   cfg.statistic        = 'ft_statfun_depsamplesT';
   cfg.correctm         = 'cluster';
-  cfg.clusteralpha     = 0.05; %Normal 0.05
+  cfg.clusteralpha     = 0.008; %Normal 0.05
   cfg.clusterstatistic = 'maxsum';
   cfg.minnbchan        = 2;
   cfg.tail             = 0;
@@ -146,6 +159,7 @@ function output = run_permute_sensors(cfgin)
   % prepare_neighbours determines what sensors may form clusters
   cfg_neighb.method    = 'distance';
   cfg.neighbours       = ft_prepare_neighbours(cfg_neighb, freq);
+  % cfg.channel           = dat_time0.label;
 
   subj = size(dat_time0.powspctrm,1);
   design = zeros(2,2*subj);
@@ -180,7 +194,7 @@ function output = run_permute_sensors(cfgin)
   hf=figure(1),clf
   %ax1=subplot(2,2,1)
   cfg=[];
-  cfg.zlim         = [-3 3];
+  cfg.zlim         = [-5 5];
   %cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
   %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -200,11 +214,49 @@ function output = run_permute_sensors(cfgin)
   colormap(hf,flipud(brewermap(64,'RdBu')))
 
 
+  cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
+  %New naming file standard. Apply to all projects.
+  formatOut = 'yyyy-mm-dd';
+  todaystr = datestr(now,formatOut);
+  namefigure = sprintf('prelim10_60-90Hz_trialblock_stimoffbaseline_self-locked-195-165s');%Stage of analysis, frequencies, type plot, baselinewindow
+
+  figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
+  % set(gca,'PaperpositionMode','Auto')
+  saveas(gca,figurefreqname,'png')
+
+
+
+
+  hf=figure(1),clf
+  %ax1=subplot(2,2,1)
+  cfg=[];
+  cfg.zlim         = [-3 3];
+  %cfg.ylim         = [3 35];
+  cfg.layout       = 'CTF275_helmet.lay';
+  %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+  % cfg.channel      = freq.label(idx_occ);
+  cfg.interactive = 'no';
+  cfg.title='Cluster Channels';
+  %freq.powspctrm=dat_time1.powspctrm;
+
+  %ft_multiplotTFR(cfg,freq)
+  cfg.highlight          = 'on'
+  cfg.highlightchannel=freq.label(stat.mask);
+  cfg.colorbar           = 'yes'
+  cfg.highlightcolor =[0 0 0];
+  cfg.highlightsize=12;
+  cfg.parameter     = 'stat';
+  % ft_topoplotTFR(cfg,freq)
+  ft_singleplotTFR(cfg,stat);
+  %ft_hastoolbox('brewermap', 1);
+  colormap(hf,flipud(brewermap(64,'RdBu')))
+
+
   cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures'))
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim10_4-8Hz_switchvsnoswitch_wholetrialbaseline_1-15s');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim10_TFR_clusterstatistics_switchvsnoswitch_wholetrialbaseline');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   % set(gca,'PaperpositionMode','Auto')

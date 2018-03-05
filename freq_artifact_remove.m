@@ -9,37 +9,55 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   %preproc path
   cd(sprintf('%s%s/preprocessed/%s/%s/',cfgin.fullpath(1:56),...
   cfgin.blocktype,cfgin.restingfile,cfgin.stim_self))
-  preproc_path = dir(sprintf('*noMEG*%d.mat',ipart+1));
+  if strcmp(cfgin.blocktype,'trial')
+    preproc_path = dir(sprintf('preproc*%s.mat',cfgin.restingfile));
+    load(preproc_path.name) %dataNoMEG
 
-  load(preproc_path.name) %dataNoMEG
+    %Get all data except for the MEG.
+    cfg          = [];
+    cfg.channel  = {'all','-MEG'};
+    dataNoMEG    = ft_selectdata(cfg,data);
 
-  arfct_path = dir(sprintf('artifacts*%d.mat',ipart+1));
+    cfg = [];
+    cfg.toilim = [-2.25 0.5];
+    dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)
 
-  load(arfct_path.name) % artifact_Jump/Muscle/idx_jump
+  else
+    preproc_path = dir(sprintf('*noMEG*%d.mat',ipart+1));
+    load(preproc_path.name) %dataNoMEG
 
-  sampleinfo = dataNoMEG.cfg.previous.previous.trl(:,1:2);
+      arfct_path = dir(sprintf('artifacts*%d.mat',ipart+1));
 
-  %Find muscle trials
-  for iart = 1:length(artifact_Muscle)
+      load(arfct_path.name) % artifact_Jump/Muscle/idx_jump
 
-    idx_trl_mscle_start = find(artifact_Muscle(iart,1)<sampleinfo(:,2));
-    idx_trl_mscle_start = idx_trl_mscle_start(1);
+      sampleinfo = dataNoMEG.cfg.previous.previous.trl(:,1:2);
 
-    idx_trl_mscle_end = find(artifact_Muscle(iart,2)<sampleinfo(:,2));
-    idx_trl_mscle_end = idx_trl_mscle_end(1);
+      %Find muscle trials
+      for iart = 1:length(artifact_Muscle)
 
-    idx_mscle{iart} = unique([idx_trl_mscle_start,idx_trl_mscle_end]);
+        idx_trl_mscle_start = find(artifact_Muscle(iart,1)<sampleinfo(:,2));
+        idx_trl_mscle_start = idx_trl_mscle_start(1);
+
+        idx_trl_mscle_end = find(artifact_Muscle(iart,2)<sampleinfo(:,2));
+        idx_trl_mscle_end = idx_trl_mscle_end(1);
+
+        idx_mscle{iart} = unique([idx_trl_mscle_start,idx_trl_mscle_end]);
+
+      end
+
+      %Muscle and jump trials to remove.
+      idx_artifacts = unique([idx_mscle{:},idx_jump]);
+
+
+      %Identify blinks and insert nans.
+
+      cfg = [];
+      cfg.toilim = [-2.25 2.25];
+      dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)
 
   end
 
-  %Muscle and jump trials to remove.
-  idx_artifacts = unique([idx_mscle{:},idx_jump]);
 
-  %Identify blinks and insert nans.
-
-  cfg = [];
-  cfg.toilim = [-2.25 2.25];
-  dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)
 
 
   %Eye artifact detection.
