@@ -84,6 +84,8 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
       [idx_artifacts, freq]         = freq_artifact_remove(freq,cfgin,ipart);
       idx_noswitch(idx_artifacts)   = 0;
       idx_switch(idx_artifacts)     = 0;
+    else
+      [~,freq] = freq_artifact_remove(freq,cfgin,[]);
     end
 
     %select trials,
@@ -133,9 +135,9 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
     cfg2.baselinewindow        = [freq.time(1) freq.time(11)];
   else
     if strcmp(cfgin.baseline,'cue')
-      cfg.baselinewindow=[-0.7 -0.3];
+      cfg2.baselinewindow=[-0.7 -0.3];
     elseif strcmp(cfgin.baseline,'stimoff')
-      cfg.baselinewindow=[0.1 0.5];
+      cfg2.baselinewindow=[0.1 0.5];
     end
   end
 
