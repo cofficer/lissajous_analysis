@@ -15,7 +15,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
   if strcmp(cfgin.blocktype,'continuous')
     freqpath   = dir(sprintf('*%s*',cfgin.freqrange));
   else
-    freqpath   = dir(sprintf('*stim_%s*',cfgin.freqrange));
+    freqpath   = dir(sprintf('*%s*',cfgin.freqrange));
   end
 
   namecell = {freqpath.name};
@@ -55,13 +55,13 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
 
     %Find the indices of switches and non switches.
     if strcmp(cfgin.blocktype,'trial')
-      idx_switch   = zeros(1,length(freq.trialinfo(:,6)))';
-      idx_switch(freq.trialinfo(:,6)==42)   = 1;
-      idx_switch(freq.trialinfo(:,6)==45)   = 1;
-      nopress      = freq.trialinfo(:,6)==43;
-      idx_noswitch   = zeros(1,length(freq.trialinfo(:,6)))';
-      idx_noswitch(freq.trialinfo(:,6)==41)   = 1;
-      idx_noswitch(freq.trialinfo(:,6)==46)   = 1;
+      idx_switch   = zeros(1,length(freq.trialinfo(:,8)))';
+      idx_switch(freq.trialinfo(:,8)==42)   = 1;
+      idx_switch(freq.trialinfo(:,8)==45)   = 1;
+      nopress      = freq.trialinfo(:,8)==43;
+      idx_noswitch   = zeros(1,length(freq.trialinfo(:,8)))';
+      idx_noswitch(freq.trialinfo(:,8)==41)   = 1;
+      idx_noswitch(freq.trialinfo(:,8)==46)   = 1;
     else
       idx_switch   = (abs(diff(freq.trialinfo(:,5)))==7);
       nopress      = freq.trialinfo(:,5)==0;
@@ -132,7 +132,11 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
     % cfg.baselinewindow        = [-2.25 -1.85];%[-switchTrial.time(idx_time) switchTrial.time(idx_time)];
     cfg2.baselinewindow        = [freq.time(1) freq.time(11)];
   else
-    cfg2.baselinewindow        = [switchTrial.time(1) switchTrial.time(11)];
+    if strcmp(cfgin.baseline,'cue')
+      cfg.baselinewindow=[-0.7 -0.3];
+    elseif strcmp(cfgin.baseline,'stimoff')
+      cfg.baselinewindow=[0.1 0.5];
+    end
   end
 
   if ~strcmp(cfg2.subtractmode,'no')

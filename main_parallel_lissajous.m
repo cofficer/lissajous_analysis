@@ -83,9 +83,9 @@ switch runcfg.execute
       %settings for plotting and loading or creating average freq files.
       for icfgin = 1:length(cfgin)
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
-        cfgin{icfgin}.freqrange='low';
+        cfgin{icfgin}.freqrange='high';
         %Create new average freq or not.
-        cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
+        cfgin{icfgin}.load_avg   = 'createSwitch'; %switch,createSwitch,createAll, loadAll
         %Create topo of tfr plots
         %cfgin=cfgin{29}
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
