@@ -77,8 +77,8 @@ function data = preproc_lissajous(cfgin)
 
       if ~strcmp(cfgin.blocktype,'continuous')
         if strcmp(cfgin.stim_self,'stim')
-          cfg.trialdef.prestim        = 1; % -2in seconds
-          cfg.trialdef.poststim       = 2; % 1in seconds
+          cfg.trialdef.prestim        = 4; % -2in seconds
+          cfg.trialdef.poststim       = -1; % 1in seconds
         elseif strcmp(cfgin.stim_self,'cue')
           cfg.trialdef.prestim        = 2; %200ms bf stimoff. Negative means after self-occlusion
           cfg.trialdef.poststim       = 1;  %800ms after stimoff.

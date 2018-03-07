@@ -120,10 +120,12 @@ function output = run_tmap_sensors_continuous(cfgin)
 
 
   hf=figure(1),clf
-  ax2=subplot(1,1,1)
+  set(hf, 'Position', [0 0 800 800])
+
+  ax2=subplot(2,1,2)
   % freq.powspctrm = switchTrial;
   cfg=[];
-  cfg.zlim         = [-3 3];
+  cfg.zlim         = [-10 10];
   %cfg.ylim         = [3 35];
   cfg.layout       = 'CTF275_helmet.lay';
   %cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -138,11 +140,11 @@ function output = run_tmap_sensors_continuous(cfgin)
   colormap(ax2,flipud(brewermap(64,'RdBu')))
 
 
-  cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures'))
+  cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim10_tmap_lowfreq_TFR_switchvsnoswitch_wholebaseline_15-20HzVisualSensors');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim15_freqmap_lowandhighfreq_TFR_avg_CONT_allVisual');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   set(hf,'PaperpositionMode','Auto')
