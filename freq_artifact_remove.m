@@ -109,13 +109,24 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   for iblinks = 1:length(start_blink)
     %find trial of the blink.
     %insert nan at the time-freq been affected.
-    trl=ceil(start_blink(iblinks)/length(dataNoMEG.time{1}));
+    trl_start   = ceil(start_blink(iblinks)/length(dataNoMEG.time{1}));
+    trl_stop    = ceil(end_blink(iblinks)/length(dataNoMEG.time{1}));
+
 
     %How do find the affect tbins?
     %How many samples in each tbin? 25. 1 sample = 0.002s. 1 bin = 0.05.
     sample_from_start(iblinks)       = mod(start_blink(iblinks),length(dataNoMEG.time{1}));
     sample_from_stop(iblinks)        = mod(end_blink(iblinks),length(dataNoMEG.time{1}));
 
+    %Correction for the cases where blinks extend across more than one trial.
+    %If the end trial is one larger than the start trial, then remove from
+    %sample 1 on the end trial.
+    %The samples which extend into the previous trial will be ignored since
+    %The data is not continuous.
+    if trl_stop>trl_start;
+      trl_start=trl_stop;
+      sample_from_start(iblinks)=1;
+    end
     %convert num samples to num bins. 25samples = 1 bin
     num_bins_start(iblinks)          = ceil(sample_from_start(iblinks)/25);
     num_bins_stop(iblinks)           = ceil(sample_from_stop(iblinks)/25);
@@ -125,7 +136,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     end
 
     %the num_bins_start, until num_bins_stop
-    freq_nan(trl,:,:,num_bins_start(iblinks):num_bins_stop(iblinks))=NaN;
+    freq_nan(trl_start,:,:,num_bins_start(iblinks):num_bins_stop(iblinks))=NaN;
 
   end
 
