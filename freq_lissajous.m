@@ -14,7 +14,7 @@ elseif strcmp(cfgin.stim_self,'stimoff')
 
 elseif strcmp(cfgin.stim_self,'stim')
 
-  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
+  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s_block1.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
 
 elseif strcmp(cfgin.stim_self,'self')
 
@@ -60,7 +60,7 @@ cfg.method      = 'mtmconvol';
 cfg.trigger     = cfgin.stim_self; %stim. selfoccl.
 cfg.channel     ='MEG'; %
 cfg.trials      = 'all';
-cfg.freqanalysistype = 'high';
+cfg.freqanalysistype = cfgin.freqrange;
 
 
 switch cfg.freqanalysistype
@@ -112,7 +112,7 @@ elseif strcmp(cfg.trigger,'cue')
 
 elseif strcmp(cfg.trigger,'stim')
 
-  cfg.toi = -0.5:0.05:1.5;            %still to figure
+  cfg.toi = -3.5:0.05:-0.5;            %still to figure
 elseif strcmp(cfg.trigger,'stim_off')
 
   cfg.toi = -4:0.05:0.1;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
