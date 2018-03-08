@@ -115,6 +115,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
 
     %How do find the affect tbins?
     %How many samples in each tbin? 25. 1 sample = 0.002s. 1 bin = 0.05.
+    %This might be wrong, if the samples are considered in terms of original Hz.
     sample_from_start(iblinks)       = mod(start_blink(iblinks),length(dataNoMEG.time{1}));
     sample_from_stop(iblinks)        = mod(end_blink(iblinks),length(dataNoMEG.time{1}));
 
@@ -128,8 +129,14 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
       sample_from_start(iblinks)=1;
     end
     %convert num samples to num bins. 25samples = 1 bin
-    num_bins_start(iblinks)          = ceil(sample_from_start(iblinks)/25);
-    num_bins_stop(iblinks)           = ceil(sample_from_stop(iblinks)/25);
+    %1 bin=50ms, 1 sample = 1/1200ms. 20 freq bins per second.
+    %1 freq bins = 50ms = 24 original samples.
+    %assuming basing all samples on the new sample rate.... does not make sense.
+    %1200*0.05 = 60. The convertion rate for orig samples to freq time bins.
+    num_bins_start(iblinks)          = ceil(sample_from_start(iblinks)/60);
+    num_bins_stop(iblinks)           = ceil(sample_from_stop(iblinks)/60);
+
+    % 2422/1200 sec from start. = 2.01, how many freq bins? one every 50ms.
 
     if num_bins_start(iblinks)<1;
       num_bins_start(iblinks)=1;
