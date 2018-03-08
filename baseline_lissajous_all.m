@@ -16,14 +16,21 @@ if strcmp(cfg.subtractmode,'within')
   cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/%s',cfgin.baseline))
   freqpath   = dir(sprintf('*%s*',cfgin.freqrange));
   baseline = load(freqpath(cfgin.part_ID).name);
+
+  cfg2      = [];
   if strcmp(cfgin.baseline,'stim')
     %remove blinks and remove
     cfgin2=cfgin;
-    cfgin2.stim_self ='stim';
-    [~,baseline.freq] = freq_artifact_remove(baseline.freq,cfgin2,[]);
+    cfgin2.stim_self              = 'stim';
+    [idx_artifacts,baseline.freq] = freq_artifact_remove(baseline.freq,cfgin2,[]);
+    trls_sel                      = ones(1,length(baseline.freq.trialinfo));
+    trls_sel(idx_artifacts)       = 0;
+    cfg2.trials                   = logical(trls_sel)';
   end
-  cfg2      = [];
+
   cfg2.avgoverrpt = 'yes';
+  cfg2.nanmean    = 'yes';
+
   freq12    = ft_selectdata(cfg2,baseline.freq);
   toi1 = find(round(freq12.time,2)==round(cfg.baselinewindow(1),2));
   toi2 = find(round(freq12.time,2)==round(cfg.baselinewindow(2),2));
