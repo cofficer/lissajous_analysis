@@ -44,7 +44,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   end
 
   %Find muscle trials
-  for iart = 1:length(artifact_Muscle)
+  for iart = 1:size(artifact_Muscle,1)
 
     idx_trl_mscle_start = find(artifact_Muscle(iart,1)<sampleinfo(:,2));
     idx_trl_mscle_start = idx_trl_mscle_start(1);
