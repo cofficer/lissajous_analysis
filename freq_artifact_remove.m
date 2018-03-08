@@ -56,8 +56,12 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
 
   end
 
-  %Muscle and jump trials to remove.
-  idx_artifacts = unique([idx_mscle{:},idx_jump]);
+  if length(artifact_Muscle)==0
+    idx_artifacts=idx_jump;
+  else
+    %Muscle and jump trials to remove.
+    idx_artifacts = unique([idx_mscle{:},idx_jump]);
+  end
 
 
   %Eye artifact detection.
