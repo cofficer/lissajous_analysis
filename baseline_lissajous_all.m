@@ -18,7 +18,9 @@ if strcmp(cfg.subtractmode,'within')
   baseline = load(freqpath(cfgin.part_ID).name);
   if strcmp(cfgin.baseline,'stim')
     %remove blinks and remove
-    [~,freqAll] = freq_artifact_remove(freqAll,cfgin,[]);
+    cfgin2=cfgin;
+    cfgin2.stim_self ='stim';
+    [~,baseline.freq] = freq_artifact_remove(baseline.freq,cfgin2,[]);
   end
   cfg2      = [];
   cfg2.avgoverrpt = 'yes';

@@ -23,43 +23,41 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     cfg = [];
     cfg.trials = freq.trialinfo(:,12);
     dataNoMEG = ft_selectdata(cfg,dataNoMEG);
-    idx_artifacts=[];
+    % idx_artifacts=[];
+    sampleinfo = dataNoMEG.cfg.previous.previous.previous.previous.trl(:,1:2);
+
   else
     preproc_path = dir(sprintf('*noMEG*%d.mat',ipart+1));
     load(preproc_path.name) %dataNoMEG
 
-      arfct_path = dir(sprintf('artifacts*%d.mat',ipart+1));
+    arfct_path = dir(sprintf('artifacts*%d.mat',ipart+1));
 
-      load(arfct_path.name) % artifact_Jump/Muscle/idx_jump
+    load(arfct_path.name) % artifact_Jump/Muscle/idx_jump
+    sampleinfo = dataNoMEG.cfg.previous.previous.trl(:,1:2);
 
-      sampleinfo = dataNoMEG.cfg.previous.previous.trl(:,1:2);
+    %Identify blinks and insert nans.
 
-      %Find muscle trials
-      for iart = 1:length(artifact_Muscle)
-
-        idx_trl_mscle_start = find(artifact_Muscle(iart,1)<sampleinfo(:,2));
-        idx_trl_mscle_start = idx_trl_mscle_start(1);
-
-        idx_trl_mscle_end = find(artifact_Muscle(iart,2)<sampleinfo(:,2));
-        idx_trl_mscle_end = idx_trl_mscle_end(1);
-
-        idx_mscle{iart} = unique([idx_trl_mscle_start,idx_trl_mscle_end]);
-
-      end
-
-      %Muscle and jump trials to remove.
-      idx_artifacts = unique([idx_mscle{:},idx_jump]);
-
-
-      %Identify blinks and insert nans.
-
-      cfg = [];
-      cfg.toilim = [-2.25 2.25];
-      dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)
+    cfg = [];
+    cfg.toilim = [-2.25 2.25];
+    dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)
 
   end
 
+  %Find muscle trials
+  for iart = 1:length(artifact_Muscle)
 
+    idx_trl_mscle_start = find(artifact_Muscle(iart,1)<sampleinfo(:,2));
+    idx_trl_mscle_start = idx_trl_mscle_start(1);
+
+    idx_trl_mscle_end = find(artifact_Muscle(iart,2)<sampleinfo(:,2));
+    idx_trl_mscle_end = idx_trl_mscle_end(1);
+
+    idx_mscle{iart} = unique([idx_trl_mscle_start,idx_trl_mscle_end]);
+
+  end
+
+  %Muscle and jump trials to remove.
+  idx_artifacts = unique([idx_mscle{:},idx_jump]);
 
 
   %Eye artifact detection.
@@ -122,7 +120,9 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     num_bins_start(iblinks)          = ceil(sample_from_start(iblinks)/25);
     num_bins_stop(iblinks)           = ceil(sample_from_stop(iblinks)/25);
 
-    if num_bins_start(iblinks)<1;num_bins_start(iblinks)=1;end
+    if num_bins_start(iblinks)<1;
+      num_bins_start(iblinks)=1;
+    end
 
     %the num_bins_start, until num_bins_stop
     freq_nan(trl,:,:,num_bins_start(iblinks):num_bins_stop(iblinks))=NaN;
