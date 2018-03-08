@@ -16,7 +16,10 @@ if strcmp(cfg.subtractmode,'within')
   cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/%s',cfgin.baseline))
   freqpath   = dir(sprintf('*%s*',cfgin.freqrange));
   baseline = load(freqpath(cfgin.part_ID).name);
-
+  if strcmp(cfgin.baseline,'stim')
+    %remove blinks and remove
+    [~,freqAll] = freq_artifact_remove(freqAll,cfgin,[]);
+  end
   cfg2      = [];
   cfg2.avgoverrpt = 'yes';
   freq12    = ft_selectdata(cfg2,baseline.freq);

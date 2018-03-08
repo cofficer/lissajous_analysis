@@ -13,8 +13,11 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     preproc_path = dir(sprintf('*noMEG*%s*block1.mat',cfgin.restingfile));
     load(preproc_path.name) %dataNoMEG
 
+    arfct_path = dir(sprintf('artifacts*block1.mat'));
+    load(arfct_path.name)
+
     cfg = [];
-    cfg.toilim = [-2.25 0.5];
+    cfg.toilim = [freq.time(1) freq.time(end)];
     dataNoMEG = ft_redefinetrial(cfg,dataNoMEG);
 
     cfg = [];

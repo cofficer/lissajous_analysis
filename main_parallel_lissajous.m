@@ -24,7 +24,7 @@ for icfg = 1:length(restingpaths)
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
     cfgin{idx_cfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
+    cfgin{idx_cfg}.blocktype               = 'self'; % trial or continuous.
     cfgin{idx_cfg}.stim_self               = 'stim'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
                                                          %Or stim_off = data from when stimulus offset.
                                                          %Baseline = time-period 100-600ms after stim offset
@@ -37,7 +37,7 @@ for icfg = 1:length(restingpaths)
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -91,7 +91,7 @@ switch runcfg.execute
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
         %This depends on the what the data is locked to.
         %If baseline cue then load the precue data as basline.
-        cfgin{icfgin}.baseline                = 'stimoff'; %[-2.75 -2.25];
+        cfgin{icfgin}.baseline                = 'stim'; %[-2.75 -2.25];
       end
 
 

@@ -82,6 +82,8 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
       cfg.baselinewindow=[-0.7 -0.3];
     elseif strcmp(cfgin.baseline,'stimoff')
       cfg.baselinewindow=[0.1 0.5];
+    elseif strcmp(cfgin.baseline,'stim')
+      cfg.baselinewindow=[-2.65 -2.25]; %self0 at 0. -2.25 = onset
     else
       cfg.baselinewindow        = [cfgin.baseline(1) cfgin.baseline(2)]; %-0.4 -0.1
     end
