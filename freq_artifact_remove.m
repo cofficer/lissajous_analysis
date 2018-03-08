@@ -21,7 +21,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     dataNoMEG = ft_redefinetrial(cfg,dataNoMEG);
 
     cfg = [];
-    cfg.trials = freq.trialinfo(:,12);
+    cfg.trials = ismember(dataNoMEG.trialinfo(:,12),freq.trialinfo(:,12));
     dataNoMEG = ft_selectdata(cfg,dataNoMEG);
     % idx_artifacts=[];
     sampleinfo = dataNoMEG.cfg.previous.previous.previous.previous.trl(:,1:2);
