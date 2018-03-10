@@ -92,6 +92,27 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
   %Remove eye artifacts:
   [~,freqAll] = freq_artifact_remove(freqAll,cfgin,[]);
 
+  %Remove all trials occuring to close to stimulus onset.
+  if strcmp(cfgin.stim_self,'self')
+
+    %We need the relationship between current button press
+    %and the subsequent stimulus onset. Would also be great to know
+    %the discrepency between trial end and the onset.
+    %Is the first two columns in 500hz or 1200?
+    %how much is the 2000 samples...
+    % sel_trls = freqAll.trialinfo(:,end-1);
+
+
+    diff_resp_self= freqAll.trialinfo(:,11)-freqAll.trialinfo(:,9);
+
+    %threshold for removing trials, 500ms?
+    % sum(diff_resp_self<600)
+    %remove trials
+    cfg4 =[];
+    cfg4.trials = diff_resp_self>600;
+    freqAll = ft_selectdata(cfg4,freqAll);
+
+  end
   [freq_base] = baseline_lissajous_all(freqAll,cfg,cfgin);
 
 

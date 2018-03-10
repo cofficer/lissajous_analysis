@@ -78,7 +78,7 @@ switch cfg.freqanalysistype
 %           cfg.keeptapers = 'yes'; % idem
             cfg.foi = 3:35;
             cfg.t_ftimwin = ones(length(cfg.foi),1) .* 0.5; %400ms time window?
-            %cfg.tapsmofrq = ones(length(cfg.foi),1) .* 8;
+            cfg.tapsmofrq = ones(length(cfg.foi),1) .* 8;
         case 'full'
             cfg.taper = 'dpss'; % high frequency-optimized analysis (smooth)
             cfg.keeptrials  = 'yes';
@@ -112,7 +112,7 @@ elseif strcmp(cfg.trigger,'cue')
 
 elseif strcmp(cfg.trigger,'stim')
 
-  cfg.toi = -3.5:0.05:-0.5;            %still to figure
+  cfg.toi = -3.5:0.05:-1.5;            %still to figure
 elseif strcmp(cfg.trigger,'stim_off')
 
   cfg.toi = -4:0.05:0.1;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
@@ -138,6 +138,7 @@ freq=ft_combineplanar(cfgC,freq);
 % %
 % %plot TFR
 %  cfg = [];
+% freq.powspctrm(1,1,1,:)
 %  cfg.baseline = [0.5 1];
 %  cfg.baselinetype = 'relchange';
 %  cfg.masktype     = 'saturation';

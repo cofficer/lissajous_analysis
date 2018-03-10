@@ -23,9 +23,16 @@ if strcmp(cfg.subtractmode,'within')
     cfgin2=cfgin;
     cfgin2.stim_self              = 'stim';
     [idx_artifacts,baseline.freq] = freq_artifact_remove(baseline.freq,cfgin2,[]);
+
     trls_sel                      = ones(1,length(baseline.freq.trialinfo));
     trls_sel(idx_artifacts)       = 0;
-    cfg2.trials                   = logical(trls_sel)';
+
+    %remove slow reponses.
+    diff_resp_self= baseline.freq.trialinfo(:,11)-baseline.freq.trialinfo(:,9);
+    trials_resp = diff_resp_self>600;
+
+    %combine non-artifacts and trials with good separation resp and onset.
+    cfg2.trials                   = (trials_resp.*(trls_sel'))>0;
   end
 
   cfg2.avgoverrpt = 'yes';
