@@ -102,6 +102,9 @@ function data = preproc_lissajous(cfgin)
       elseif strcmp(cfgin.stim_self,'self')
         cfg.trialdef.prestim          = 3
         cfg.trialdef.poststim         = 3
+      elseif strcmp(cfgin.stim_self,'stim')
+        cfg.trialdef.prestim          = 4
+        cfg.trialdef.poststim         = -1
       else
         cfg.trialdef.prestim          = 2.6
         cfg.trialdef.poststim         = 2.6
