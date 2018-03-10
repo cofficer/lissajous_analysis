@@ -20,13 +20,13 @@ function output = run_permute_sensors(cfgin)
 
   clear all
 
-  blocktype = 'continuous';
+  blocktype = 'trial';
 
-  sw_vs_no = 1;
+  sw_vs_no = 0;
 
   topo_or_tfr = 'tfr';
 
-  freqspan = 'high';
+  freqspan = 'low';
 
   mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self/',blocktype);
   cd(mainDir)
@@ -65,6 +65,9 @@ function output = run_permute_sensors(cfgin)
       allsubjCue{ifiles}=stableTrial;
     end
   end
+
+  %cfg  = [];
+  %freq = ft_freqgrandaverage(cfg,allsubjStim{:})
 
   %load instead the completed combined_low_freq_self_stim.mat
   % load('combined_low_freq_self_stim.mat')

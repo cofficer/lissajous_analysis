@@ -45,6 +45,7 @@ end
 
 
 %remove part3
+%freq=
 
 freq.powspctrm=squeeze(nanmean(all_freq,1));
 %freq.powspctrm=(squeeze(nanmean(all_sw,1))+squeeze(nanmean(all_nsw,1)))./2;
@@ -62,6 +63,7 @@ load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_v
 
 %plot the TFR
 %TODO: find the IDX of all motor sensors, and use those to plot TFR.
+%idx_lissajous = freq.label(idx_occ);
 idx_occ=strfind(freq.label,'O');
 idx_occ=find(~cellfun(@isempty,idx_occ));
 idx_lissajous = visual_sensors;
@@ -78,7 +80,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-3e-28 3e-28];
+cfg.zlim         = [-10 10];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 % cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -100,7 +102,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim11_lowfreq_CONT_TFR_zlim3_switch_nobaseline');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim18_lowfreq_TRIAL_TFR_zlim10_preOnsetBaseline');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
