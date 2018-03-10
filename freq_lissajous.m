@@ -18,7 +18,7 @@ elseif strcmp(cfgin.stim_self,'stim')
 
 elseif strcmp(cfgin.stim_self,'self')
 
-  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_self_%s.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
+  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_self_%s_block1.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
 
 elseif strcmp(cfgin.stim_self,'baseline')
 
@@ -100,7 +100,7 @@ elseif strcmp(cfg.trigger,'selfoccl')
 
 elseif strcmp(cfg.trigger,'self')
 
-  cfg.toi = -2.5:0.05:0.5;
+  cfg.toi = -3.5:0.05:0.5;
 
 elseif strcmp(cfg.trigger,'resp')
 
