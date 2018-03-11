@@ -78,6 +78,24 @@ if strcmp(cfg.subtractmode,'within')
 
 %within_norm means doing single-trial normalization
 %and compute within trial percent change.
+elseif strcmp(cfg.subtractmode,'within_self')
+
+    cfg2      = [];
+    cfg2.avgoverrpt = 'yes';
+    cfg2.nanmean    = 'yes';
+
+    base_trl    = ft_selectdata(cfg2,freq);
+    toi1 = find(round(base_trl.time,2)==round(cfg.baselinewindow(1),2));
+    toi2 = find(round(base_trl.time,2)==round(cfg.baselinewindow(2),2));
+
+    base_trl = nanmean(base_trl.powspctrm(:,:,toi1:toi2),3);
+
+  for itrl1 = 1:size(freq.powspctrm,1)
+    freq_base(itrl1,:,:,:) = ((squeeze(freq.powspctrm(itrl1,:,:,:)) - base_trl)./base_trl)*100;
+  end
+
+  %Average over trials
+  freq_base = squeeze(nanmean(freq_base,1));
 elseif strcmp(cfg.subtractmode,'within_norm')
   %loop over all trials for each switch and stable trials
   for itrl1 = 1:size(freq.powspctrm,1)
