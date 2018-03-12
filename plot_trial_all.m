@@ -66,6 +66,7 @@ load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_v
 %idx_lissajous = freq.label(idx_occ);
 idx_occ=strfind(freq.label,'O');
 idx_occ=find(~cellfun(@isempty,idx_occ));
+idx_lissajous = freq.label(idx_occ);
 idx_lissajous = visual_sensors;
 idx_motor = {'MRC13','MRC14','MRC15','MRC16','MRC22','MRC23'...
             'MRC24','MRC31','MRC41','MRF64','MRF65','MRF63'...
@@ -80,7 +81,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-10 10];
+cfg.zlim         = [-20 20];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 % cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -102,7 +103,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim18_lowfreq_TRIAL_TFR_zlim10_preOnsetBaseline');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim19_lowfreq_TRIAL_TFR_zlim10_preOnsetBaseline');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')
@@ -115,11 +116,11 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-3e-28 3e-28];
-cfg.ylim         = [7 12];%7 12
+cfg.zlim         = [-20 20];
+cfg.ylim         = [15 30];%7 12
 % cfg.ylim         = [15 25];
 cfg.layout       = 'CTF275_helmet.mat';
-cfg.xlim         = [-0.5 -0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+cfg.xlim         = [-2 -1.5];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
 % cfg.channel      = freq.label(idx_occ);
 cfg.interactive = 'no';
 cfg.title='TOPO freq freq';
@@ -131,11 +132,11 @@ ft_topoplotTFR(cfg,freq)
 %ft_hastoolbox('brewermap', 1);
 colormap(ax2,flipud(brewermap(64,'RdBu')))
 
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/figures'))
+cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/figures'))
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim10_7-12Hzfreq_CONT_TOPO_t-05-0s');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim12_15-30Hzfreq_trial_TOPO_t-2-15s');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

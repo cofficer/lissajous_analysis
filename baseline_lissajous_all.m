@@ -76,8 +76,7 @@ if strcmp(cfg.subtractmode,'within')
   %Average over trials
   freq_base = squeeze(nanmean(freq_base,1));
 
-%within_norm means doing single-trial normalization
-%and compute within trial percent change.
+%Withing self only should apply when the input data to normalize is self-locked. 
 elseif strcmp(cfg.subtractmode,'within_self')
 
     cfg2      = [];
@@ -96,6 +95,10 @@ elseif strcmp(cfg.subtractmode,'within_self')
 
   %Average over trials
   freq_base = squeeze(nanmean(freq_base,1));
+
+
+  %within_norm means doing single-trial normalization
+  %and compute within trial percent change.
 elseif strcmp(cfg.subtractmode,'within_norm')
   %loop over all trials for each switch and stable trials
   for itrl1 = 1:size(freq.powspctrm,1)
