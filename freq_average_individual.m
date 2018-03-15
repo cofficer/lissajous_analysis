@@ -146,6 +146,16 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
     [freq1,freq2] = baseline_lissajous(switchTrial,stableTrial,cfg2,cfgin);
   end
 
+  %save the number of switch trials and stable trials left.
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/')
+  fid=fopen('stat_summary_trials','a+');
+  c=clock;
+  fprintf(fid,sprintf('\n\n\n\nNew entry for %s at %i/%i/%i %i:%i\n',cfgin.restingfile,fix(c(1)),fix(c(2)),fix(c(3)),fix(c(4)),fix(c(5))))
+  fprintf(fid,sprintf('Switch trials: %s \nStable trials: %s \n',num2str(size(switchTrial.powspctrm,1)),num2str(size(stableTrial.powspctrm,1))))
+
+  fclose(fid)
+
+
   %Make the freq the trial average
   cfg =[];
   cfg.avgoverrpt = 'yes';

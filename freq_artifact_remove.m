@@ -33,8 +33,11 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     arfct_path = dir(sprintf('artifacts*%d.mat',ipart+1));
 
     load(arfct_path.name) % artifact_Jump/Muscle/idx_jump
-    sampleinfo = dataNoMEG.cfg.previous.previous.trl(:,1:2);
-
+    if isfield(dataNoMEG.cfg.previous.previous,'trl')
+      sampleinfo = dataNoMEG.cfg.previous.previous.trl(:,1:2);
+    else
+      sampleinfo = dataNoMEG.cfg.previous.previous.previous.trl(:,1:2);
+    end
     %Identify blinks and insert nans.
 
     cfg = [];
