@@ -2,7 +2,7 @@
 %Startup settings:
 
 %Set paths
-warning off 
+warning off
 
 whichFieldtrip = 'git';%'2017-2';
 

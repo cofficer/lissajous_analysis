@@ -22,7 +22,7 @@ function output = run_permute_sensors(cfgin)
 
   blocktype = 'trial';
 
-  sw_vs_no = 0;
+  sw_vs_no = 1;
 
   topo_or_tfr = 'tfr';
 
@@ -83,7 +83,7 @@ function output = run_permute_sensors(cfgin)
 
   if ~sw_vs_no
     %Load the baseline freq data.
-    mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/stimoff/';
+    mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/freq/average/self/';
     cd(mainDir)
 
     %Store all the seperate data files
@@ -116,8 +116,8 @@ function output = run_permute_sensors(cfgin)
   % freq.dimord = 'rpt_chan_freq_time';
 
   if strcmp(blocktype,'trial')
-    idx_start = [8,12,18,24,30,36,42,48,54]; %idx_start=18
-    idx_end = [12,18,24,30,36,42,48,54,60]; %idx_end=24
+    idx_start = [8,12,18,24,30,36,42,48,54,60,68,75]; %idx_start=18
+    idx_end = [12,18,24,30,36,42,48,54,60,66,74,81]; %idx_end=24
   else
     idx_start = [8,12,18,24,30,36,42,48,54]; %idx_start=18
     idx_end = [12,18,24,30,36,42,48,54,60]; %idx_end=24
@@ -128,9 +128,17 @@ function output = run_permute_sensors(cfgin)
     time0 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))]; %13, 19,   41 51
     % time1 = [allsubjCue{1}.time(33) allsubjCue{1}.time(41)];
     if strcmp(topo_or_tfr,'tfr')
-      time1 = [allsubjCue{1}.time(33) allsubjCue{1}.time(41)];
+      if strcmp(blocktype,'trial')
+        time1 = [allsubjCue{1}.time(31) allsubjCue{1}.time(end)];
+        time0 = [allsubjCue{1}.time(31) allsubjCue{1}.time(end)];
+      elseif strcmp(blocktype,'continuous')
+        time1 = [allsubjCue{1}.time(41) allsubjCue{1}.time(61)];
+        time0 = [allsubjCue{1}.time(41) allsubjCue{1}.time(61)];
+      end
+
     elseif strcmp(topo_or_tfr,'topo')
-      time1 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))];
+      % time1 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))];
+      time1 = [allsubjStim{1}.time(18) allsubjStim{1}.time(26)];
     end
 
     %Trying the orginal baseline comparison...
@@ -142,7 +150,7 @@ function output = run_permute_sensors(cfgin)
     if strcmp(topo_or_tfr,'topo')
       cfg.toilim =time0;
     else
-      load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-04_visual_sensors_alpha.mat')
+      load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-14_visual_sensors_gamma.mat')
       cfg.channel=visual_sensors;
       % cfg.foilim = [36 110];
     end
@@ -166,6 +174,7 @@ function output = run_permute_sensors(cfgin)
       cfg.frequency =[15 30];
     else
       cfg.avgoverchan ='yes';
+      cfg.latency = [time1(1), time1(end)];
     end
     dat_time0 = ft_selectdata(cfg,dat_time0);
 
@@ -177,6 +186,7 @@ function output = run_permute_sensors(cfgin)
       cfg.avgoverfreq ='yes';
       cfg.frequency =[15 30];
     else
+      cfg.latency = [time1(1), time1(end)];
       cfg.avgoverchan ='yes';
     end
     dat_time1 = ft_selectdata(cfg,dat_time1);
@@ -189,6 +199,8 @@ function output = run_permute_sensors(cfgin)
     % dat_time0.dimord = 'subj_freq_time';
     % %% visual_sensors = freq.label(stat.mask)
     % %% ab=load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-04_visual_sensors_alpha.mat')
+    %cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/')
+    %stat2=load('2018-03-15_stats_TRIAL_lowfreq_switchvsno.mat')
     % %Try doing TFR cluster stats.
     % ab=load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_visual_sensors.mat')
 
@@ -231,8 +243,11 @@ function output = run_permute_sensors(cfgin)
     cfg.uvar     = 1;
     cfg.ivar     = 2;
     [stat] = ft_freqstatistics(cfg, dat_time0, dat_time1);
-    sum(stat.mask)
-
+    sum(stat.mask(idx_sens,:,:))
+    %save the significant sensors.
+    %visual_sensors = freq.label(stat.mask)
+    %save('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-14_visual_sensors_gamma.mat','visual_sensors')
+    % %% ab=load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-14_visual_sensors_gamma.mat')
 
 
     %Plotting
@@ -256,14 +271,21 @@ function output = run_permute_sensors(cfgin)
     cfg.interactive = 'no';
     cfg.title='Cluster Channels';
     %freq.powspctrm=dat_time1.powspctrm;
-    % ft_singleplotTFR(cfg,freq);
+    %high22=ones(1,33,21);
+    %high2=high22;
+    %freq.high22=high22;
+    cfg.maskstyle     = 'saturation';
+    cfg.maskparameter = 'mask'
+    cfg.maskalpha     = 0.5
+    ft_singleplotTFR(cfg,stat);
     %ft_multiplotTFR(cfg,freq)
     cfg.highlight          = 'on'
-    cfg.highlightchannel=freq.label(idx_occ);
+    % cfg.highlightchannel=freq.label(stat.mask);
+    % cfg.highlightchannel=high22;
     cfg.colorbar           = 'no'
     cfg.highlightcolor =[0 0 0];
-    cfg.highlightsize=22;
-    ft_topoplotTFR(cfg,freq)
+    cfg.highlightsize=12;
+    % ft_topoplotTFR(cfg,freq)
     %ft_hastoolbox('brewermap', 1);
     colormap(hf,flipud(brewermap(64,'RdBu')))
 
@@ -272,8 +294,8 @@ function output = run_permute_sensors(cfgin)
     %New naming file standard. Apply to all projects.
     formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
-    namefigure='prelim15_visual_sensors_with_o'
-    namefigure = sprintf('prelim15_15-30Hz_%s_stimoffbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
+    namefigure='prelim17_sig_cluster_TFR_lowfreq_Switchvsno'
+    namefigure = sprintf('prelim15_60-90Hz_%s_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
     % set(gca,'PaperpositionMode','Auto')
@@ -286,7 +308,7 @@ function output = run_permute_sensors(cfgin)
   hf=figure(1),clf
   set(hf, 'Position', [0 0 800 800])
 
-  ax1=subplot(2,1,1)
+  ax1=subplot(1,1,1)
   cfg=[];
   cfg.zlim         = [-4 4];
   %cfg.ylim         = [3 35];
@@ -296,15 +318,22 @@ function output = run_permute_sensors(cfgin)
   cfg.interactive = 'no';
   cfg.title='Cluster Channels';
   %freq.powspctrm=dat_time1.powspctrm;
-
+  cfg.maskstyle     = 'outline';
+  cfg.maskparameter = 'mask'
+  cfg.maskalpha     = 0.5
   %ft_multiplotTFR(cfg,freq)
   cfg.highlight          = 'on'
-  cfg.highlightchannel=freq.label(stat.mask);
+  % high2 = squeeze(mean(stat2.stat.mask(idx_sens,:,:),1));
+  % high2=high2>0.3; stat.mask=logical(stat.mask);
+  % cfg.highlightchannel=high2;
   cfg.colorbar           = 'yes'
   cfg.highlightcolor =[0 0 0];
   cfg.highlightsize=12;
   cfg.parameter     = 'stat';
   % ft_topoplotTFR(cfg,freq)
+  % stat2=squeeze(mean(stat.stat(idx_sens,:,:),1));
+  % stat.stat=stat2;
+
   ft_singleplotTFR(cfg,stat);
   %ft_hastoolbox('brewermap', 1);
   colormap(hf,flipud(brewermap(64,'RdBu')))
@@ -314,11 +343,57 @@ function output = run_permute_sensors(cfgin)
   %New naming file standard. Apply to all projects.
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('prelim15_tmap_lowandhighfreq_TFR_switchvsno_CONT_allVisual');%Stage of analysis, frequencies, type plot, baselinewindow
+  namefigure = sprintf('prelim15_tmap_lowfreq_TFR_switchvsno_TRIAL_allGammaVisual_-0505s');%Stage of analysis, frequencies, type plot, baselinewindow
 
   figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
   % set(gca,'PaperpositionMode','Auto')
   saveas(gca,figurefreqname,'png')
+
+
+
+
+  %%
+  %Following fieldtrip plotting permutation test:
+
+  neg = stat.negclusterslabelmat == 1;
+
+  timestep = 0.05;		% timestep between time windows for each subplot (in seconds)
+  sampling_rate = dataFC_LP.fsample;	% Data has a temporal resolution of 300 Hz
+  sample_count = length(stat.time);
+  % number of temporal samples in the statistics object
+  j = [0:timestep:1];   % Temporal endpoints (in seconds) of the ERP average computed in each subplot
+  m = [1:timestep*sampling_rate:sample_count];  % temporal endpoints in MEEG samples
+
+
+  % First ensure the channels to have the same order in the average and in the statistical output.
+% This might not be the case, because ft_math might shuffle the order
+  [i1,i2] = match_str(raweffectFICvsFC.label, stat.label);
+
+  for k = 1:20;
+       subplot(4,5,k);
+       cfg = [];
+       cfg.xlim=[j(k) j(k+1)];   % time interval of the subplot
+       cfg.zlim = [-2.5e-13 2.5e-13];
+     % If a channel reaches this significance, then
+     % the element of pos_int with an index equal to that channel
+     % number will be set to 1 (otherwise 0).
+
+     % Next, check which channels are significant over the
+     % entire time interval of interest.
+       pos_int = zeros(numel(raweffectFICvsFC.label),1);
+       neg_int = zeros(numel(raweffectFICvsFC.label),1);
+       pos_int(i1) = all(pos(i2, m(k):m(k+1)), 2);
+       neg_int(i1) = all(neg(i2, m(k):m(k+1)), 2);
+
+       cfg.highlight = 'on';
+     % Get the index of each significant channel
+       cfg.highlightchannel = find(pos_int | neg_int);
+       cfg.comment = 'xlim';
+       cfg.commentpos = 'title';
+       cfg.layout = 'CTF151.lay';
+       cfg.interactive = 'no';
+       ft_topoplotER(cfg, raweffectFICvsFC);
+  end
 
 
   end

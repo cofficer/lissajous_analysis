@@ -12,8 +12,13 @@ cd(mainDir)
 %Store all the seperate data files
 restingpaths = dir('P*');
 restingpaths = restingpaths(1:end);
+% idxs=[2,4,6,8,10,11,13,14,15,16,19,20,21,22,24];
+% cfgin=cfgin(idxs);
+% idx_rest = zeros(1,29);
+% idx_rest(idxs)=1;
 
 %Loop all data files into seperate jobs
+%do these: restingpaths=restingpaths(1,2,4,6,8,10,11,13,14,15,16,19,20,21,22,24)
 idx_cfg=1;
 for icfg = 1:length(restingpaths)
     % if ismember(icfg,[2])
@@ -24,7 +29,7 @@ for icfg = 1:length(restingpaths)
     fullpath                            = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
     cfgin{idx_cfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin{idx_cfg}.blocktype               = 'trial'; % trial or continuous.
+    cfgin{idx_cfg}.blocktype               = 'continuous'; % trial or continuous.
     cfgin{idx_cfg}.stim_self               = 'self'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
                                                          %Or stim_off = data from when stimulus offset.
                                                          %Baseline = time-period 100-600ms after stim offset
@@ -33,11 +38,11 @@ for icfg = 1:length(restingpaths)
     cfgin{idx_cfg}.poststim = 5.3;
 
     idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{28}
+    %cfgin=cfgin{18}
 end
 
 %Define script to run and whether to run on the torque
-runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
 runcfg.timreq          = 2000;      %number of minutes.
 runcfg.parallel        = 'torque';  %local or torque
 
@@ -61,8 +66,8 @@ switch runcfg.execute
         runcfg.stack = 1;%round(length(cfg1)/nnodes);
 
         %Set freqrange
-        for icfg = 1:length(restingpaths)
-          cfgin{icfg}.freqrange = 'how';
+        for icfg = 1:length(cfgin)
+          cfgin{icfg}.freqrange = 'high';
         end
         if strcmp(cfgin{1}.blocktype,'continuous')
 
@@ -70,7 +75,8 @@ switch runcfg.execute
 
         else
           qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
-            'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+            'memreq', 7e9, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+
         end
 
     case 'freq_plot'
@@ -87,7 +93,7 @@ switch runcfg.execute
         %Create new average freq or not.
         cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
         %Create topo of tfr plots
-        %cfgin=cfgin{29}
+        %cfgin=cfgin{29} % cfgin=cfgin(1:28)
         cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
         %This depends on the what the data is locked to.
         %If baseline cue then load the precue data as basline.

@@ -14,7 +14,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
   doplot     = 0;
   compSwitch = 0;
   if strcmp(cfgin.blocktype,'continuous')
-    freqpath   = dir(sprintf('*freq_%s*-26-26*',cfgin.freqrange));
+    freqpath   = dir(sprintf('*freq_%s*',cfgin.freqrange));
   else
     if strcmp(cfgin.stim_self,'stim')
       freqpath   = dir(sprintf('*freq_stim_%s*',cfgin.freqrange));
@@ -67,11 +67,11 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
   %Find first nonnan timepoint in data, and use that before and after self-O
   %What if there are no nans at all...
   if strcmp(cfgin.blocktype,'continuous')
-    idx_nan = ~isnan(freq.powspctrm(1,1,1,:));
+    % idx_nan = ~isnan(freq.powspctrm(1,1,1,:));
     % idx_time=find(diff(idx_nan)==-1);
     % switchTrial.time(idx_time)
     if strcmp(cfgin.stim_self,'self')
-      cfg.baselinewindow        = [freq.time(1) freq.time(11)];
+      cfg.baselinewindow        = [freq.time(11) freq.time(21)];
     else
       cfg.baselinewindow        = [freq.time(21) freq.time(31)];
     end
