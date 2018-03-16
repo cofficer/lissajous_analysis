@@ -20,7 +20,7 @@ function output = run_permute_sensors(cfgin)
 
   clear all
 
-  blocktype = 'trial';
+  blocktype = 'continuous';
 
   sw_vs_no = 1;
 
@@ -205,6 +205,7 @@ function output = run_permute_sensors(cfgin)
     % ab=load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_visual_sensors.mat')
 
 
+    %Run cluster-based permutation test
     cfg = [];
     if strcmp(topo_or_tfr,'topo')
       cfg.latency          = 'all';%[0.3 0.7];
@@ -243,12 +244,14 @@ function output = run_permute_sensors(cfgin)
     cfg.uvar     = 1;
     cfg.ivar     = 2;
     [stat] = ft_freqstatistics(cfg, dat_time0, dat_time1);
-    sum(stat.mask(idx_sens,:,:))
-    %save the significant sensors.
-    %visual_sensors = freq.label(stat.mask)
-    %save('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-14_visual_sensors_gamma.mat','visual_sensors')
-    % %% ab=load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-14_visual_sensors_gamma.mat')
+    sum(stat.mask(:))
 
+    data_comp = stat.stat;
+    data_comp(~stat.mask)=NaN;
+    %sum over channels...
+    data_comp=nansum(data_comp(:,:,:),1);
+    % size(data_comp)
+    %realstat.mask()
 
     %Plotting
     cfg =[];
@@ -258,12 +261,12 @@ function output = run_permute_sensors(cfgin)
     cfg.avgovertime = 'yes';
     freq = ft_selectdata(cfg,freq);
 
-    freq.powspctrm=stat.stat;
+    freq.powspctrm=data_comp;
 
     hf=figure(1),clf
     %ax1=subplot(2,2,1)
     cfg=[];
-    cfg.zlim         = [-5 5];
+    cfg.zlim         = [-160 160];
     %cfg.ylim         = [3 35];
     cfg.layout       = 'CTF275_helmet.lay';
     %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -274,15 +277,17 @@ function output = run_permute_sensors(cfgin)
     %high22=ones(1,33,21);
     %high2=high22;
     %freq.high22=high22;
-    cfg.maskstyle     = 'saturation';
-    cfg.maskparameter = 'mask'
-    cfg.maskalpha     = 0.5
-    ft_singleplotTFR(cfg,stat);
+    % cfg.maskstyle     = 'saturation';
+    % cfg.maskparameter = 'mask'
+    % cfg.maskalpha     = 0.5
+    % cfg.colorbar           = 'yes'
+    % cfg.parameter     = 'stat';
+    ft_singleplotTFR(cfg,freq);
     %ft_multiplotTFR(cfg,freq)
-    cfg.highlight          = 'on'
+
     % cfg.highlightchannel=freq.label(stat.mask);
     % cfg.highlightchannel=high22;
-    cfg.colorbar           = 'no'
+
     cfg.highlightcolor =[0 0 0];
     cfg.highlightsize=12;
     % ft_topoplotTFR(cfg,freq)
@@ -294,7 +299,7 @@ function output = run_permute_sensors(cfgin)
     %New naming file standard. Apply to all projects.
     formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
-    namefigure='prelim17_sig_cluster_TFR_lowfreq_Switchvsno'
+    namefigure='prelim18_sig_cluster_TFR_lowfreq_Switchvsno_thomas'
     namefigure = sprintf('prelim15_60-90Hz_%s_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
