@@ -20,9 +20,9 @@ function output = run_permute_sensors(cfgin)
 
   clear all
 
-  blocktype = 'trial';
+  blocktype = 'continuous';
 
-  sw_vs_no = 1;
+  sw_vs_no = 0;
 
   topo_or_tfr = 'tfr';
 
@@ -129,8 +129,8 @@ function output = run_permute_sensors(cfgin)
     % time1 = [allsubjCue{1}.time(33) allsubjCue{1}.time(41)];
     if strcmp(topo_or_tfr,'tfr')
       if strcmp(blocktype,'trial')
-        time1 = [allsubjCue{1}.time(31) allsubjCue{1}.time(end)];
-        time0 = [allsubjCue{1}.time(31) allsubjCue{1}.time(end)];
+        time1 = [allsubjCue{1}.time(61) allsubjCue{1}.time(end)];
+        time0 = [allsubjCue{1}.time(61) allsubjCue{1}.time(end)];
       elseif strcmp(blocktype,'continuous')
         time1 = [allsubjCue{1}.time(41) allsubjCue{1}.time(61)];
         time0 = [allsubjCue{1}.time(41) allsubjCue{1}.time(61)];
@@ -260,10 +260,11 @@ function output = run_permute_sensors(cfgin)
     data_comp(~stat.mask)=NaN;
     %sum over channels...
     %time
-    data_comp=nansum(data_comp(:,:,5:11),3);
+    data_comp=nansum(data_comp(:,:,1:7),3);
     %freq
     data_comp=nansum(data_comp(:,4:8,:),2);
     %min(data_comp(:))
+    %min(dat_time0.powspctrm(:))
 
     %Plotting
     cfg =[];
@@ -278,11 +279,13 @@ function output = run_permute_sensors(cfgin)
     freq = ft_selectdata(cfg,freq);
 
     freq.powspctrm=data_comp;
+    % freq.powspctrm=dat_time0.powspctrm;
+
 
     hf=figure(1),clf
     %ax1=subplot(2,2,1)
     cfg=[];
-    cfg.zlim         = [-320 320];
+    cfg.zlim         = [-10 10];
     %cfg.ylim         = [3 35];
     cfg.layout       = 'CTF275_helmet.lay';
     %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -298,7 +301,7 @@ function output = run_permute_sensors(cfgin)
     % cfg.maskalpha     = 0.5
     % cfg.colorbar           = 'yes'
     % cfg.parameter     = 'stat';
-    % ft_singleplotTFR(cfg,freq);
+    ft_singleplotTFR(cfg,freq);
     %ft_multiplotTFR(cfg,freq)
 
     % cfg.highlightchannel=freq.label(stat.mask);
@@ -306,7 +309,7 @@ function output = run_permute_sensors(cfgin)
 
     cfg.highlightcolor =[0 0 0];
     cfg.highlightsize=12;
-    ft_topoplotTFR(cfg,freq)
+    % ft_topoplotTFR(cfg,freq)
     %ft_hastoolbox('brewermap', 1);
     colormap(hf,flipud(brewermap(64,'RdBu')))
 
@@ -315,7 +318,7 @@ function output = run_permute_sensors(cfgin)
     %New naming file standard. Apply to all projects.
     formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
-    namefigure='prelim19_sig_cluster_TFR_lowfreq_TRIAL_Switchvsno_thomas'
+    namefigure='prelim19_TFR_highfreq_TRIAL_allGammasens'
     namefigure = sprintf('prelim15_60-90Hz_%s_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp

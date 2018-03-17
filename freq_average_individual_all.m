@@ -44,6 +44,8 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
     %Load the freq data
     disp(freqpath(blocks_ID(iblocks)).name)
     load(freqpath(blocks_ID(iblocks)).name)
+    %Remove eye artifacts:
+    [~,freq] = freq_artifact_remove(freq,cfgin,iblocks);
 
     %Append all the data
     if iblocks>1
@@ -91,8 +93,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
     end
   end
 
-  %Remove eye artifacts:
-  [~,freqAll] = freq_artifact_remove(freqAll,cfgin,[]);
+
 
   %Remove all trials occuring to close to stimulus onset.
   if strcmp(cfgin.stim_self,'self')
@@ -115,6 +116,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
     freqAll = ft_selectdata(cfg4,freqAll);
 
   end
+  
   [freq_base] = baseline_lissajous_all(freqAll,cfg,cfgin);
 
 
