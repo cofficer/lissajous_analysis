@@ -96,7 +96,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
 
 
   %Remove all trials occuring to close to stimulus onset.
-  if strcmp(cfgin.stim_self,'self')
+  if strcmp(cfgin.stim_self,'self') && strcmp(cfgin.blocktype,'trial')
 
     %We need the relationship between current button press
     %and the subsequent stimulus onset. Would also be great to know
@@ -116,7 +116,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual_all(cfgin)
     freqAll = ft_selectdata(cfg4,freqAll);
 
   end
-  
+
   [freq_base] = baseline_lissajous_all(freqAll,cfg,cfgin);
 
 
