@@ -20,7 +20,7 @@ function output = run_permute_sensors(cfgin)
 
   clear all
 
-  blocktype = 'continuous';
+  blocktype = 'trial';
 
   sw_vs_no = 0;
 
@@ -51,19 +51,27 @@ function output = run_permute_sensors(cfgin)
   % stim_paths(11)=[];
 
   %Load all participants
+  i_load = 1;
   for ifiles = 1:length(stim_paths)
-    disp((stim_paths(ifiles).name))
+
     load(stim_paths(ifiles).name)
+
+    % if strcmp(stim_paths(ifiles).name(18:19),'8.')
+    disp((stim_paths(ifiles).name))
+    % else
+      if ~sw_vs_no
+        allsubjStim{i_load}=freq;
+      else
+        allsubjStim{i_load}=switchTrial;
+        allsubjCue{i_load}=stableTrial;
+      end
+      i_load=i_load+1;
+    % end
     % cfg =[];
     % cfg.avgoverrpt = 'yes';
     % freq = ft_selectdata(cfg,freq);
     % all_stim(ifiles,:,:,:) = freq.powspctrm;
-    if ~sw_vs_no
-      allsubjStim{ifiles}=freq;
-    else
-      allsubjStim{ifiles}=switchTrial;
-      allsubjCue{ifiles}=stableTrial;
-    end
+
   end
 
   %cfg  = [];
@@ -124,7 +132,8 @@ function output = run_permute_sensors(cfgin)
   end
 
   for iplot = 1:length(idx_start)
-    % Select data for time of interest.
+    % Select data for time of interest. time1= [allsubjStim{1}.time(18) allsubjStim{1}.time(26)];
+    %time1= [allsubjStim{1}.time(41) allsubjStim{1}.time(end)];
     time0 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))]; %13, 19,   41 51
     % time1 = [allsubjCue{1}.time(33) allsubjCue{1}.time(41)];
     if strcmp(topo_or_tfr,'tfr')
@@ -168,10 +177,10 @@ function output = run_permute_sensors(cfgin)
 
     cfg = []
     if strcmp(topo_or_tfr,'topo')
-      cfg.latency = [dat_time0.time(1), dat_time0.time(end)];
+      cfg.latency = [time1(1), time1(end)];
       cfg.avgovertime ='yes';
       cfg.avgoverfreq ='yes';
-      cfg.frequency =[15 30];
+      cfg.frequency =[12];
     else
       cfg.avgoverchan ='yes';
       cfg.latency = [time1(1), time1(end)];
@@ -264,7 +273,7 @@ function output = run_permute_sensors(cfgin)
     %freq
     data_comp=nansum(data_comp(:,4:8,:),2);
     %min(data_comp(:))
-    %min(dat_time0.powspctrm(:))
+    %max(dat_time0.powspctrm(:))
 
     %Plotting
     cfg =[];
@@ -285,7 +294,7 @@ function output = run_permute_sensors(cfgin)
     hf=figure(1),clf
     %ax1=subplot(2,2,1)
     cfg=[];
-    cfg.zlim         = [-10 10];
+    cfg.zlim         = [-40 40];
     %cfg.ylim         = [3 35];
     cfg.layout       = 'CTF275_helmet.lay';
     %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -301,7 +310,7 @@ function output = run_permute_sensors(cfgin)
     % cfg.maskalpha     = 0.5
     % cfg.colorbar           = 'yes'
     % cfg.parameter     = 'stat';
-    ft_singleplotTFR(cfg,freq);
+    % ft_singleplotTFR(cfg,freq);
     %ft_multiplotTFR(cfg,freq)
 
     % cfg.highlightchannel=freq.label(stat.mask);
@@ -309,7 +318,7 @@ function output = run_permute_sensors(cfgin)
 
     cfg.highlightcolor =[0 0 0];
     cfg.highlightsize=12;
-    % ft_topoplotTFR(cfg,freq)
+    ft_topoplotTFR(cfg,freq)
     %ft_hastoolbox('brewermap', 1);
     colormap(hf,flipud(brewermap(64,'RdBu')))
 
@@ -318,7 +327,7 @@ function output = run_permute_sensors(cfgin)
     %New naming file standard. Apply to all projects.
     formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
-    namefigure='prelim19_TFR_highfreq_TRIAL_allGammasens'
+    namefigure='prelim19_TOPO_TRIAL_12Hz_self-locked_-15-05s'
     namefigure = sprintf('prelim15_60-90Hz_%s_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
