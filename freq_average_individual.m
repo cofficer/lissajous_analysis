@@ -139,7 +139,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
     elseif strcmp(cfgin.baseline,'stimoff')
       cfg2.baselinewindow=[0.1 0.5];
     elseif strcmp(cfgin.baseline,'self')
-      cfg2.baselinewindow=[-2.65 -2.65];
+      cfg2.baselinewindow=[-2.5 -2.5];
     end
   end
 
