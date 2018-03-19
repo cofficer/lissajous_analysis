@@ -22,11 +22,11 @@ function output = run_permute_sensors(cfgin)
 
   blocktype = 'trial';
 
-  sw_vs_no = 0;
+  sw_vs_no = 1;
 
-  topo_or_tfr = 'tfr';
+  topo_or_tfr = 'topo';
 
-  freqspan = 'low';
+  freqspan = 'high';
 
   mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self/',blocktype);
   cd(mainDir)
@@ -71,6 +71,14 @@ function output = run_permute_sensors(cfgin)
     % cfg.avgoverrpt = 'yes';
     % freq = ft_selectdata(cfg,freq);
     % all_stim(ifiles,:,:,:) = freq.powspctrm;
+
+  end
+
+  %The the average of switch and stable trials. No longer need to have this
+  %separately. Only load switch vs no switch.
+  for ifiles = 1:length(stim_paths)
+    disp(ifiles)
+    allsubjStim{ifiles}.powspctrm=(allsubjStim{ifiles}.powspctrm+allsubjCue{ifiles}.powspctrm)./2;
 
   end
 
@@ -146,8 +154,8 @@ function output = run_permute_sensors(cfgin)
       end
 
     elseif strcmp(topo_or_tfr,'topo')
-      % time1 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))];
-      time1 = [allsubjStim{1}.time(18) allsubjStim{1}.time(26)];
+      time1 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))];
+      % time1 = [allsubjStim{1}.time(18) allsubjStim{1}.time(26)];
     end
 
     %Trying the orginal baseline comparison...
@@ -180,7 +188,7 @@ function output = run_permute_sensors(cfgin)
       cfg.latency = [time1(1), time1(end)];
       cfg.avgovertime ='yes';
       cfg.avgoverfreq ='yes';
-      cfg.frequency =[12];
+      cfg.frequency =[60 90];
     else
       cfg.avgoverchan ='yes';
       cfg.latency = [time1(1), time1(end)];
@@ -193,7 +201,7 @@ function output = run_permute_sensors(cfgin)
       cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
       cfg.avgovertime ='yes';
       cfg.avgoverfreq ='yes';
-      cfg.frequency =[15 30];
+      cfg.frequency =[60 90];
     else
       cfg.latency = [time1(1), time1(end)];
       cfg.avgoverchan ='yes';
@@ -255,46 +263,48 @@ function output = run_permute_sensors(cfgin)
     cfg.ivar     = 2;
     [stat] = ft_freqstatistics(cfg, dat_time0, dat_time1);
     sum(stat.mask(:))
-
-    %Sum over channels
-    data_comp = stat.stat;
-    data_comp(~stat.mask)=NaN;
-    %sum over channels...
-    data_comp=nansum(data_comp(:,:,:),1);
-    % size(data_comp)
-    %realstat.mask()
-
-    %Sum over time, and freq.
-    data_comp = stat.stat;
-    data_comp(~stat.mask)=NaN;
-    %sum over channels...
-    %time
-    data_comp=nansum(data_comp(:,:,1:7),3);
-    %freq
-    data_comp=nansum(data_comp(:,4:8,:),2);
+    %
+    % %Sum over channels
+    % data_comp = stat.stat;
+    % data_comp(~stat.mask)=NaN;
+    % %sum over channels...
+    % data_comp=nansum(data_comp(:,:,:),1);
+    % % size(data_comp)
+    % %realstat.mask()
+    %
+    % %Sum over time, and freq.
+    % data_comp = stat.stat;
+    % data_comp(~stat.mask)=NaN;
+    % %sum over channels...
+    % %time
+    % data_comp=nansum(data_comp(:,:,1:7),3);
+    % %freq
+    % data_comp=nansum(data_comp(:,4:8,:),2);
     %min(data_comp(:))
     %max(dat_time0.powspctrm(:))
 
-    %Plotting
-    cfg =[];
-    cfg.avgoverfreq = 'yes';
-    freq = ft_selectdata(cfg,freq);
-    cfg =[];
-    cfg.avgovertime = 'yes';
-    cfg.latency = [time1(1), time1(end)];
-    freq = ft_selectdata(cfg,freq);
-    cfg =[];
-    cfg.avgoverchan = 'yes';
-    freq = ft_selectdata(cfg,freq);
-
-    freq.powspctrm=data_comp;
+    % %Plotting
+    % cfg =[];
+    % cfg.avgoverfreq = 'yes';
+    % freq = ft_selectdata(cfg,freq);
+    % cfg =[];
+    % cfg.avgovertime = 'yes';
+    % cfg.latency = [time1(1), time1(end)];
+    % freq = ft_selectdata(cfg,freq);
+    %
+    % if ~strcmp(topo_or_tfr,'topo')
+    %   cfg =[];
+    %   cfg.avgoverchan = 'yes';
+    %   freq = ft_selectdata(cfg,freq);
+    % end
+    % % freq.powspctrm=data_comp;
     % freq.powspctrm=dat_time0.powspctrm;
 
 
     hf=figure(1),clf
     %ax1=subplot(2,2,1)
     cfg=[];
-    cfg.zlim         = [-40 40];
+    cfg.zlim         = [-4 4];
     %cfg.ylim         = [3 35];
     cfg.layout       = 'CTF275_helmet.lay';
     %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -309,16 +319,16 @@ function output = run_permute_sensors(cfgin)
     % cfg.maskparameter = 'mask'
     % cfg.maskalpha     = 0.5
     % cfg.colorbar           = 'yes'
-    % cfg.parameter     = 'stat';
+    cfg.parameter     = 'stat';
     % ft_singleplotTFR(cfg,freq);
     %ft_multiplotTFR(cfg,freq)
 
-    % cfg.highlightchannel=freq.label(stat.mask);
+    cfg.highlightchannel=freq.label(stat.mask);
     % cfg.highlightchannel=high22;
 
     cfg.highlightcolor =[0 0 0];
     cfg.highlightsize=12;
-    ft_topoplotTFR(cfg,freq)
+    ft_topoplotTFR(cfg,stat)
     %ft_hastoolbox('brewermap', 1);
     colormap(hf,flipud(brewermap(64,'RdBu')))
 
@@ -328,7 +338,7 @@ function output = run_permute_sensors(cfgin)
     formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
     namefigure='prelim19_TOPO_TRIAL_12Hz_self-locked_-15-05s'
-    namefigure = sprintf('prelim15_60-90Hz_%s_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
+    namefigure = sprintf('prelim20_60-90Hz_%s_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
     % set(gca,'PaperpositionMode','Auto')
