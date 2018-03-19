@@ -122,6 +122,23 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
 
   end
 
+  %Remove all trials occuring to close to stimulus onset.
+  if strcmp(cfgin.stim_self,'self') && strcmp(cfgin.blocktype,'trial')
+
+    diff_resp_self_stable= stableTrial.trialinfo(:,11)-stableTrial.trialinfo(:,9);
+    diff_resp_self_switch= switchTrial.trialinfo(:,11)-switchTrial.trialinfo(:,9);
+
+    %threshold for removing trials, 500ms?
+    % sum(diff_resp_self<600)
+    %remove trials
+    cfg4 =[];
+    cfg4.trials = diff_resp_self_stable>900;
+    stableTrial = ft_selectdata(cfg4,stableTrial);
+    cfg4.trials = diff_resp_self_switch>900;
+    switchTrial = ft_selectdata(cfg4,switchTrial);
+
+  end
+
   %Run within trial baseline
   cfg2                       = [];
   cfg2.subtractmode          = 'within'; %what are the options? %no within within_norm

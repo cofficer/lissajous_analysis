@@ -142,7 +142,8 @@ function output = run_permute_sensors(cfgin)
   for iplot = 1:length(idx_start)
     % Select data for time of interest. time1= [allsubjStim{1}.time(18) allsubjStim{1}.time(26)];
     %time1= [allsubjStim{1}.time(41) allsubjStim{1}.time(end)];
-    time0 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))]; %13, 19,   41 51
+    time0 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))];
+    % time0 = [allsubjStim{1}.time(18) allsubjStim{1}.time(21)]; %13, 19,   41 51
     % time1 = [allsubjCue{1}.time(33) allsubjCue{1}.time(41)];
     if strcmp(topo_or_tfr,'tfr')
       if strcmp(blocktype,'trial')
@@ -154,8 +155,8 @@ function output = run_permute_sensors(cfgin)
       end
 
     elseif strcmp(topo_or_tfr,'topo')
-      time1 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))];
-      % time1 = [allsubjStim{1}.time(18) allsubjStim{1}.time(26)];
+      % time1 = [allsubjStim{1}.time(idx_start(iplot)) allsubjStim{1}.time(idx_end(iplot))];
+      time1 = [allsubjStim{1}.time(21) allsubjStim{1}.time(21)];
     end
 
     %Trying the orginal baseline comparison...
@@ -178,14 +179,14 @@ function output = run_permute_sensors(cfgin)
     else
       cfg.channel=visual_sensors;
     end
-    dat_time1= ft_freqgrandaverage(cfg,allsubjCue{:})
+    dat_time1= ft_freqgrandaverage(cfg,allsubjStim{:})
 
     % dat_time0.time = dat_time1.time;
 
 
     cfg = []
     if strcmp(topo_or_tfr,'topo')
-      cfg.latency = [time1(1), time1(end)];
+      % cfg.latency = [time1(1), time1(end)];
       cfg.avgovertime ='yes';
       cfg.avgoverfreq ='yes';
       cfg.frequency =[60 90];
@@ -198,7 +199,7 @@ function output = run_permute_sensors(cfgin)
 
     cfg = []
     if strcmp(topo_or_tfr,'topo')
-      cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
+      % cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
       cfg.avgovertime ='yes';
       cfg.avgoverfreq ='yes';
       cfg.frequency =[60 90];
@@ -325,7 +326,7 @@ function output = run_permute_sensors(cfgin)
 
     cfg.highlightchannel=freq.label(stat.mask);
     % cfg.highlightchannel=high22;
-
+    cfg.highlight='on';
     cfg.highlightcolor =[0 0 0];
     cfg.highlightsize=12;
     ft_topoplotTFR(cfg,stat)
