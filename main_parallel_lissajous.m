@@ -1,4 +1,4 @@
-function main_parallel_lissjous(input)
+function main_parallel_lissajous(input)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Main lissajous wrapper for all parallelized processing of scripts..%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10,6 +10,8 @@ function main_parallel_lissjous(input)
   % clear all
   %%6-11
   %Change the folder to where eyelink data is contained
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/code')
+  startup_liss
   mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/';
   cd(mainDir)
 
