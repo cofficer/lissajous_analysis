@@ -19,4 +19,4 @@ cd $PBS_O_WORKDIR
 
 # sleep "$var"
 
-matlab -nodisplay -nodesktop -r "main_parallel_lissajous $var; exit"  1> ~/jobs/$PBS_JOBID.out 2> ~/jobs/$PBS_JOBID.err
+matlab -nodisplay -nodesktop -r "main_parallel_lissajous($var); exit"  1> ~/jobs/$PBS_JOBID.out 2> ~/jobs/$PBS_JOBID.err
