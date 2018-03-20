@@ -13,7 +13,7 @@
 # -- run in the current working (submission) directory --
 cd $PBS_O_WORKDIR
 
-chmod g=wx $PBS_JOBNAME
+# chmod g=wx $PBS_JOBNAME
 
 # FILE TO EXECUTE
 
