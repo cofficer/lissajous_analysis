@@ -26,7 +26,7 @@ function output = run_permute_sensors(cfgin)
 
   topo_or_tfr = 'topo';
 
-  freqspan = 'high';
+  freqspan = 'low';
 
   mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self/',blocktype);
   cd(mainDir)
@@ -189,7 +189,7 @@ function output = run_permute_sensors(cfgin)
       % cfg.latency = [time1(1), time1(end)];
       cfg.avgovertime ='yes';
       cfg.avgoverfreq ='yes';
-      cfg.frequency =[60 90];
+      cfg.frequency =[7 12];
     else
       cfg.avgoverchan ='yes';
       cfg.latency = [time1(1), time1(end)];
@@ -202,7 +202,7 @@ function output = run_permute_sensors(cfgin)
       % cfg.latency = [dat_time1.time(1), dat_time1.time(end)];
       cfg.avgovertime ='yes';
       cfg.avgoverfreq ='yes';
-      cfg.frequency =[60 90];
+      cfg.frequency =[7 12];
     else
       cfg.latency = [time1(1), time1(end)];
       cfg.avgoverchan ='yes';
@@ -339,7 +339,7 @@ function output = run_permute_sensors(cfgin)
     formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
     namefigure='prelim19_TOPO_TRIAL_12Hz_self-locked_-15-05s'
-    namefigure = sprintf('prelim20_60-90Hz_%s_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
+    namefigure = sprintf('prelim20_7-12Hz_%s_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
     % set(gca,'PaperpositionMode','Auto')
