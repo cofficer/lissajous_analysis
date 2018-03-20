@@ -27,7 +27,7 @@ function main_parallel_lissajous(input)
   %do these: restingpaths=restingpaths(1,2,4,6,8,10,11,13,14,15,16,19,20,21,22,24)
   % idx_cfg=1;
   % for icfg = 1:length(restingpaths)
-    icfg = input;
+    icfg = round(input/10);
     % if ismember(icfg,[2])
     %   continue % idxs=[11,18,21,22,24,25,26,27];
     % end
