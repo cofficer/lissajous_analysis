@@ -115,10 +115,10 @@ elseif strcmp(cfg.trigger,'stim')
   cfg.toi = -3.5:0.05:-1.5;            %still to figure
 elseif strcmp(cfg.trigger,'stim_off')
 
-  cfg.toi = -4:0.05:0.1;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
+  cfg.toi = -2.5:0.05:1.5;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
 elseif strcmp(cfg.trigger,'stimoff')
 
-  cfg.toi = -1.5:0.05:1.5;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
+  cfg.toi = -2.5:0.05:1.5;      %3.75-6.75      %still to figure 3s=1.1gb. 5gb/part.
 
 end
 
