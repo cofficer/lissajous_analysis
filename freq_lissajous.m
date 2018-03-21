@@ -10,7 +10,7 @@ if strcmp(cfgin.stim_self,'stim_off')
   dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/preproc_stim_%s.mat',cfgin.restingfile,cfgin.restingfile);
 
 elseif strcmp(cfgin.stim_self,'stimoff')
-  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_stim_%s_block1.mat',cfgin.restingfile,cfgin.stim_self,cfgin.restingfile);
+  dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/preprocessed/%s/%s/preproc_%s_%s_block1.mat',cfgin.restingfile,cfgin.stim_self,cfgin.stim_self,cfgin.restingfile);
 
 elseif strcmp(cfgin.stim_self,'stim')
 

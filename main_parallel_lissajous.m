@@ -74,16 +74,18 @@ function main_parallel_lissajous(input)
     runcfg.stack = 1;%round(length(cfg1)/nnodes);
 
     %Set freqrange
-    for icfg = 1:length(cfgin)
-      cfgin{icfg}.freqrange = 'high';
-    end
-    if strcmp(cfgin{1}.blocktype,'continuous')
+    % for icfg = 1:length(cfgin)
+    %   cfgin{icfg}.freqrange = 'high';
+    % end
+    cfgin.freqrange='low';
+    if strcmp(cfgin.blocktype,'continuous')
 
       freq_lissajous_wrap(cfgin,runcfg)
 
     else
-      qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
-      'memreq', 7e9, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+      % qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
+      % 'memreq', 7e9, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+      freq_lissajous(cfgin)
 
     end
 
