@@ -26,7 +26,7 @@ function main_parallel_lissajous(input)
   %Loop all data files into seperate jobs
   %do these: restingpaths=restingpaths(1,2,4,6,8,10,11,13,14,15,16,19,20,21,22,24)
   % idx_cfg=1;
-  % for icfg = 1:length(restingpaths)
+  % for icfg = 10:16 %1:length(restingpaths)
     icfg = input;
     % if ismember(icfg,[2])
     %   continue % idxs=[11,18,21,22,24,25,26,27];
@@ -46,110 +46,110 @@ function main_parallel_lissajous(input)
 
     % idx_cfg = idx_cfg + 1;
     %cfgin=cfgin{18}
-  % end
-
-  %Define script to run and whether to run on the torque
-  runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
-  runcfg.timreq          = 2000;      %number of minutes.
-  runcfg.parallel        = 'torque';  %local or torque
-
-
-  %Execute jobs on the torque
-  switch runcfg.execute
-
-
-  case 'preproc'
-    %restingPreprocNumbers(cfgin{1})
-    %cellfun(@preproc_lissajous, cfgin,'UniformOutput',false)
-    nnodes = 1;%64; % how many licenses?
-    stack = 1;%round(length(cfg1)/nnodes);
-    % qsubcellfun(@preproc_lissajous, cfgin, 'compile', 'no', ...
-    % 'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
-    preproc_lissajous(cfgin)
-
-  case 'freq'
-    %restingPreprocNumbers(cfgin{1})
-    %cellfun(@freq_lissajous, cfgin,'UniformOutput',false);
-    runcfg.nnodes = 1;%64; % how many licenses?
-    runcfg.stack = 1;%round(length(cfg1)/nnodes);
-
-    %Set freqrange
-    % for icfg = 1:length(cfgin)
-    %   cfgin{icfg}.freqrange = 'high';
     % end
-    cfgin.freqrange='low';
-    if strcmp(cfgin.blocktype,'continuous')
 
-      freq_lissajous_wrap(cfgin,runcfg)
+    %Define script to run and whether to run on the torque
+    runcfg.execute         = 'preproc'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+    runcfg.timreq          = 2000;      %number of minutes.
+    runcfg.parallel        = 'torque';  %local or torque
 
-    else
-      % qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
-      % 'memreq', 7e9, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
-      freq_lissajous(cfgin)
+
+    %Execute jobs on the torque
+    switch runcfg.execute
+
+
+    case 'preproc'
+      %restingPreprocNumbers(cfgin{1})
+      %cellfun(@preproc_lissajous, cfgin,'UniformOutput',false)
+      nnodes = 1;%64; % how many licenses?
+      stack = 1;%round(length(cfg1)/nnodes);
+      % qsubcellfun(@preproc_lissajous, cfgin, 'compile', 'no', ...
+      % 'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+      preproc_lissajous(cfgin)
+
+    case 'freq'
+      %restingPreprocNumbers(cfgin{1})
+      %cellfun(@freq_lissajous, cfgin,'UniformOutput',false);
+      runcfg.nnodes = 1;%64; % how many licenses?
+      runcfg.stack = 1;%round(length(cfg1)/nnodes);
+
+      %Set freqrange
+      % for icfg = 1:length(cfgin)
+      %   cfgin{icfg}.freqrange = 'high';
+      % end
+      cfgin.freqrange='low';
+      if strcmp(cfgin.blocktype,'continuous')
+
+        freq_lissajous_wrap(cfgin,runcfg)
+
+      else
+        % qsubcellfun(@freq_lissajous, cfgin, 'compile', 'no', ...
+        % 'memreq', 7e9, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+        freq_lissajous(cfgin)
+
+      end
+
+    case 'freq_plot'
+
+
+
+      filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
+      cd(filepath)
+
+      %settings for plotting and loading or creating average freq files.
+      for icfgin = 1:length(cfgin)
+        cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
+        cfgin{icfgin}.freqrange='low';
+        %Create new average freq or not.
+        cfgin{icfgin}.load_avg   = 'createSwitch'; %switch,createSwitch,createAll, loadAll
+        %Create topo of tfr plots
+        %cfgin=cfgin{29} % cfgin=cfgin(1:28)
+        cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
+        %This depends on the what the data is locked to.
+        %If baseline cue then load the precue data as basline.
+        cfgin{icfgin}.baseline                = 'self'; %[-2.75 -2.25];
+      end
+
+
+
+      runcfg.nnodes = 1;%64; % how many licenses?
+      runcfg.stack = 1;%round(length(cfg1)/nnodes);
+      %cellfun(@main_individual_freq, cfgin,'UniformOutput',false);
+      qsubcellfun(@main_individual_freq, cfgin, 'compile', 'no', ...
+      'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+
+
+
+    case 'filter'
+
+      filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
+      cd(filepath)
+
+      %settings for plotting and loading or creating average freq files.
+      for icfgin = 1:length(cfgin)
+        cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
+        cfgin{icfgin}.freqrange='low';
+        %Create new average freq or not.
+        cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
+        %Create topo of tfr plots
+        %cfgin=cfgin{29}
+        cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
+        %This depends on the what the data is locked to.
+        %If baseline cue then load the precue data as basline.
+        cfgin{icfgin}.baseline                = 'stimoff'; %[-2.75 -2.25];
+      end
+
+
+
+      runcfg.nnodes = 1;%64; % how many licenses?
+      runcfg.stack = 1;%round(length(cfg1)/nnodes);
+      %cellfun(@main_individual_freq, cfgin,'UniformOutput',false);
+      qsubcellfun(@freq_filter, cfgin, 'compile', 'no', ...
+      'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+
 
     end
-
-  case 'freq_plot'
-
-
-
-    filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
-    cd(filepath)
-
-    %settings for plotting and loading or creating average freq files.
-    for icfgin = 1:length(cfgin)
-      cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
-      cfgin{icfgin}.freqrange='low';
-      %Create new average freq or not.
-      cfgin{icfgin}.load_avg   = 'createSwitch'; %switch,createSwitch,createAll, loadAll
-      %Create topo of tfr plots
-      %cfgin=cfgin{29} % cfgin=cfgin(1:28)
-      cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
-      %This depends on the what the data is locked to.
-      %If baseline cue then load the precue data as basline.
-      cfgin{icfgin}.baseline                = 'self'; %[-2.75 -2.25];
-    end
-
-
-
-    runcfg.nnodes = 1;%64; % how many licenses?
-    runcfg.stack = 1;%round(length(cfg1)/nnodes);
-    %cellfun(@main_individual_freq, cfgin,'UniformOutput',false);
-    qsubcellfun(@main_individual_freq, cfgin, 'compile', 'no', ...
-    'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
-
-
-
-  case 'filter'
-
-    filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
-    cd(filepath)
-
-    %settings for plotting and loading or creating average freq files.
-    for icfgin = 1:length(cfgin)
-      cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
-      cfgin{icfgin}.freqrange='low';
-      %Create new average freq or not.
-      cfgin{icfgin}.load_avg   = 'createAll'; %switch,createSwitch,createAll, loadAll
-      %Create topo of tfr plots
-      %cfgin=cfgin{29}
-      cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
-      %This depends on the what the data is locked to.
-      %If baseline cue then load the precue data as basline.
-      cfgin{icfgin}.baseline                = 'stimoff'; %[-2.75 -2.25];
-    end
-
-
-
-    runcfg.nnodes = 1;%64; % how many licenses?
-    runcfg.stack = 1;%round(length(cfg1)/nnodes);
-    %cellfun(@main_individual_freq, cfgin,'UniformOutput',false);
-    qsubcellfun(@freq_filter, cfgin, 'compile', 'no', ...
-    'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
-
-
-  end
-
+  % end
   %%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Cell for execuing ICA analysis and saving all the resulting components.%

@@ -7,7 +7,7 @@
 #PBS -q batch
 #PBS -l walltime=700:00:00
 #PBS -l nodes=1:ppn=1
-#PBS -l mem=10gb
+#PBS -l mem=14gb
 
 
 # -- run in the current working (submission) directory --
