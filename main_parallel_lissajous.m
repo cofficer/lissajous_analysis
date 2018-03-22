@@ -26,8 +26,8 @@ function main_parallel_lissajous(input)
   %Loop all data files into seperate jobs
   %do these: restingpaths=restingpaths(1,2,4,6,8,10,11,13,14,15,16,19,20,21,22,24)
   % idx_cfg=1;
-  % for icfg = 10:16 %1:length(restingpaths)
-    icfg = input;
+  for icfg = 1:length(restingpaths)
+    % icfg = input;
     % if ismember(icfg,[2])
     %   continue % idxs=[11,18,21,22,24,25,26,27];
     % end
@@ -49,7 +49,7 @@ function main_parallel_lissajous(input)
     % end
 
     %Define script to run and whether to run on the torque
-    runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+    runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
     runcfg.timreq          = 2000;      %number of minutes.
     runcfg.parallel        = 'torque';  %local or torque
 
@@ -77,7 +77,7 @@ function main_parallel_lissajous(input)
       % for icfg = 1:length(cfgin)
       %   cfgin{icfg}.freqrange = 'high';
       % end
-      cfgin.freqrange='low';
+      cfgin.freqrange='high';
       if strcmp(cfgin.blocktype,'continuous')
 
         freq_lissajous_wrap(cfgin,runcfg)
@@ -149,7 +149,7 @@ function main_parallel_lissajous(input)
 
 
     end
-  % end
+  end
   %%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Cell for execuing ICA analysis and saving all the resulting components.%
