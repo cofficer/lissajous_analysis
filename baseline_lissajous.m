@@ -48,6 +48,9 @@ if strcmp(cfg.subtractmode,'within')
         cfg2.avgoverrpt = 'yes';
         cfg2.nanmean = 'yes';
         freq12    = ft_selectdata(cfg2,freq12);
+        cfg.baselinewindow=[-2.5 -2.5];
+        toi1 = find(round(freq12.time,2)==round(cfg.baselinewindow(1),2));
+        toi2 = find(round(freq12.time,2)==round(cfg.baselinewindow(2),2));
         freq12 = nanmean(freq12.powspctrm(:,:,toi1:toi2),3);
       end
     end
