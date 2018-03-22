@@ -2,9 +2,9 @@
 
 # Submits n jobs to the torque queing system
 
-for i in {1..29}
+for i in {10..16}
 do
-  let var1=10*$i;
+  let var1=$i;
   echo 'Start Job ' $i 'wait for: ' $var1 's'
   qsub -v var="$var1" lissajous_jobs.sh
 done
