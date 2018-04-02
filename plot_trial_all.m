@@ -15,9 +15,9 @@ stim_self = ''; %'' or resp.
 cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype))
 
 %Define if looking at switch vs no switch
-sw_vs_nsw = 0;
+sw_vs_nsw = 1;
 
-freqfiles= dir('*all_high*');
+freqfiles= dir('*switch_high*');
 load(freqfiles(22).name)
 
 
@@ -103,7 +103,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim19_highfreq_TRIAL_TFR_zlim10_preOnsetBaseline');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim22_highfreq_TRIAL_TFR_preOnsetBaseline_self-locked');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

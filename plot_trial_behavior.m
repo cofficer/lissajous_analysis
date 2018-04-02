@@ -130,6 +130,7 @@ function plot_trial_behavior
   % % g.geom_abline()
   % g(2,1).set_names('column','Origin','x','Reaction time, stim');
   g.set_text_options('base_size',20);
+  % g.set_point_options('base_size',20)
   % g(2,1).set_color_options('chroma',0,'lightness',20)
   g.set_title('Time (s) since rotation stop');
   %g.facet_grid('space','free')

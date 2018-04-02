@@ -37,7 +37,7 @@ function main_parallel_lissajous(input)
     cfgin.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
     cfgin.blocktype               = 'trial'; % trial or continuous.
-    cfgin.stim_self               = 'stimoff'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
+    cfgin.stim_self               = 'self'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
     %Or stim_off = data from when stimulus offset.
     %Baseline = time-period 100-600ms after stim offset
     %Define baseline period.
@@ -49,7 +49,7 @@ function main_parallel_lissajous(input)
     % end
 
     %Define script to run and whether to run on the torque
-    runcfg.execute         = 'freq'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
+    runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
     runcfg.timreq          = 2000;      %number of minutes.
     runcfg.parallel        = 'torque';  %local or torque
 
