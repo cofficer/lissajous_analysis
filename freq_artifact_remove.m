@@ -40,6 +40,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     end
     %Identify blinks and insert nans.
 
+    % Not sure if it should be 2.5 instead.
     cfg = [];
     cfg.toilim = [-2.25 2.25];
     dataNoMEG = ft_redefinetrial(cfg,dataNoMEG)

@@ -36,7 +36,7 @@ function main_parallel_lissajous(input)
     fullpath                      = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
     cfgin.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin.blocktype               = 'trial'; % trial or continuous.
+    cfgin.blocktype               = 'continuous'; % trial or continuous.
     cfgin.stim_self               = 'self'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
     %Or stim_off = data from when stimulus offset.
     %Baseline = time-period 100-600ms after stim offset

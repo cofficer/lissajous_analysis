@@ -10,7 +10,7 @@ function plot_trial_all(~)
 %Load and average all averaged high data.
 clear all
 
-blocktype = 'trial' %continuous or trial
+blocktype = 'continuous' %continuous or trial
 stim_self = ''; %'' or resp.
 cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype))
 
@@ -60,6 +60,7 @@ end
 
 %Load the sensors of interest
 load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_visual_sensors.mat')
+load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-14_visual_sensors_gamma.mat')
 
 %plot the TFR
 %TODO: find the IDX of all motor sensors, and use those to plot TFR.
@@ -103,7 +104,7 @@ cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figu
 %New naming file standard. Apply to all projects.
 formatOut = 'yyyy-mm-dd';
 todaystr = datestr(now,formatOut);
-namefigure = sprintf('prelim22_highfreq_TRIAL_TFR_preOnsetBaseline_self-locked');%Stage of analysis, frequencies, type plot, baselinewindow
+namefigure = sprintf('prelim22_lowfreq_CONT_TFR_Baseline_self-locked');%Stage of analysis, frequencies, type plot, baselinewindow
 
 figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
 set(hf,'PaperpositionMode','Auto')

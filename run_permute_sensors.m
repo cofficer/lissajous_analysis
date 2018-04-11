@@ -20,15 +20,15 @@ function output = run_permute_sensors(cfgin)
 
   clear all
 
-  blocktype = 'trial';
+  blocktype = 'continuous';
 
   sw_vs_no = 1;
 
   topo_or_tfr = 'topo';
 
-  freqspan = 'high';
+  freqspan = 'low';
 
-  stim_self='stimoff'
+  stim_self='self'
 
   mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/%s/',blocktype,stim_self);
   cd(mainDir)
@@ -153,8 +153,8 @@ function output = run_permute_sensors(cfgin)
         time1 = [allsubjCue{1}.time(61) allsubjCue{1}.time(end)];
         time0 = [allsubjCue{1}.time(61) allsubjCue{1}.time(end)];
       elseif strcmp(blocktype,'continuous')
-        time1 = [allsubjCue{1}.time(41) allsubjCue{1}.time(61)];
-        time0 = [allsubjCue{1}.time(41) allsubjCue{1}.time(61)];
+        time1 = [allsubjCue{1}.time(41) allsubjCue{1}.time(51)];
+        time0 = [allsubjCue{1}.time(41) allsubjCue{1}.time(51)];
       end
 
     elseif strcmp(topo_or_tfr,'topo')
