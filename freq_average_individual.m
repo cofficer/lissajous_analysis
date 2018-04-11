@@ -149,7 +149,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
     % idx_time=find(diff(idx_nan)==-1);
     % switchTrial.time(idx_time)
     % cfg.baselinewindow        = [-2.25 -1.85];%[-switchTrial.time(idx_time) switchTrial.time(idx_time)];
-    cfg2.baselinewindow        = [freq.time(11) freq.time(21)];
+    cfg2.baselinewindow        = [freq.time(1) freq.time(11)];
   else
     if strcmp(cfgin.baseline,'cue')
       cfg2.baselinewindow=[-0.7 -0.3];
