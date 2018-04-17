@@ -153,8 +153,8 @@ function output = run_permute_sensors(cfgin)
         time1 = [allsubjCue{1}.time(61) allsubjCue{1}.time(end)];
         time0 = [allsubjCue{1}.time(61) allsubjCue{1}.time(end)];
       elseif strcmp(blocktype,'continuous')
-        time1 = [allsubjCue{1}.time(41) allsubjCue{1}.time(51)];
-        time0 = [allsubjCue{1}.time(41) allsubjCue{1}.time(51)];
+        time1 = [allsubjCue{1}.time(41) allsubjCue{1}.time(61)];
+        time0 = [allsubjCue{1}.time(41) allsubjCue{1}.time(61)];
       end
 
     elseif strcmp(topo_or_tfr,'topo')
