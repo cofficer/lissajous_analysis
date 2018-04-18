@@ -81,9 +81,9 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
       %inputs: participant nr, and iblock, freq.
       %outputs: full freq, but with nans. and idx of
       %trials to remove.
-      % [idx_artifacts, freq]         = freq_artifact_remove(freq,cfgin,ipart);
-      % idx_noswitch(idx_artifacts)   = 0;
-      % idx_switch(idx_artifacts)     = 0;
+      [idx_artifacts, freq]         = freq_artifact_remove(freq,cfgin,ipart);
+      idx_noswitch(idx_artifacts)   = 0;
+      idx_switch(idx_artifacts)     = 0;
     else
       [~,freq] = freq_artifact_remove(freq,cfgin,[]);
     end
