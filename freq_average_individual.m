@@ -141,7 +141,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
 
   %Run within trial baseline
   cfg2                       = [];
-  cfg2.subtractmode          = 'within'; %what are the options? %no within within_norm
+  cfg2.subtractmode          = 'no'; %what are the options? %no within within_norm
   %Find first nonnan timepoint in data, and use that before and after self-O
   %What if there are no nans at all...
   if strcmp(cfgin.blocktype,'continuous')
