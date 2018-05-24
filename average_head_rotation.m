@@ -90,7 +90,12 @@ function mm_move = average_head_rotation(cfgin)
       cfg.trialdef.poststim         = 2.6
     end
     %Stores all the trial information
-    cfg = ft_definetrial(cfg);
+    try
+      cfg = ft_definetrial(cfg);
+    catch
+      mm_move(iblock-1)=NaN;
+      continue
+    end
 
     %add trial information about perceptual switches.
 
