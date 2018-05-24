@@ -74,5 +74,28 @@ g(2,2).set_names('column','Origin','x','mean percept duration','y','skewness','c
 g(2,2).set_title('Summary stat mean');
 g.draw();
 
+
+[p,ci] = gamfit(allRun)
+
+gampdf(X,A,B)
+
+data = gamrnd(p(1),p(2),600,1);
+
+Y = gampdf(3:0.1:30,p(1),p(2));
+close all
+
+plot(Y,'LineWidth',4,'color','k')
+title('Upper Cumulative Gamma Distribution')
+xlim([-20 300])
+saveas(gca,'testplot.png')
+
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
-saveas(gca,'behavOverview.png','png')
+
+filetyp='svg';
+%name filess
+formatOut = 'yyyy-mm-dd';
+todaystr = datestr(now,formatOut);
+namefigure = sprintf('switch_perecep_dist');%fractionTrialsRemaining
+filetype    = 'svg';
+figurename = sprintf('%s_%s.%s',todaystr,namefigure,filetype);
+g.export('file_name',figurename,'file_type',filetype);

@@ -26,7 +26,7 @@ function output = run_permute_sensors(cfgin)
 
   topo_or_tfr = 'topo';
 
-  freqspan = 'low';
+  freqspan = 'high';
 
   stim_self='self'
 
@@ -39,27 +39,30 @@ function output = run_permute_sensors(cfgin)
   else
     stim_paths = dir(sprintf('*all_%s*',freqspan));
   end
-  % load(stim_paths(1).name)
-  % cfg =[];
-  % cfg.avgoverrpt = 'yes';
-  % freq = ft_selectdata(cfg,freq);
-  %
-  % %Create matrix for all participants.
-  % dims = size(freq.powspctrm);
-  % all_stim = zeros(29,dims(1),dims(2),dims(3));
 
-  %exclude 8 and 19.
-  % stim_paths(28)=[];
-  % stim_paths(11)=[];
+  % Define the ID's.
+  % Not sure exactly how to.
+  namecell = {stim_paths.name};
+  partnum = cellfun(@(x) x(end-5:end-4),namecell,'UniformOutput',false);
+  partnum = cellfun(@strtok, partnum,repmat({'_'},1,29),'UniformOutput',false);
+
+
+    %part_ID = 5;
+
+
 
   %Load all participants
   i_load = 1;
-  for ifiles = 1:length(stim_paths)
+  for ifiles = 16:29 %length(stim_paths)
 
-    load(stim_paths(ifiles).name)
+
+    blocks_ID = find(ismember([partnum],{num2str(ifiles)}));
+
+
+    load(stim_paths(blocks_ID).name)
     sum(isnan(freq.powspctrm(:)))
     % if strcmp(stim_paths(ifiles).name(18:19),'8.')
-    disp((stim_paths(ifiles).name))
+    disp((stim_paths(blocks_ID).name))
     % else
       if ~sw_vs_no
         allsubjStim{i_load}=freq;
@@ -240,12 +243,12 @@ function output = run_permute_sensors(cfgin)
     % cfg.frequency        = 75;
     cfg.statistic        = 'ft_statfun_depsamplesT';
     cfg.correctm         = 'cluster';
-    cfg.clusteralpha     = 0.2; %Normal 0.05
+    cfg.clusteralpha     = 0.025; %Normal 0.05 0.02 for 1 cluster
     cfg.clusterstatistic = 'maxsum';
-    cfg.minnbchan        = 2;
+    cfg.minnbchan        = 2;  %orig 2, 5 for one cluster
     cfg.tail             = 0;
     cfg.clustertail      = 0;
-    cfg.alpha            = 0.2;
+    cfg.alpha            = 0.025;
     cfg.numrandomization = 500;
     % prepare_neighbours determines what sensors may form clusters
     cfg_neighb.method    = 'distance';
@@ -282,13 +285,14 @@ function output = run_permute_sensors(cfgin)
     data_comp(~stat.mask)=NaN;
     %sum over channels...
     %time
-    data_comp=nansum(data_comp(:,:,8:13),3);
+    data_comp=nansum(data_comp(:,:,:),3);
     %freq
-    data_comp=nansum(data_comp(:,10:28,:),2);
+    data_comp=nansum(data_comp(:,:,:),2);
     min(data_comp(:))
     max(data_comp(:))
 
     %Plotting
+    freq2=freq;
     cfg =[];
     cfg.avgoverfreq = 'yes';
     freq = ft_selectdata(cfg,freq);
@@ -310,7 +314,7 @@ function output = run_permute_sensors(cfgin)
     hf=figure(1),clf
     %ax1=subplot(2,2,1)
     cfg=[];
-    cfg.zlim         = [-100 100];
+    cfg.zlim         = [-180 180];
     %cfg.ylim         = [3 35];
     cfg.layout       = 'CTF275_helmet.lay';
     %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -324,14 +328,14 @@ function output = run_permute_sensors(cfgin)
     % cfg.maskstyle     = 'saturation';
     % cfg.maskparameter = 'mask'
     % cfg.maskalpha     = 0.5
-    % cfg.colorbar           = 'yes'
+    cfg.colorbar           = 'yes'
     % cfg.parameter     = 'stat';
     % ft_singleplotTFR(cfg,freq);
     %ft_multiplotTFR(cfg,freq)
 
     cfg.highlightchannel=freq.label(stat.mask);
     % cfg.highlightchannel=high22;
-    cfg.highlight='on';
+    cfg.highlight='off';
     cfg.highlightcolor =[0 0 0];
     cfg.highlightsize=12;
     ft_topoplotTFR(cfg,freq)
@@ -343,12 +347,53 @@ function output = run_permute_sensors(cfgin)
     %New naming file standard. Apply to all projects.
     formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
-    namefigure='prelim22_TOPO_CONT_BetaHz_self-locked_-15-1s'
+    namefigure='prelim24_TOPO_CONT_lowHz_self-locked_nobaseline'
     namefigure = sprintf('prelim22_12-30Hz_%s_stimoff_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
     % set(gca,'PaperpositionMode','Auto')
     saveas(gca,figurefreqname,'png')
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Compute the TFR for the significant cluster.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    cfg =[];
+    cfg.latency = [time1(1), time1(end)];
+    cfg.avgoverchan = 'yes';
+    freq = ft_selectdata(cfg,freq);
+
+    data_comp = stat.stat;
+    data_comp(~stat.mask)=NaN;
+    %sum over channels...
+    %channels
+    data_comp=nansum(data_comp(:,:,:),1);
+    freq.powspctrm=data_comp;
+    %freq
+
+    hf=figure(1),clf
+    %ax1=subplot(2,2,1)
+    cfg=[];
+    cfg.zlim         = [-60 60];
+    %cfg.ylim         = [3 35];
+    % cfg.layout       = 'CTF275_helmet.lay';
+    %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
+    % cfg.channel      = freq.label(idx_occ);
+    cfg.interactive = 'no';
+    cfg.title='Cluster Channels';
+    ft_singleplotTFR(cfg,freq)
+    %ft_hastoolbox('brewermap', 1);
+    colormap(hf,flipud(brewermap(64,'RdBu')))
+
+    namefigure='prelim24_TFR_CONT_lowghz_self-locked_nobaseline'
+
+    figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
+    % set(gca,'PaperpositionMode','Auto')
+    cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figures',blocktype))
+    saveas(gca,figurefreqname,'png')
+
+
 
   end
 
