@@ -137,7 +137,7 @@ function mm_move = average_head_rotation(cfgin)
     % compute head rotation wrt first trial
     cc_rel = computeHeadRotation(data);
 
-    mm_move(iblock) = max(cc_rel(:));
+    mm_move(iblock-1) = max(cc_rel(:));
   end
 
 end
