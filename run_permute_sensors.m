@@ -26,7 +26,7 @@ function output = run_permute_sensors(cfgin)
 
   topo_or_tfr = 'topo';
 
-  freqspan = 'high';
+  freqspan = 'low';
 
   stim_self='self'
 
@@ -53,7 +53,7 @@ function output = run_permute_sensors(cfgin)
 
   %Load all participants
   i_load = 1;
-  for ifiles = 16:29 %length(stim_paths)
+  for ifiles = 1:29 %length(stim_paths)
 
 
     blocks_ID = find(ismember([partnum],{num2str(ifiles)}));

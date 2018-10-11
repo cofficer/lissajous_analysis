@@ -60,12 +60,12 @@ function plot_cont_bias
   bias_mag=abs(bias-1);
 
   clear g;close all
-  % g(1,1)=gramm('x',[1:29,1:29],'y',[bias,ones(1,29)],'color',[ones(1,29),ones(1,29)*2]);
-  g(1,1)=gramm('x',[1:29],'y',[bias_mag]);
+  g(1,1)=gramm('x',[1:29,1:29],'y',[bias,ones(1,29)],'color',[ones(1,29),ones(1,29)*2]);
+  % g(1,1)=gramm('x',[1:29],'y',[bias]);
   g(1,1).geom_point();
   g(1,1).set_text_options('base_size',20);
   figure('Position',[100 100 800 600]);
-  g(1,1).set_names('x','Participant #','y','Magnitude bias');
+  g(1,1).set_names('x','Participant #','y','Bias clockwise/counter-clockwise');
   g(1,1).set_point_options('base_size',10)
   g.draw();
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
@@ -74,7 +74,7 @@ function plot_cont_bias
   %name filess
   formatOut = 'yyyy-mm-dd';
   todaystr = datestr(now,formatOut);
-  namefigure = sprintf('cont_magbias_blocks_line');%fractionTrialsRemaining
+  namefigure = sprintf('cont_bias_blocks_line');%fractionTrialsRemaining
   filetype    = 'svg';
   figurename = sprintf('%s_%s.%s',todaystr,namefigure,filetype);
   g.export('file_name',figurename,'file_type',filetype);

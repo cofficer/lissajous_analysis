@@ -28,8 +28,9 @@ for ipart = 1:trlTA.participant(end)
   end
   runlength{iblock+1}  = diff([0; find(diff(resp(134*iblock+1:end))~=0);length(resp(134*iblock+1:end))])';
 
-  [co_var(ipart),skew_var(ipart)]=compute_distmoments([runlength{:}]);
-  meanPercepts(ipart) = mean([runlength{:}]);
+  [co_var(ipart),skew_var(ipart)]=compute_distmoments([runlength{:}].*4.5);
+  meanPercepts(ipart) = mean([runlength{:}].*4.5);
+  standdev(ipart) = std([runlength{:}].*4.5);
 
   allRun = [allRun runlength{:}];
 

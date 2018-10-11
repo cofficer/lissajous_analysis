@@ -26,27 +26,27 @@ function main_parallel_lissajous(input)
   %Loop all data files into seperate jobs
   %do these: restingpaths=restingpaths(1,2,4,6,8,10,11,13,14,15,16,19,20,21,22,24)
   % idx_cfg=1;
-  % for icfg = 1:length(restingpaths)
-    icfg = input;
+  for icfg = 1:length(restingpaths)
+    % icfg = input;
     % if ismember(icfg,[2])
     %   continue % idxs=[11,18,21,22,24,25,26,27];
     % end
 
-    cfgin.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
+    cfgin{icfg}.restingfile             = restingpaths(icfg).name;%40 100. test 232, issues.
     fullpath                      = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
-    cfgin.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
+    cfgin{icfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin.blocktype               = 'continuous'; % trial or continuous.
-    cfgin.stim_self               = 'self'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
+    cfgin{icfg}.blocktype               = 'continuous'; % trial or continuous.
+    cfgin{icfg}.stim_self               = 'self'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
     %Or stim_off = data from when stimulus offset.
     %Baseline = time-period 100-600ms after stim offset
     %Define baseline period.
-    cfgin.prestim = 4.4; %Before self_occlusion
-    cfgin.poststim = 5.3;
+    cfgin{icfg}.prestim = 4.4; %Before self_occlusion
+    cfgin{icfg}.poststim = 5.3;
 
     % idx_cfg = idx_cfg + 1;
-    %cfgin=cfgin{18}
-    % end
+    %cfgin=cfgin{icfg}
+  end
 
     %Define script to run and whether to run on the torque
     runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
@@ -57,7 +57,13 @@ function main_parallel_lissajous(input)
     %Execute jobs on the torque
     switch runcfg.execute
 
-
+    case 'headmove'
+      mm_move=[];
+      for icfg2 = 20:29
+        mm_move(icfg2-1,:) = average_head_rotation(cfgin{icfg2})
+      end
+      % oldmove =mm_move;
+      % nanstd(mm_move(:))
     case 'preproc'
       %restingPreprocNumbers(cfgin{1})
       %cellfun(@preproc_lissajous, cfgin,'UniformOutput',false)

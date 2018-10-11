@@ -1,7 +1,7 @@
 function output = run_tmap_sensors_continuous(cfgin)
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %Plot and show activity maximially activated by
+  %Plot and show activity maximally activated by
   %perceptual switch.
   %Created 15/01/2018.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
