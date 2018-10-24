@@ -1,4 +1,9 @@
-function [stableTrial.trialinfo,switchTrial.trialinfo]=save_trial_info(cfgin)
+function [stableTrial,switchTrial]=save_trial_info(cfgin)
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %Input participant and output the trialinfo structure
+  %Created 24/10/2018.
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/%s/',cfgin.blocktype,cfgin.stim_self)
 
@@ -133,6 +138,7 @@ if strcmp(cfgin.stim_self,'self') && strcmp(cfgin.blocktype,'trial')
 
 end
 
-
+stableTrial=stableTrial.trialinfo;
+switchTrial=switchTrial.trialinfo;
 
 end

@@ -99,7 +99,7 @@ function main_parallel_lissajous(input)
 
 
 
-      filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin.blocktype)
+      filepath = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/',cfgin{1}.blocktype)
       cd(filepath)
 
       %settings for plotting and loading or creating average freq files.
@@ -115,8 +115,8 @@ function main_parallel_lissajous(input)
         %If baseline cue then load the precue data as basline.
         cfgin{icfgin}.baseline                = 'self'; %[-2.75 -2.25];
         [info_stable,info_switch]=save_trial_info(cfgin{icfgin});
-        stable_nr(icfgin)=size(switchTrial.powspctrm,1);
-        switch_nr(icfgin)=size(switchTrial.powspctrm,1);
+        stable_nr(icfgin)=size(info_stable.powspctrm,1);
+        switch_nr(icfgin)=size(info_switch.powspctrm,1);
        end
 
 
