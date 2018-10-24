@@ -6,7 +6,7 @@ function plot_trial_behavior
 
   %load the cont trial information stored in freq data.
   clear all
-  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/cue')
+  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/continuous/freq/self')
 
   freqpaths = dir('*low*.mat');
 

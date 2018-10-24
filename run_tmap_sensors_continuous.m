@@ -10,8 +10,8 @@ function output = run_tmap_sensors_continuous(cfgin)
   clear all
 
   blocktype = 'continuous';%continuous or trial
-
   mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype);
+  mainDir = sprintf('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/%s_self_freqavg',blocktype);
   cd(mainDir)
 
   %Store all the seperate data files
