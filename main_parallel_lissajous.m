@@ -36,7 +36,7 @@ function main_parallel_lissajous(input)
     fullpath                      = dir(sprintf('%s%s/*01.ds',mainDir,restingpaths(icfg).name));
     cfgin{icfg}.fullpath                = sprintf('%s%s',mainDir,fullpath.name);
     %Define which blocks to run.
-    cfgin{icfg}.blocktype               = 'continuous'; % trial or continuous.
+    cfgin{icfg}.blocktype               = 'trial'; % trial or continuous.
     cfgin{icfg}.stim_self               = 'self'; %For cont resp use resp. For Cont use cont. For preproc_trial. Either stim or self.
     %Or stim_off = data from when stimulus offset.
     %Baseline = time-period 100-600ms after stim offset
@@ -103,7 +103,7 @@ function main_parallel_lissajous(input)
       cd(filepath)
 
       %settings for plotting and loading or creating average freq files.
-       for icfgin = 1:length(cfgin)
+       for icfgin = 2:length(cfgin)
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
         cfgin{icfgin}.freqrange='low';
         %Create new average freq or not.
@@ -114,11 +114,15 @@ function main_parallel_lissajous(input)
         %This depends on the what the data is locked to.
         %If baseline cue then load the precue data as basline.
         cfgin{icfgin}.baseline                = 'self'; %[-2.75 -2.25];
+
+        %comment out to avoid saving the number of trials used for averaging.
         [info_stable,info_switch]=save_trial_info(cfgin{icfgin});
-        stable_nr(icfgin)=size(info_stable.powspctrm,1);
-        switch_nr(icfgin)=size(info_switch.powspctrm,1);
+        stable_nr(icfgin)=size(info_stable,1);
+        switch_nr(icfgin)=size(info_switch,1);
        end
 
+       %cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
+       %save('trialNrTrial_StableSwitch.mat','stable_nr', 'switch_nr')
 
 
       runcfg.nnodes = 1;%64; % how many licenses?

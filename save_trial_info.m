@@ -122,21 +122,23 @@ for ipart = 1:length(blocks_ID)
 end
 
 %Remove all trials occuring to close to stimulus onset.
-if strcmp(cfgin.stim_self,'self') && strcmp(cfgin.blocktype,'trial')
-
-  diff_resp_self_stable= stableTrial.trialinfo(:,11)-stableTrial.trialinfo(:,9);
-  diff_resp_self_switch= switchTrial.trialinfo(:,11)-switchTrial.trialinfo(:,9);
-
-  %threshold for removing trials, 500ms?
-  % sum(diff_resp_self<600)
-  %remove trials
-  cfg4 =[];
-  cfg4.trials = diff_resp_self_stable>900;
-  stableTrial = ft_selectdata(cfg4,stableTrial);
-  cfg4.trials = diff_resp_self_switch>900;
-  switchTrial = ft_selectdata(cfg4,switchTrial);
-
-end
+%I would guess this only matters if we are baselining for instance... I will
+%Remove this for now. Also means redoing the trial based averaging. 
+% if strcmp(cfgin.stim_self,'self') && strcmp(cfgin.blocktype,'trial')
+%
+%   diff_resp_self_stable= stableTrial.trialinfo(:,11)-stableTrial.trialinfo(:,9);
+%   diff_resp_self_switch= switchTrial.trialinfo(:,11)-switchTrial.trialinfo(:,9);
+%
+%   %threshold for removing trials, 500ms?
+%   % sum(diff_resp_self<600)
+%   %remove trials
+%   cfg4 =[];
+%   cfg4.trials = diff_resp_self_stable>900;
+%   stableTrial = ft_selectdata(cfg4,stableTrial);
+%   cfg4.trials = diff_resp_self_switch>900;
+%   switchTrial = ft_selectdata(cfg4,switchTrial);
+%
+% end
 
 stableTrial=stableTrial.trialinfo;
 switchTrial=switchTrial.trialinfo;
