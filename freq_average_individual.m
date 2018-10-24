@@ -139,6 +139,9 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
 
   end
 
+  %save the trial info for switch and for stabel trials.
+
+
   %Run within trial baseline
   cfg2                       = [];
   cfg2.subtractmode          = 'no'; %what are the options? %no within within_norm
@@ -180,6 +183,7 @@ function [freq,switchTrial,stableTrial]=freq_average_individual(cfgin)
   cfg.avgoverrpt = 'yes';
   cfg.nanmean    = 'yes';
   freq = ft_selectdata(cfg,freq);
+
 
   %Make the freq the trial average
   cfg =[];

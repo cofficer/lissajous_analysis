@@ -51,7 +51,7 @@ function main_parallel_lissajous(input)
     %Define script to run and whether to run on the torque
     runcfg.execute         = 'freq_plot'; %freq preproc, parallel, findsquid, check_nSensors,freq_plot
     runcfg.timreq          = 2000;      %number of minutes.
-    runcfg.parallel        = 'torque';  %local or torque
+    runcfg.parallel        = 'local';  %local or torque
 
 
     %Execute jobs on the torque
@@ -103,18 +103,21 @@ function main_parallel_lissajous(input)
       cd(filepath)
 
       %settings for plotting and loading or creating average freq files.
-      % for icfgin = 1:length(cfgin)
-        cfgin.part_ID=str2num(cfgin.restingfile(2:3));
-        cfgin.freqrange='low';
+       for icfgin = 1:length(cfgin)
+        cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
+        cfgin{icfgin}.freqrange='low';
         %Create new average freq or not.
-        cfgin.load_avg   = 'createSwitch'; %switch,createSwitch,createAll, loadAll
+        cfgin{icfgin}.load_avg   = 'createSwitch'; %switch,createSwitch,createAll, loadAll
         %Create topo of tfr plots
         %cfgin=cfgin{29} % cfgin=cfgin(1:28)
-        cfgin.topo_tfr = 'no_plot'; %topo-all, no_plot
+        cfgin{icfgin}.topo_tfr = 'no_plot'; %topo-all, no_plot
         %This depends on the what the data is locked to.
         %If baseline cue then load the precue data as basline.
-        cfgin.baseline                = 'self'; %[-2.75 -2.25];
-      % end
+        cfgin{icfgin}.baseline                = 'self'; %[-2.75 -2.25];
+        [info_stable,info_switch]=save_trial_info(cfgin{icfgin});
+        stable_nr(icfgin)=size(switchTrial.powspctrm,1);
+        switch_nr(icfgin)=size(switchTrial.powspctrm,1);
+       end
 
 
 
@@ -123,7 +126,10 @@ function main_parallel_lissajous(input)
       %cellfun(@main_individual_freq, cfgin,'UniformOutput',false);
       % qsubcellfun(@main_individual_freq, cfgin, 'compile', 'no', ...
       % 'memreq', 1024^3, 'timreq', runcfg.timreq*60, 'stack', runcfg.stack, 'StopOnError', false, 'backend', runcfg.parallel,'matlabcmd','matlab91');
+
       main_individual_freq(cfgin)
+
+      %save info trials
 
 
     case 'filter'
