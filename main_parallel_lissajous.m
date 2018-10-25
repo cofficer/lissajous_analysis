@@ -103,7 +103,7 @@ function main_parallel_lissajous(input)
       cd(filepath)
 
       %settings for plotting and loading or creating average freq files.
-       for icfgin = 2:length(cfgin)
+       for icfgin = 1:length(cfgin)
         cfgin{icfgin}.part_ID=str2num(cfgin{icfgin}.restingfile(2:3));
         cfgin{icfgin}.freqrange='low';
         %Create new average freq or not.
@@ -116,9 +116,10 @@ function main_parallel_lissajous(input)
         cfgin{icfgin}.baseline                = 'self'; %[-2.75 -2.25];
 
         %comment out to avoid saving the number of trials used for averaging.
-        [info_stable,info_switch]=save_trial_info(cfgin{icfgin});
-        stable_nr(icfgin)=size(info_stable,1);
-        switch_nr(icfgin)=size(info_switch,1);
+        % [info_stable,info_switch]=save_trial_info(cfgin{icfgin});
+        % stable_nr(icfgin)=size(info_stable,1);
+        % switch_nr(icfgin)=size(info_switch,1);
+        main_individual_freq(cfgin{icfgin})
        end
 
        %cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
