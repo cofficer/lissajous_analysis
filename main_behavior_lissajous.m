@@ -1,7 +1,8 @@
 %Main behavior script for lissajous
 
 
-load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior/allTrialsTable.mat')
+% load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior/allTrialsTable.mat')
+load('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/behaviour/allTrialsTable.mat')
 
 allRun = [];
 for ipart = 1:trlTA.participant(end)
