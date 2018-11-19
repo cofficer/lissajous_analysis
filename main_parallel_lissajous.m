@@ -12,6 +12,7 @@ function main_parallel_lissajous(input)
   %Change the folder to where eyelink data is contained
   cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/code')
   startup_liss
+  % mainDir = '/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/raw_data';
   mainDir = '/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/';
   cd(mainDir)
 
@@ -116,10 +117,10 @@ function main_parallel_lissajous(input)
         cfgin{icfgin}.baseline                = 'self'; %[-2.75 -2.25];
 
         %comment out to avoid saving the number of trials used for averaging.
-        % [info_stable,info_switch]=save_trial_info(cfgin{icfgin});
-        % stable_nr(icfgin)=size(info_stable,1);
-        % switch_nr(icfgin)=size(info_switch,1);
-        main_individual_freq(cfgin{icfgin})
+        [info_stable,info_switch]=save_trial_info(cfgin{icfgin});
+        stable_nr(icfgin)=size(info_stable,1);
+        switch_nr(icfgin)=size(info_switch,1);
+        % main_individual_freq(cfgin{icfgin})
        end
 
        %cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
