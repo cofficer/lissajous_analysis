@@ -50,8 +50,8 @@ function output = run_switch_behaviour_reproduce_kloosterman(nPart)
 
   % Extract the participant number.
   % Necessary to store the data in the proper format per participant.
-  % npart='06';
-  nFiles = dir(sprintf('%s*low*',npart));
+  % nPart='06';
+  nFiles = dir(sprintf('%s*low*',nPart));
 
   for ifile = 1:length(nFiles)
 
