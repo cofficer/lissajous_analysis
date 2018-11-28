@@ -97,7 +97,7 @@ function output = run_switch_behaviour_reproduce_kloosterman(nPart)
   % Loop over the quantiles and create correct indexing.
   for iquant = 1:10
     if iquant == 10
-      meg_quantiles_bool(iquant,:)=meg_detrend>quantize_data(iquant-1)
+      meg_quantiles_bool(iquant,:)=meg_detrend>quantize_data(iquant-1);
     else
       meg_quantiles_bool(iquant,:)=meg_detrend<quantize_data(iquant+1);
       meg_quantiles_bool(iquant,:)=and(meg_quantiles_bool(iquant,:), meg_detrend>=quantize_data(iquant));
@@ -106,9 +106,9 @@ function output = run_switch_behaviour_reproduce_kloosterman(nPart)
 
   % Figure out which quantile each MEG scalar belongs to.
   % Each scalar should be replaced  with 1:10.
-  find(meg_quantiles_bool)
-  meg_cluster_all(1,:)
-  total_quant=sum(meg_quantiles_bool,2)
+  % find(meg_quantiles_bool)
+  % meg_cluster_all(1,:)
+  % total_quant=sum(meg_quantiles_bool,2)
 
   % use test_meg_change instead of changing meg_cluster_all for now
   % this loop removes the MEG scalar and inserts the quartile divisions instead.
@@ -121,14 +121,14 @@ function output = run_switch_behaviour_reproduce_kloosterman(nPart)
 
   % final step is to normalise the stay duration by the median stay duration.
   % need to consider if this is different from the post switch-related stay dur.
-  meg_cluster_bins(2,:)=meg_cluster_all(2,:)./median(meg_cluster_all(2,:));
+  meg_cluster_bins(2,:)=meg_cluster_all(2,:)./median(meg_cluster_all(2,:),'omitnan');
 
 
   % meg_cluster_bins_collapsed will contain the norm. average percept duration per bin
   meg_cluster_bins_collapsed=nan(1,10);
 
   for ibins =1:10
-    meg_cluster_bins_collapsed(ibins)=mean(meg_cluster_bins(2,meg_cluster_bins(1,:)==ibins));
+    meg_cluster_bins_collapsed(ibins)=nanmean(meg_cluster_bins(2,meg_cluster_bins(1,:)==ibins));
   end
 
   % save the data meg_cluster_bins_collapsed per participant.
