@@ -21,7 +21,7 @@ function output = run_permute_sensors(cfgin)
   clear all
 
   %The next step... is it possible to combine the trial and the continuous...
-  blocktype = 'both';
+  blocktype = 'trial';
 
   sw_vs_no = 1;
 
@@ -32,8 +32,8 @@ function output = run_permute_sensors(cfgin)
   stim_self='self'
 
   mainDir = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/%s/',blocktype,stim_self);
-  mainDir = sprintf('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/%s_self_freqavg/',blocktype);
-
+  % mainDir = sprintf('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/%s_self_freqavg/',blocktype);
+  % blocktype = 'both';
   cd(mainDir)
 
   if strcmp(blocktype,'both')

@@ -1,0 +1,43 @@
+function y = tapas_rs_surprise_amb_sim(r, infStates, p)
+% Simulates observations from a Bernoulli distribution
+%
+% --------------------------------------------------------------------------------------------------
+% Copyright (C) 2012-2013 Christoph Mathys, TNU, UZH & ETHZ
+%
+% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
+% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
+% (either version 3 or, at your option, any later version). For further details, see the file
+% COPYING or <http://www.gnu.org/licenses/>.
+
+mu1hat = infStates(:,1,1);
+alpha = 1./(1-log2(mu1hat));
+
+ze1v = p(1);
+ze1i = p(2);
+ze2  = p(3);
+ze3  = p(4);
+ze1v_amb = p(5);
+ze1i_amb = p(6);
+ze2_amb  = p(7);
+
+for i=1:length(u)
+    
+if u(i,2)~=0.5    
+rs(i,1) = u(i,1).*(ze1v + ze2*alpha(i)) + (1-u(i,1)).*(ze1i + ze2*(1-alpha(i)));   
+elseif u(i,2)==0.5 
+rs(i,1) = u(i,1).*(ze1v_amb + ze2_amb*alpha(i)) + (1-u(i,1)).*(ze1i_amb + ze2_amb*(1-alpha(i)));    
+end
+
+end
+
+
+% Apply the unit-square sigmoid to the inferred states
+prob = mu1hat.^ze./(mu1hat.^ze+(1-mu1hat).^ze);
+
+% Initialize random number generator
+RandStream.setGlobalStream(RandStream('mt19937ar','Seed',rem(now,1)*1000000));
+
+% Simulate
+y = binornd(1, prob);
+
+return;
