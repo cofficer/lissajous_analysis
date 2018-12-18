@@ -4,7 +4,7 @@
 %Set paths
 warning off
 
-whichFieldtrip = 'git';%git '2017-2';
+whichFieldtrip = 'local';%git '2017-2';
 
 if strcmp(whichFieldtrip,'2015')
 
@@ -68,9 +68,9 @@ elseif strcmp(whichFieldtrip,'2017-3')
       addpath(genpath('/home/chrisgahn/Documents/MATLAB/toolkits/'))
       ft_defaults
   elseif strcmp(whichFieldtrip,'local')
-    addpath('/Users/c.gahnstrohm/Desktop/toolboxes_matlab/fieldtrip')
-    addpath(genpath('/Users/c.gahnstrohm/Desktop/toolboxes_matlab/cbrewer'))
-    addpath(genpath('/Users/c.gahnstrohm/Desktop/lissajous_code'))
+    addpath('/Users/c.gahnstrohm/Dropbox/spiers07_desktop/toolboxes_matlab/fieldtrip')
+    addpath(genpath('/Users/c.gahnstrohm/Dropbox/spiers07_desktop/toolboxes_matlab/cbrewer'))
+    addpath(genpath('/Users/c.gahnstrohm/Dropbox/spiers07_desktop/lissajous_code'))
     addpath('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/continuous_self_freqavg')
     global ft_default
     ft_default.spmversion = 'spm12'

@@ -11,6 +11,7 @@ function data = preproc_lissajous(cfgin)
   try
     %define ds file, this is actually from the trial-based data
     dsfile = sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P%s/',cfgin.restingfile(2:3));
+    % dsfile = sprintf('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/raw_data/P%s/',cfgin.restingfile(2:3));
     cd(dsfile)
 
     %Identify datasets, and load correct block.

@@ -61,9 +61,15 @@ function output = run_permute_sensors(cfgin)
   %participant
   %For this to be done properly I need to probably look into the code that makes
   %the average plots... Maybe even run on cluster and save only that info...
-  cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
-  load('Table_continfo.mat') %seems good. Which folder??
-  load('all_trialinfo.mat') %also usable. Very different though.
+  % cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
+  cd('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/behaviour')
+  nr_cont=load('trialNrCont_StableSwitch.mat');
+  nr_trial=load('trialNrTrial_StableSwitch.mat');
+  cd(mainDir)
+  %consider excluding participant 5 due to only having 7 stable trial trials.
+  %really think this must be a trigger issue...
+  % load('Table_continfo.mat') %seems good. Which folder??
+  % load('all_trialinfo.mat') %also usable. Very different though.
 
   %Load all participants
   i_load = 1;
@@ -96,6 +102,7 @@ function output = run_permute_sensors(cfgin)
 
       %
       if iblock_ID==1
+        %_1 is the continuous blocks and _2 is the trial blocks.
         switchTrial_1=ft_selectdata(cfg,switchTrial);
         stableTrial_1=ft_selectdata(cfg,stableTrial);
       else
@@ -104,8 +111,13 @@ function output = run_permute_sensors(cfgin)
 
         %Calculate the amount of trials
         %Average together the switchTrial & the stableTrial 816, 240
-        switchTrial_2.powspctrm = (switchTrial_1.powspctrm.*0.71+switchTrial_2.powspctrm.*0.29);
-        stableTrial_2.powspctrm = (stableTrial_1.powspctrm.*0.71+stableTrial_2.powspctrm.*0.29);
+        nr_cont_stable_ratio=nr_cont.stable_nr(ifiles)/(nr_cont.stable_nr(ifiles)+nr_trial.stable_nr(ifiles));
+        nr_cont_switch_ratio=nr_cont.switch_nr(ifiles)/(nr_cont.switch_nr(ifiles)+nr_trial.switch_nr(ifiles));
+        nr_trial_stable_ratio=nr_trial.stable_nr(ifiles)/(nr_trial.stable_nr(ifiles)+nr_cont.stable_nr(ifiles));
+        nr_trial_switch_ratio=nr_trial.switch_nr(ifiles)/(nr_cont.switch_nr(ifiles)+nr_trial.switch_nr(ifiles));
+
+        switchTrial_2.powspctrm = (switchTrial_1.powspctrm.*nr_cont_switch_ratio+switchTrial_2.powspctrm.*nr_trial_switch_ratio);
+        stableTrial_2.powspctrm = (stableTrial_1.powspctrm.*nr_cont_stable_ratio+stableTrial_2.powspctrm.*nr_trial_stable_ratio);
         switchTrial=switchTrial_2;
         stableTrial=stableTrial_2;
       end
@@ -137,11 +149,12 @@ function output = run_permute_sensors(cfgin)
 
   %The the average of switch and stable trials. No longer need to have this
   %separately. Only load switch vs no switch.
-  for ifiles = 1:length(stim_paths)
-    disp(ifiles)
-    allsubjStim{ifiles}.powspctrm=(allsubjStim{ifiles}.powspctrm+allsubjCue{ifiles}.powspctrm)./2;
 
-  end
+  % for ifiles = 1:length(stim_paths)
+  %   disp(ifiles)
+  %   allsubjStim{ifiles}.powspctrm=(allsubjStim{ifiles}.powspctrm+allsubjCue{ifiles}.powspctrm)./2;
+  %
+  % end
 
   %cfg  = [];
   %freq = ft_freqgrandaverage(cfg,allsubjStim{:})
@@ -299,12 +312,12 @@ function output = run_permute_sensors(cfgin)
     % cfg.frequency        = 75;
     cfg.statistic        = 'ft_statfun_depsamplesT';
     cfg.correctm         = 'cluster';
-    cfg.clusteralpha     = 0.05; %Normal 0.05 0.02 for 1 cluster
+    cfg.clusteralpha     = 0.025; %Normal 0.05 0.02 for 1 cluster
     cfg.clusterstatistic = 'maxsum';
     cfg.minnbchan        = 2;  %orig 2, 5 for one cluster
     cfg.tail             = 0;
     cfg.clustertail      = 0;
-    cfg.alpha            = 0.05;
+    cfg.alpha            = 0.025;
     cfg.numrandomization = 500;
     % prepare_neighbours determines what sensors may form clusters
     cfg_neighb.method    = 'distance';
@@ -371,7 +384,7 @@ function output = run_permute_sensors(cfgin)
     hf=figure(1),clf
     %ax1=subplot(2,2,1)
     cfg=[];
-    cfg.zlim         = [-180 180];
+    cfg.zlim         = [-224 224];
     %cfg.ylim         = [3 35];
     cfg.layout       = 'CTF275_helmet.lay';
     %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
@@ -401,10 +414,12 @@ function output = run_permute_sensors(cfgin)
 
 
     cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figures',blocktype))
+
+    cd('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/results_plots')
     %New naming file standard. Apply to all projects.
     formatOut = 'yyyy-mm-dd';
     todaystr = datestr(now,formatOut);
-    namefigure='prelim24_TOPO_CONT_lowHz_self-locked_nobaseline'
+    namefigure='TOPO_cont-trl-comb_switch-activity_025clus'
     namefigure = sprintf('prelim22_12-30Hz_%s_stimoff_preOnsetbaseline_self-locked%s-%ss',blocktype(1:4),num2str(time0(1)),num2str(time0(2)));%Stage of analysis, frequencies, type plot, baselinewindow
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
@@ -421,8 +436,8 @@ function output = run_permute_sensors(cfgin)
     cfg.avgoverchan = 'yes';
     freq = ft_selectdata(cfg,freq);
 
-    data_comp = stat.stat;
-    data_comp(~stat.mask)=NaN;
+    data_comp = statout.stat;
+    data_comp(~statout.mask)=NaN;
     %sum over channels...
     %channels
     data_comp=nansum(data_comp(:,:,:),1);
@@ -432,23 +447,24 @@ function output = run_permute_sensors(cfgin)
     hf=figure(1),clf
     %ax1=subplot(2,2,1)
     cfg=[];
-    cfg.zlim         = [-60 60];
+    cfg.zlim         = [-140 140];
     %cfg.ylim         = [3 35];
     % cfg.layout       = 'CTF275_helmet.lay';
     %cfg.xlim         = [-2.25 2.25];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%
     % cfg.channel      = freq.label(idx_occ);
     cfg.interactive = 'no';
     cfg.title='Cluster Channels';
+    freq.dimord='freq_time';
     ft_singleplotTFR(cfg,freq)
     %ft_hastoolbox('brewermap', 1);
     colormap(hf,flipud(brewermap(64,'RdBu')))
 
-    namefigure='prelim24_TFR_CONT_lowghz_self-locked_nobaseline'
+    namefigure='TFR_CONT-TRL_lowghz_self-locked_nobaseline'
 
     figurefreqname = sprintf('%s_%s.png',todaystr,namefigure)%2012-06-28 idyllwild library - sd - exterior massing model 04.skp
     % set(gca,'PaperpositionMode','Auto')
     cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/figures',blocktype))
-    saveas(gca,figurefreqname,'png')
+    saveas(hf,figurefreqname,'png')
 
 
 
