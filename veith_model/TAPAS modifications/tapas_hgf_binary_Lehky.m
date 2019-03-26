@@ -132,43 +132,49 @@ for k = 2:1:n
         %% Perceptual level
         % ~~~~~~~~~
         if k == 2
-            
+
             Activity(k,:) = abs([1-u(k,1) 0-u(k,1)]); %% erste Spalte: linke Population; zweite Spalte: rechte Population
-        
+
         else
-            
-            
+
+
             if u(k,3) == 0.5 && ~(u(k-1,3) == 0.5 && u(k,1) ~= u(k-1,1))
-            
+
             gamma = randp([1 0 1],1,1)-2;
             active = find(Activity(k-1,:) >= threshold);
             inactive = find(Activity(k-1,:) < threshold);
-            
-            
-            Activity(k,active) = dominant(Activity(k-1,active), a, b, gamma);
-            Activity(k,inactive) = supressed(Activity(k,inactive), a, b, gamma);
+            % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % inserted change chris 2018-12-19
+            % inserted previous_dom and sup. since the previous functions
+            % dominant and supressed were not defined. Veith email. 
+            % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            previous_dom=Activity(k-1,active);
+            Activity(k,active) = a*previous_dom+b*gamma;;
 
-            if Activity(k,active) < threshold 
+            previous_sup=Activity(k,inactive);
+            Activity(k,inactive) = a*previous_sup + (1.0-a) + b*gamma;
+
+            if Activity(k,active) < threshold
             Activity(k,active) = 0;
-            Activity(k,inactive) = 1;  
+            Activity(k,inactive) = 1;
             end
 
-            
+
 
             elseif u(k,3) == 0.5 && (u(k-1,3) == 0.5 && u(k,1) ~= u(k-1,1))
-                
+
              Activity(k,:) = abs([1-u(k,1) 0-u(k,1)]);
-               
+
             elseif u(k,3) ~=0.5
-                
-             Activity(k,:) = abs([1-u(k,3) 0-u(k,3)]);   
-             
+
+             Activity(k,:) = abs([1-u(k,3) 0-u(k,3)]);
+
             end
-            
-            
+
+
             TimeCourse(k,1) = Activity(k,2) > Activity(k,1);
-            
-            
+
+
         end
         %%
         %% 2nd level
@@ -248,13 +254,13 @@ for k = 2:1:n
         v(k,:)  = v(k-1,:);
         w(k,:)  = w(k-1,:);
         da(k,:) = da(k-1,:);
-        
-        
-        
-        
+
+
+
+
         Activity(k,:) = Activity(k-1,:);
         TimeCourse(k,:) = TimeCourse(k-1,:);
-        
+
     end
 end
 

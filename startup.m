@@ -4,7 +4,7 @@
 %Set paths
 warning off
 
-whichFieldtrip = 'local';%git '2017-2';
+whichFieldtrip = 'local_bookpro';%git '2017-2';
 
 if strcmp(whichFieldtrip,'2015')
 
@@ -72,6 +72,16 @@ elseif strcmp(whichFieldtrip,'2017-3')
     addpath(genpath('/Users/c.gahnstrohm/Dropbox/spiers07_desktop/toolboxes_matlab/cbrewer'))
     addpath(genpath('/Users/c.gahnstrohm/Dropbox/spiers07_desktop/lissajous_code'))
     addpath('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/continuous_self_freqavg')
+    global ft_default
+    ft_default.spmversion = 'spm12'
+    ft_defaults
+
+  elseif strcmp(whichFieldtrip,'local_bookpro')
+    addpath('/Users/Christoffer/Documents/MATLAB/fieldtrip')
+    addpath('/Users/Christoffer/Documents/MATLAB/randp')
+    addpath(genpath('/Users/Christoffer/Documents/MATLAB/cbrewer/cbrewer'))
+    addpath(genpath('/Users/Christoffer/Documents/MATLAB/lissajousCode'))
+    % addpath('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/continuous_self_freqavg')
     global ft_default
     ft_default.spmversion = 'spm12'
     ft_defaults

@@ -305,7 +305,15 @@ pihat(1,:) = [];
 v(1,:)     = [];
 w(1,:)     = [];
 da(1,:)    = [];
-predicted(1,:) = [];
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% inserted change chris 2018-12-19
+% inserted if statement due to error in deleting var.
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if exist('predicted')
+  predicted(1,:) = [];
+else
+  predicted=[];
+end
 
 % Create result data structure
 traj = struct;
@@ -354,6 +362,6 @@ infStates(:,:,1) = traj.muhat;
 infStates(:,:,2) = traj.sahat;
 infStates(:,:,3) = traj.mu;
 infStates(:,:,4) = traj.sa;
-infStates(:,1,5) = traj.predicted;
+% infStates(:,1,5) = traj.predicted;
 
 return;

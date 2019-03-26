@@ -31,7 +31,7 @@ try
     l = r.c_prc.n_levels;
 catch
     l = (length(p)+1)/5;
-    
+
     if l ~= floor(l)
         error('tapas:hgf:UndetNumLevels', 'Cannot determine number of levels');
     end
@@ -117,66 +117,66 @@ duration_ambiguous_block = unique(diff(ambiguous_start_trials)/2);
 
 for k = 2:1:n
     if not(ismember(k-1, r.ign))
-        
+
         %%%%%%%%%%%%%%%%%%%%%%
         % Effect of input u(k)
         %%%%%%%%%%%%%%%%%%%%%%
-        
+
         % 2nd level prediction
         muhat(k,2) = mu(k-1,2) +t(k) *rho(2);
-        
+
         % 1st level
         % ~~~~~~~~~
         % Prediction
         muhat(k,1) = tapas_sgm(muhat(k,2), 1);
-        
+
         % Precision of prediction
         pihat(k,1) = 1/(muhat(k,1)*(1 -muhat(k,1)));
-        
+
         % Updates
         pi(k,1) = Inf;
         mu(k,1) = u(k,1);
-        
+
         % Prediction error
         da(k,1) = mu(k,1) -muhat(k,1);
-        
+
         %% Perceptual level
         % ~~~~~~~~~
-        
-        
+
+
         if any(k == ambiguous_start_trials)
-        
+
         percept = u(k,1);
         time = 0;
         switch_n = 0;
-        
-        for idx = k:k+duration_ambiguous_block-1 
-        
+
+        for idx = k:k+duration_ambiguous_block-1
+
         L(idx,1) = 1;
-        R(idx,1) = 1;      
-            
-       
-        
+        R(idx,1) = 1;
+
+
+
         if percept == 1
             E_L(idx,1) = M*L(idx,1)/(1 - M * e) - (M^2 * g * L(idx,1))/((1 + M * g - M * e)*(1 - M * e)) * (1-exp(-(((1+M*g-M*e)*time)/((1-M*e)*tau_H))));
             E_R(idx,1) = 0;
-            
+
             H_R(idx,1) = ((M * R(idx,1)) / (1 + M * g - M * e)) * exp ( -time / tau_H );
             H_L(idx,1) = 0;
-            
+
             x(idx,1) = R(idx,1) - a * E_L(idx,1) - g * H_R(idx,1);
-        
+
         else
             E_R(idx,1) = M*R(idx,1)/(1 - M * e) - (M^2 * g * R(idx,1))/((1 + M * g - M * e)*(1 - M * e)) * (1-exp(-(((1+M*g-M*e)*time)/((1-M*e)*tau_H))));
             E_L(idx,1) = 0;
-            
+
             H_L(idx,1) = ((M * L(idx,1)) / (1 + M * g - M * e)) * exp ( -time / tau_H );
             H_R(idx,1) = 0;
-            
+
             x(idx,1) = L(idx,1) - a * E_R(idx,1) - g * H_L(idx,1);
-            
+
         end
-        
+
         if x(idx) > 0
             percept = abs(1 - percept);
             switch_n =switch_n + 1;
@@ -184,104 +184,104 @@ for k = 2:1:n
         else
             time = time + diff(u(2:3,4))*1000;
         end
-        
-        
+
+
         predicted(idx,1) = tapas_sgm(E_L(idx,1) - E_R(idx,1),1);
-        
-        
+
+
         end
-        
+
         elseif u(k,3) ~= 0.5
-            
+
         predicted(k,1) = (0.5*exp(-(certainty/2)*(u(k,3)-1)^2))/(0.5*exp(-(certainty/2)*(u(k,3)-1)^2)+(1-0.5)*exp(-(certainty/2)*(u(k,3)-0)^2));
         L(k,1) = u(k,3);
         R(k,1) = 1 - L(k,1);
 
         end
-        
-        
-        
+
+
+
         %%
         %% 2nd level
         % ~~~~~~~~~
         % Prediction: see above
-        
+
         % Precision of prediction
         pihat(k,2) = 1/(1/pi(k-1,2) +exp(ka(2) *mu(k-1,3) +om(2)));
-        
+
         % Updates
         pi(k,2) = pihat(k,2) +1/pihat(k,1);
         mu(k,2) = muhat(k,2) +1/pi(k,2) *da(k,1);
-        
+
         % Volatility prediction error
         da(k,2) = (1/pi(k,2) +(mu(k,2) -muhat(k,2))^2) *pihat(k,2) -1;
-        
+
         if l > 3
             % Pass through higher levels
             % ~~~~~~~~~~~~~~~~~~~~~~~~~~
             for j = 3:l-1
                 % Prediction
                 muhat(k,j) = mu(k-1,j) +t(k) *rho(j);
-                
+
                 % Precision of prediction
                 pihat(k,j) = 1/(1/pi(k-1,j) +t(k) *exp(ka(j) *mu(k-1,j+1) +om(j)));
-                
+
                 % Weighting factor
                 v(k,j-1) = t(k) *exp(ka(j-1) *mu(k-1,j) +om(j-1));
                 w(k,j-1) = v(k,j-1) *pihat(k,j-1);
-                
+
                 % Updates
                 pi(k,j) = pihat(k,j) +1/2 *ka(j-1)^2 *w(k,j-1) *(w(k,j-1) +(2 *w(k,j-1) -1) *da(k,j-1));
-                
+
                 if pi(k,j) <= 0
                     error('tapas:hgf:NegPostPrec', 'Negative posterior precision. Parameters are in a region where model assumptions are violated.');
                 end
-                
+
                 mu(k,j) = muhat(k,j) +1/2 *1/pi(k,j) *ka(j-1) *w(k,j-1) *da(k,j-1);
-                
+
                 % Volatility prediction error
                 da(k,j) = (1/pi(k,j) +(mu(k,j) -muhat(k,j))^2) *pihat(k,j) -1;
             end
         end
-        
+
         % Last level
         % ~~~~~~~~~~
         % Prediction
         muhat(k,l) = mu(k-1,l) +t(k) *rho(l);
-        
+
         % Precision of prediction
         pihat(k,l) = 1/(1/pi(k-1,l) +t(k) *th);
-        
+
         % Weighting factor
         v(k,l)   = t(k) *th;
         v(k,l-1) = t(k) *exp(ka(l-1) *mu(k-1,l) +om(l-1));
         w(k,l-1) = v(k,l-1) *pihat(k,l-1);
-        
+
         % Updates
         pi(k,l) = pihat(k,l) +1/2 *ka(l-1)^2 *w(k,l-1) *(w(k,l-1) +(2 *w(k,l-1) -1) *da(k,l-1));
-        
+
         if pi(k,l) <= 0
             error('tapas:hgf:NegPostPrec', 'Negative posterior precision. Parameters are in a region where model assumptions are violated.');
         end
-        
+
         mu(k,l) = muhat(k,l) +1/2 *1/pi(k,l) *ka(l-1) *w(k,l-1) *da(k,l-1);
-        
+
         % Volatility prediction error
         da(k,l) = (1/pi(k,l) +(mu(k,l) -muhat(k,l))^2) *pihat(k,l) -1;
     else
-        
+
         mu(k,:) = mu(k-1,:);
         pi(k,:) = pi(k-1,:);
-        
+
         muhat(k,:) = muhat(k-1,:);
         pihat(k,:) = pihat(k-1,:);
-        
+
         v(k,:)  = v(k-1,:);
         w(k,:)  = w(k-1,:);
         da(k,:) = da(k-1,:);
        predicted(k,:)= predicted(k-1,:);
-        
-        
+
+
     end
 end
 
@@ -302,7 +302,7 @@ else
     dpi = diff(pi(:,2:end));
     rmdmu = repmat(sqrt(mean(dmu.^2)),length(dmu),1);
     rmdpi = repmat(sqrt(mean(dpi.^2)),length(dpi),1);
-    
+
     jumpTol = 16;
     if any(abs(dmu(:)) > jumpTol*rmdmu(:)) || any(abs(dpi(:)) > jumpTol*rmdpi(:))
         error('tapas:hgf:VarApproxInvalid', 'Variational approximation invalid. Parameters are in a region where model assumptions are violated.');
@@ -315,7 +315,15 @@ pihat(1,:) = [];
 v(1,:)     = [];
 w(1,:)     = [];
 da(1,:)    = [];
-predicted(1,:) = [];
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% inserted change chris 2018-12-19
+% inserted if statement due to error in deleting var.
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if exist('predicted')
+  predicted(1,:) = [];
+else
+  predicted=[];
+end
 
 % Create result data structure
 traj = struct;
@@ -364,6 +372,6 @@ infStates(:,:,1) = traj.muhat;
 infStates(:,:,2) = traj.sahat;
 infStates(:,:,3) = traj.mu;
 infStates(:,:,4) = traj.sa;
-infStates(:,1,5) = traj.predicted;
+% infStates(:,1,5) = traj.predicted;
 
 return;
