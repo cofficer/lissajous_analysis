@@ -66,6 +66,8 @@ elseif strcmp(whichFieldtrip,'2017-3')
       addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous'))
       addpath(genpath('/mnt/homes/home024/chrisgahn/Documents/MATLAB/ktsetsos'))
       addpath(genpath('/home/chrisgahn/Documents/MATLAB/toolkits/'))
+
+      addpath('/Users/c.gahnstrohm/Dropbox/spiers07_desktop/toolboxes_matlab/fieldtrip')
       ft_defaults
 
 
