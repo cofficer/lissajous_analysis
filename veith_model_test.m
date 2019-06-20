@@ -9,13 +9,18 @@ function output = veith_model_test(cfgin)
   %Created 18/12/2018.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  load('/Users/Christoffer/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo.mat')
+
+  addpath(genpath('/Users/c.gahnstrohm/Dropbox/spiers07_desktop/lissajous_code/lissajous_analysis'))
+
+  load('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo.mat')
 
   % select a participants data.
   ipart       = 14;
+
+  % trlTA=trlTA(trlTA.participant==14,:);
   % Error in participants: 13 and 15.
   for ipart = 1:29
-    blocklength=length(trlTA) %change to actual
+    blocklength=length(trlTA.StartTrial) %change to actual
     for iblock = 1:blocklength
       disp(ipart)
       index       = trlTA.participant==ipart;
@@ -71,7 +76,7 @@ for ipart = 1:29
   end
 end
 
-cd('/Users/Christoffer/Dropbox/PhD/Projects/Lissajous/behaviour/')
+cd('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/behaviour')
 save('model_tapas.mat','Model')
 
 figure(1),clf

@@ -1,4 +1,4 @@
-function [freq,model_dat_block] = clean_resp(trlTA_1,freq,model_dat)
+function [freq,freqsamples] = clean_resp(trlTA_1,freq,model_dat)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Extract model predictions per self-occlusion
 %based on the active inference framework.
@@ -8,36 +8,29 @@ function [freq,model_dat_block] = clean_resp(trlTA_1,freq,model_dat)
 
 trl_info = freq.cfg.previous.previous.previous.previous.previous.previous.trl;
 
-% model_info should always be larger. So we use find for all the samples.
-figure(1),clf
-plot((trl_info(1:end,2)-3600)-(trlTA_1.SelfOcclusionSample(1:length(trl_info(1:end,2)))))
-
-
-trial_end.freq = trl_info(1:end,2)-3600;
+trial_end.freq = trl_info(:,2)-3600;
+if trlTA_1.participant(1)==1
+  trial_end.freq=trial_end.freq-2700;
+end
+trial_end.respfreq = trl_info(:,8);
 trial_end.model = trlTA_1.SelfOcclusionSample;
 
+% indexes of the current block.
+% finds the samples in the freq data that exists as samples in the model data.
+% this should get rid of all non-response trials already.
 trial_end.index = (ismember(trial_end.freq,trial_end.model));
 
-model_dat_block=model_dat(trial_end.index);
-
+% remove bad trials. Add to trial_end.index?
+% removes all non-existant trials, this probably changes nothing over the above one.
+resp = trial_end.respfreq;
+add_index=(resp>0);
+trial_end.index = and(trial_end.index,add_index);
 
 cfg = [];
 cfg.trials = trial_end.index;
+cfg.latency   = [-0.5,0.5];
 freq = ft_selectdata(cfg, freq);
 
-% TODO: index mask for data
-% TODO: output freq after masking. 
-freq.powspctrm = freq.powspctrm();
 
-resp = trl_info(:,end-2)
-resp=resp(resp>0);
-freq=
-resp(resp==225)=0;
-resp(resp==232)=1;
-resp(resp==226)=0;
-resp(resp==228)=1;
-resp=resp(~isnan(resp));
-
-
-
+freqsamples=trial_end.freq(trial_end.index);
 end
