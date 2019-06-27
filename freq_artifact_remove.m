@@ -1,14 +1,15 @@
-function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
+function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart,iblock)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Remove all trials with artifact,
   %Insert NaN for blinks into freq. Add freq xtra wdw.
   %Created 02/03/2018.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+  % TODO: make function more general, call for any analysis.
   %preproc path
-  cd(sprintf('%s%s/preprocessed/%s/%s/',cfgin.fullpath(1:56),...
-  cfgin.blocktype,cfgin.restingfile,cfgin.stim_self))
+  % cd(sprintf('%s%s/preprocessed/%s/%s/',cfgin.fullpath(1:56),...
+  % cfgin.blocktype,cfgin.restingfile,cfgin.stim_self))
+  cd(cfgin.preproc)
   if strcmp(cfgin.blocktype,'trial')
     preproc_path = dir(sprintf('*noMEG*%s*block1.mat',cfgin.restingfile));
     load(preproc_path.name) %dataNoMEG
@@ -27,10 +28,10 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
     sampleinfo = dataNoMEG.cfg.previous.previous.previous.previous.trl(:,1:2);
 
   else
-    preproc_path = dir(sprintf('*noMEG*%d.mat',ipart+1));
+    preproc_path = dir(sprintf('*noMEG*%s*%d.mat',ipart,iblock+1));
     load(preproc_path.name) %dataNoMEG
 
-    arfct_path = dir(sprintf('artifacts*%d.mat',ipart+1));
+    arfct_path = dir(sprintf('artifacts*%s*%d.mat',ipart,iblock+1));
 
     load(arfct_path.name) % artifact_Jump/Muscle/idx_jump
     if isfield(dataNoMEG.cfg.previous.previous,'trl')
@@ -79,6 +80,7 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   cfg.artfctdef.zvalue.trlpadding  = 0; % avoid filter edge artefacts by setting to negative
   cfg.artfctdef.zvalue.fltpadding  = 0;
   cfg.artfctdef.zvalue.artpadding  = 0.05; % go a bit to the sides of blinks
+  % cfg.artfctdef.zvalue.feedback    = 'yes';
 
   % algorithmic parameters
   cfg.artfctdef.zvalue.bpfilter   = 'yes';
@@ -156,5 +158,9 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
   end
 
   freq.powspctrm = freq_nan;
+
+  perc_blink = sum(isnan(freq.powspctrm(:)))/numel(freq.powspctrm);
+
+  disp(sprintf('The frequency data has %3f percent inserted NaNs',perc_blink))
 
 end

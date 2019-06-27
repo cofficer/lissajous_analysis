@@ -21,7 +21,7 @@ for iblock = 1:length(filenames)
   % TODO: remove artifacts, muscle and eye.
   % TODO: add the model prediction as an extra column in trialfun. Make into function?
 
-  [freq,freqsamples] = clean_resp(trlTA_1,freq);
+  [freq,freqsamples] = clean_resp(trlTA_1,freq,parts,iblock);
   % TODO: mask the significant cluster and sum the MEG values.
   % TODO: get only the trials with response.
   % TODO: reduce the time of interest.

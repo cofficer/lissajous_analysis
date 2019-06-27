@@ -1,12 +1,33 @@
-function [freq,freqsamples] = clean_resp(trlTA_1,freq,model_dat)
+function [freq,freqsamples] = clean_resp(trlTA_1,freq,model_dat,ipart,iblock)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Extract model predictions per self-occlusion
 %based on the active inference framework.
 %TODO: good idea to do for every block.
+%This funciton is meant to remove all previously
+%Identified artifacts. Could possible be found in trl_info.
+%TODO: look into how the freq analysis was made to begin with.
+
+%TODO: also clean up according to [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% load('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/continous_self_freq/29freq_low_selfocclBlock4.mat')
 
-trl_info = freq.cfg.previous.previous.previous.previous.previous.previous.trl;
+% Path to the preprocessed information.
+cfgin.preproc = '/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/preproc_continuous_self_freq/';
+cfgin.blocktype = 'continuous';
+
+[idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart,iblock)
+
+% remove trials with musle artifcats from freq.
+cfg = [];
+cfg.trials = ones(1,length(freq.trialinfo))';
+cfg.trials(idx_artifacts) = 0;
+cfg.trials = logical(cfg.trials)';
+freq = ft_selectdata(cfg,freq);
+
+
+
+trl_info = freq.cfg.previous.previous.previous.previous.previous.previous.previous.previous.trl;
 
 trial_end.freq = trl_info(:,2)-3600;
 if trlTA_1.participant(1)==1

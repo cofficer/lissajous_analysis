@@ -15,7 +15,7 @@ function output = veith_model_test(cfgin)
   load('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo.mat')
 
   % select a participants data.
-  ipart       = 14;
+  % ipart       = 14;
 
   % trlTA=trlTA(trlTA.participant==14,:);
   % Error in participants: 13 and 15.
@@ -43,6 +43,16 @@ function output = veith_model_test(cfgin)
 
       u(:,4)=[1:length(resp)]'*4.5;
 
+      % When assessing our model, Model 1 to 4 are important. Here, we
+      % systematically remove parts of the model, regarding the parameter InitPi
+      % (the inital precision of a percept) and StereoPi (the precision of the
+      % stereo-disparity). Since you don't have stereodisparity, the most
+      % appropriate model should be Model 2. You could compare it to Model 1 (the
+      % null model) using Bayesian model comparison; Model 3 and 4 don't make
+      % sense in your case, since you do not have a stereodisparity condition.
+
+      % Model 5 - 7 include alternative models of bistable perception to compare
+      % the model to. Model 8 changes an additional parameter of the model (zeta).
 
       Model{1}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lissajous_config1', 'tapas_categorical_config')
       % tapas_fit_plotCorr(Model{1}.subject{1}.session)
@@ -71,7 +81,7 @@ for ipart = 1:29
     modelfits_alt(insert_negll)=Model{2}.subject{ipart}.session.optim.negLl;
     modelfits_3(insert_negll)=Model{3}.subject{ipart}.session.optim.negLl;
     modelfits_4(insert_negll)=Model{4}.subject{ipart}.session.optim.negLl;
-    modelfits_5(insert_negll)=Model{5}.subject{ipart}.session.optim.negLl;
+    modelfits_5(insert_negll)=6.negLl;
     insert_negll=insert_negll+1;
   end
 end

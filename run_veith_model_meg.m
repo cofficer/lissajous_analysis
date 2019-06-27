@@ -1,11 +1,13 @@
 function run_veith_model_meg
-
+% Main function which uses the model fits and
+% runs a correlation between the model and the masked MEG activity.
 
 
 % TODO: add function to remove eye movements.
 % Currently all those artifacts are included.
 % try function.
-[idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
+% TODO: The freq_artifact_remove should occur after the model fitting...
+% [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
 
 
 % first participant issue. error in 13 15 26. reload 23.
@@ -30,13 +32,13 @@ for iipart = 1:29
 
 
 
-  if ~isempty(model_dat.subject{iipart})
+  if ~isempty(model_dat{2}.subject{iipart})
     if iipart == 1
-      model_p = model_dat.subject{iipart}.session.traj.daq(:,1);
-      mod_fits = model_dat.subject{iipart}.session.optim.AIC;
+      model_p = model_dat{2}.subject{iipart}.session.traj.daq(:,1);
+      mod_fits = model_dat{2}.subject{iipart}.session.optim.AIC;
     else
-      model_p=[model_p;model_dat.subject{iipart}.session.traj.daq(:,1)];
-      mod_fits=[mod_fits;model_dat.subject{iipart}.session.optim.AIC];
+      model_p=[model_p;model_dat{2}.subject{iipart}.session.traj.daq(:,1)];
+      mod_fits=[mod_fits;model_dat{2}.subject{iipart}.session.optim.AIC];
     end
   end
 
