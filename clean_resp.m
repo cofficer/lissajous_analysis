@@ -1,4 +1,4 @@
-function [freq,freqsamples] = clean_resp(trlTA_1,freq,model_dat,ipart,iblock)
+function [freq,freqsamples] = clean_resp(trlTA_1,freq,ipart,iblock)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Extract model predictions per self-occlusion
 %based on the active inference framework.
@@ -19,16 +19,17 @@ cfgin.blocktype = 'continuous';
 [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart,iblock)
 
 % remove trials with musle artifcats from freq.
-cfg = [];
-cfg.trials = ones(1,length(freq.trialinfo))';
-cfg.trials(idx_artifacts) = 0;
-cfg.trials = logical(cfg.trials)';
-freq = ft_selectdata(cfg,freq);
+% cfg = [];
+% cfg.trials = ones(1,length(freq.trialinfo))';
+% cfg.trials(idx_artifacts) = 0;
+% cfg.trials = logical(cfg.trials)';
+% freq = ft_selectdata(cfg,freq);
 
 
+% Get original trial info
+trl_info = freq.cfg.previous.previous.previous.previous.previous.previous.trl;
 
-trl_info = freq.cfg.previous.previous.previous.previous.previous.previous.previous.previous.trl;
-
+% Not sure why remove the samples. Probably to get the timestamp of the self-occlusions.
 trial_end.freq = trl_info(:,2)-3600;
 if trlTA_1.participant(1)==1
   trial_end.freq=trial_end.freq-2700;
@@ -49,9 +50,14 @@ trial_end.index = and(trial_end.index,add_index);
 
 cfg = [];
 cfg.trials = trial_end.index;
+% remove muscle artifacts.
+cfg.trials(idx_artifacts) = 0;
 cfg.latency   = [-0.5,0.5];
 freq = ft_selectdata(cfg, freq);
 
+trial_end.index(idx_artifacts) = [];
+trial_end.freq(idx_artifacts) = [];
+trial_end.respfreq(idx_artifacts) = [];
 
 freqsamples=trial_end.freq(trial_end.index);
 end

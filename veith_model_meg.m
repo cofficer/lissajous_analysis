@@ -83,8 +83,8 @@ model_dat=model_dat(index_model);
 % legend model freq
 
 [r,p]     = corr((model_dat),nansum(mask_dat,2));
-
-% scatter(abs(model_dat),nansum(mask_dat,2))
+figure
+scatter(abs(model_dat),nansum(mask_dat,2))
 
 % TODO: Correlate that value with the prediction error
 % TODO:
