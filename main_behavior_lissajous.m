@@ -2,8 +2,8 @@
 
 
 % load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior/allTrialsTable.mat')
-load('/Users/c.gahnstrohm/Dropbox/PhD/Lissajous/behaviour/allTrialsTable.mat')
-
+load('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/allTrialsTable.mat')
+% /home/chris/Dropbox/PhD/Projects/Lissajous/behaviour
 allRun = [];
 for ipart = 1:trlTA.participant(end)
 
@@ -34,10 +34,13 @@ for ipart = 1:trlTA.participant(end)
   standdev(ipart) = std([runlength{:}].*4.5);
 
   allRun = [allRun runlength{:}];
+%   figure(ipart)
+%   histogram([runlength{:}])
 
 end
 
 %Plot switches across all participants.
+
 clear g
 close
 figure(1),clf
@@ -91,6 +94,11 @@ title('Upper Cumulative Gamma Distribution')
 xlim([-20 300])
 saveas(gca,'testplot.png')
 
+%%
+
+
+%%
+
 cd('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/behavior')
 
 filetyp='svg';
@@ -101,3 +109,11 @@ namefigure = sprintf('switch_perecep_dist');%fractionTrialsRemaining
 filetype    = 'svg';
 figurename = sprintf('%s_%s.%s',todaystr,namefigure,filetype);
 g.export('file_name',figurename,'file_type',filetype);
+
+%%
+% What is interesting to look at w.r.t. the behaviour? 
+
+
+
+
+

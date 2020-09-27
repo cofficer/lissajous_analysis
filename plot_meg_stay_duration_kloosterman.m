@@ -9,7 +9,7 @@ function output = plot_meg_stay_duration_kloosterman(nPart)
 %Created 28/11/2018.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/beta_cluster_self_switch')
+cd('/home/chris/Dropbox/PhD/Projects/Lissajous/beta_cluster_self_switch')
 
 nfiles = dir('*.mat');
 

@@ -1,4 +1,4 @@
-function [freq,freqsamples] = clean_resp(trlTA_1,freq,ipart,iblock)
+function [freq,freqsamples,idx_artifacts] = clean_resp(trlTA_1,freq,ipart,iblock,latency)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Extract model predictions per self-occlusion
 %based on the active inference framework.
@@ -10,10 +10,11 @@ function [freq,freqsamples] = clean_resp(trlTA_1,freq,ipart,iblock)
 %TODO: also clean up according to [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 % load('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/continous_self_freq/29freq_low_selfocclBlock4.mat')
 
 % Path to the preprocessed information.
-cfgin.preproc = '/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/preproc_continuous_self_freq/';
+cfgin.preproc = '/home/chris/Dropbox/PhD/Projects/Lissajous/preproc_continuous_self_freq/';
 cfgin.blocktype = 'continuous';
 
 [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart,iblock)
@@ -49,10 +50,10 @@ add_index=(resp>0);
 trial_end.index = and(trial_end.index,add_index);
 
 cfg = [];
-cfg.trials = trial_end.index;
+cfg.trials = logical(ones(1,size(freq.powspctrm,1)))';
 % remove muscle artifacts.
 cfg.trials(idx_artifacts) = 0;
-cfg.latency   = [-0.5,0.5];
+cfg.latency   = latency;
 freq = ft_selectdata(cfg, freq);
 
 trial_end.index(idx_artifacts) = [];
@@ -60,4 +61,6 @@ trial_end.freq(idx_artifacts) = [];
 trial_end.respfreq(idx_artifacts) = [];
 
 freqsamples=trial_end.freq(trial_end.index);
+
+idx_artifacts=cfg.trials;
 end

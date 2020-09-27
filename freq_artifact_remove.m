@@ -153,8 +153,9 @@ function [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart,iblock)
     end
 
     %the num_bins_start, until num_bins_stop
-    freq_nan(trl_start,:,:,num_bins_start(iblinks):num_bins_stop(iblinks))=NaN;
-
+    if trl_start<=size(freq.powspctrm,1)
+        freq_nan(trl_start,:,:,num_bins_start(iblinks):num_bins_stop(iblinks))=NaN;
+    end
   end
 
   freq.powspctrm = freq_nan;

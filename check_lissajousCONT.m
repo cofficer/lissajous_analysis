@@ -3,11 +3,14 @@ function trlT=check_lissajousCONT(numP)
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Read events from the lissajous raw data, for continuous blocks.
+% Edits, 25/09/2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if numP<10
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P0%i',numP))
+% cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P0%i',numP))
+cd(sprintf('/media/chris/Elements/Projects/Lissajous/raw/P0%i',numP))
 else
-    cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P%i',numP))
+%     cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P%i',numP))
+    cd(sprintf('/media/chris/Elements/Projects/Lissajous/raw/P%i',numP))
 end
 %The first data set is for trialbased in this condition. 
 %Take the script from trialfun. Create a trialdefinition. 
@@ -27,7 +30,7 @@ for inames=2:length(ds_files)
     else
         
         %add all datasets together.
-        fullevent=[fullevent;event];
+        fullevent=[fullevent,event];
         
     end
     

@@ -79,3 +79,5 @@ disp('Finished concatenating all trials')
 
 %trlTA.responseValue(trlTA.responseValue==228)=225;
 %trlTA.responseValue(trlTA.responseValue==226)=232;
+
+save('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo_trlnumblock.mat','trlTA')

@@ -9,7 +9,7 @@ function run_veith_model_meg
 % TODO: The freq_artifact_remove should occur after the model fitting...
 % [idx_artifacts, freq] = freq_artifact_remove(freq,cfgin,ipart)
 
-
+cd('/home/chris/Documents/lissajous/data/continous_self_freq/')
 % first participant issue. error in 13 15 26. reload 23.
 for ipart = 1:29
 
@@ -31,8 +31,8 @@ for ipart = 1:29
 
 end
 
-cd('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/behaviour/')
-save('corr_stat.mat','corr_stat')
+% cd('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/behaviour/')
+% save('corr_stat.mat','corr_stat')
 
 for iipart = 1:29
 
@@ -47,5 +47,6 @@ for iipart = 1:29
       mod_fits=[mod_fits;model_dat{2}.subject{iipart}.session.optim.AIC];
     end
   end
+end
 
 end

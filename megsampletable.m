@@ -62,8 +62,7 @@ cueoffCellArray   = cell(1,length(trlN))';
 %Create the table
 trlT = table(StartTrial,EndTrial,SelfOcclusionSample,CueOnsetSample,responseSample,responseValue,cueoffCellArray,participant,trlN);
 
-%Initiate trial number
-trlNumber = 0;
+
 
 
 %loop datasets
@@ -76,6 +75,8 @@ for idat = 1:length(SOblockind)-1
     currentCueOnset       = samples.go_cuesample(CueOnind(idat)+1:CueOnind(idat+1));
     currValResonses       = values.response(BPblockind(idat)+1:BPblockind(idat+1));
  
+    %Initiate trial number
+    trlNumber = 0;
     
     %Loop the selfocclusions for the current dataset. 
     for iSO = 1:length(currentSelfOcclusions)-1
@@ -106,11 +107,17 @@ for idat = 1:length(SOblockind)-1
             
         end
         
+       
+        
         %Check if a cue on is found 
         if ~isempty(indcurrentCUEON)
             %Store all the samples of button presses.
             trlT.CueOnsetSample(iSOAll)= currentCueOnset(indcurrentCUEON(1));
+            
+            
             trlNumber = trlNumber+1;
+            
+            
             trlT.trlN(iSOAll) = trlNumber;
         end
         

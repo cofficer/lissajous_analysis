@@ -1,11 +1,9 @@
-function output = veith_model_test(cfgin)
+function output = veith_model_withfreqresp(cfgin)
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Extract model predictions per self-occlusion
   %based on the active inference framework.
   %TODO: Divide each block into separate sessions.
-  %TODO: Figure out how to treat error trials.
-  %TODO: Figure out why 13 and 15 contain errors.
   %Created 18/12/2018.
   %New version 26/09/2020
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,16 +18,44 @@ function output = veith_model_test(cfgin)
 
   % trlTA=trlTA(trlTA.participant==14,:);
   % Error in participants: 13 and 15.
+  % TODO: Fix Errors in these  
+  %   find all participant id.
+  % 
+  
+%   addpath('/home/chris/Documents/lissajous/code/lissajous_analysis/veith_model/TAPAS modifications/Old Scripts')
+  addpath('/home/chris/Documents/lissajous/code/tapas')
+  tapas_init('hgf')
+  
+  participants = dir('/home/chris/Documents/lissajous/data/continous_self_freq/*freq_low_selfocclBlock2.mat');
+  
   for ipart = 1:29
 %     blocklength=length(trlTA.StartTrial) %change to actual
 %     for iblock = 1:blocklength
       disp(ipart)
-      index       = trlTA.participant==ipart;
-      table_test  = trlTA(index,:);
-      resp        = table_test.responseValue;
       
       
+      files = dir(sprintf('/home/chris/Documents/lissajous/data/continous_self_freq/%sfreq_low_selfocclBlock*.mat',participants(ipart).name(1:2)));
       
+      cd(files(1).folder)
+      
+      %   load(sprintf('/home/chris/Documents/lissajous/data/contin
+      freqAll = [];
+      
+      for ifile = 1:length(files)
+          cfg = [];
+          
+          load(files(ifile).name);
+          
+          if ifile>1
+              [freqAll] = append_trialfreq([],freqAll,freq);
+          else
+              freqAll=freq;
+          end
+          
+      end
+      
+      resp = freqAll.trialinfo(:,5);
+      resp(resp == 0)=NaN; 
       % remove nans. Will distort but important to only have the responses.
       % resp_clean=resp(~isnan(resp));
       % resp_clean=resp;
@@ -37,6 +63,9 @@ function output = veith_model_test(cfgin)
       resp(resp==232)=1;
       resp(resp==226)=0;
       resp(resp==228)=1;
+      %there is a 233 , 236 values...
+      resp(resp==233)=1;
+      resp(resp==236)=1;
 
       % perception at each overlap
       y=resp;
@@ -57,24 +86,37 @@ function output = veith_model_test(cfgin)
 
       % Model 5 - 7 include alternative models of bistable perception to compare
       % the model to. Model 8 changes an additional parameter of the model (zeta).
-
-      Model{1}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lissajous_config1', 'tapas_categorical_config')
-      % tapas_fit_plotCorr(Model{1}.subject{1}.session)
-      % tapas_hgf_binary_plotTraj(Model{1}.subject{1}.session)
-
-      Model{2}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lissajous_config2', 'tapas_categorical_config')
-
-      Model{3}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lehky_config', 'tapas_categorical_Wilson_config')
-
-      % Error in Wilson model
-      % tried to fix by commenting out infStates(:,1,5) = traj.predicted;
-      Model{4}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Wilson_config_full', 'tapas_categorical_Wilson_config')
-
-      % Error in Moreno model - same as in Wilson.
-      Model{5}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Moreno_config', 'tapas_categorical_Moreno_config')
+      
+      Model{1}.subject{ipart}.session = tapas_fitModel(y,...
+          u,...
+          'tapas_hgf_binary_Lissajous_config1',...
+          'tapas_categorical_config');
+      
+      Model{2}.subject{ipart}.session = tapas_fitModel(y,...
+          u,...
+          'tapas_hgf_binary_Lissajous_config2',...
+          'tapas_bayes_optimal_binary_config',...
+          'tapas_quasinewton_optim_config');
+      
+      
+                     
+%       Model{1}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lissajous_config1', 'tapas_categorical_config')
+%       % tapas_fit_plotCorr(Model{1}.subject{1}.session)
+%       % tapas_hgf_binary_plotTraj(Model{1}.subject{1}.session)
+% 
+%       Model{2}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lissajous_config2', 'tapas_categorical_config')
+% 
+%       Model{3}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lehky_config', 'tapas_categorical_Wilson_config')
+% 
+%       % Error in Wilson model
+%       % tried to fix by commenting out infStates(:,1,5) = traj.predicted;
+%       Model{4}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Wilson_config_full', 'tapas_categorical_Wilson_config')
+% 
+%       % Error in Moreno model - same as in Wilson.
+%       Model{5}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Moreno_config', 'tapas_categorical_Moreno_config')
 %     end
   end
-end
+
 
 %
 %What is the meaning of all the output?
@@ -95,7 +137,7 @@ end
 %     est.p_prc          Maximum-a-posteriori estimates of perceptual parameters
 %                        (see the configuration file of your chosen perceptual model for details)
 %     est.p_obs          Maximum-a-posteriori estimates of observation parameters
-%                        (see the configuration file of your chosen observation model for details)
+%                        (see ttapas_hgf_binary_plotTrajhe configuration file of your chosen observation model for details)
 %     est.traj:          Trajectories of the environmental states tracked by the perceptual model
 %                        (see the configuration file of that model for details)
 
@@ -148,17 +190,59 @@ end
 insert_negll=1;
 for ipart = 1:29
   if ~isempty(Model{1}.subject{ipart})
-    modelfits_null(insert_negll)=Model{1}.subject{ipart}.session.optim.negLl;
-    modelfits_alt(insert_negll)=Model{2}.subject{ipart}.session.optim.negLl;
-    modelfits_3(insert_negll)=Model{3}.subject{ipart}.session.optim.negLl;
-    modelfits_4(insert_negll)=Model{4}.subject{ipart}.session.optim.negLl;
-    modelfits_5(insert_negll)=6.negLl;
+    modelfits_null(insert_negll)=Model{1}.subject{ipart}.session.optim.LME;
+    modelfits_alt(insert_negll)=Model{2}.subject{ipart}.session.optim.LME;
+%     modelfits_3(insert_negll)=Model{3}.subject{ipart}.session.optim.negLl;
+%     modelfits_4(insert_negll)=Model{4}.subject{ipart}.session.optim.negLl;
+%     modelfits_5(insert_negll)=6.negLl;
     insert_negll=insert_negll+1;
   end
 end
 
-cd('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/behaviour')
-save('model_tapas.mat','Model')
+%%
+%
+
+%plot the results of model fitting. 
+addpath('/home/chris/Documents/lissajous/code/cbrewer')
+addpath('/home/chris/Documents/lissajous/code/RainCloudPlots/tutorial_matlab')
+
+
+[cb] = cbrewer('qual', 'Set3', 12, 'pchip');
+
+h1 = raincloud_plot(modelfits_null, 'box_on', 1, 'color', cb(1,:), 'alpha', 0.5,...
+     'box_dodge', 1, 'box_dodge_amount', .15, 'dot_dodge_amount', .15,...
+     'box_col_match', 0);
+ 
+h2 = raincloud_plot(modelfits_alt, 'box_on', 1, 'color', cb(4,:), 'alpha', 0.5,...
+     'box_dodge', 1, 'box_dodge_amount', .35, 'dot_dodge_amount', .35, 'box_col_match', 0);
+ 
+legend([h1{1} h2{1}], {'Null model', 'PE Model'});
+ 
+title('LME - model comparison')
+ 
+
+
+
+h3 = raincloud_plot(mnull, 'box_on', 1, 'color', cb(7,:), 'alpha', 0.5,...
+     'box_dodge', 1, 'box_dodge_amount', .55, 'dot_dodge_amount', .55, 'box_col_match', 0);
+ 
+h4 = raincloud_plot(malt, 'box_on', 1, 'color', cb(10,:), 'alpha', 0.5,...
+     'box_dodge', 1, 'box_dodge_amount', .75, 'dot_dodge_amount', .75, 'box_col_match', 0);
+
+ 
+legend([h1{1} h2{1}], {'Group 1', 'Group 2'});
+title(['Figure M7' newline 'A) Dodge Options Example 1']);
+set(gca,'XLim', [0 40], 'YLim', [-.075 .15]);
+box off
+
+fits{1}=modelfits_null;
+fits{2}=modelfits_alt;
+
+cd('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour')
+save('model_tapas_HGFv6.mat','Model')
+
+load('model_tapas_HGFv6.mat')
+
 
 figure(1),clf
 bar([mean(modelfits_null);mean(modelfits_alt);mean(modelfits_3);mean(modelfits_4);mean(modelfits_5)])

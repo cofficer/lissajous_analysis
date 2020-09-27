@@ -12,7 +12,8 @@ clear all
 
 blocktype = 'continuous' %continuous or trial
 stim_self = ''; %'' or resp.
-cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype))
+% cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/%s/freq/average/self',blocktype))
+cd(sprintf('/media/chris/Elements/Projects/Lissajous/freq/%s/average/self/',blocktype))
 
 %Define if looking at switch vs no switch
 sw_vs_nsw = 1;
@@ -59,8 +60,8 @@ if sw_vs_nsw
 end
 
 %Load the sensors of interest
-load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-01-05_visual_sensors.mat')
-load('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/trial/2018-03-14_visual_sensors_gamma.mat')
+load('/home/chris/Dropbox/PhD/Projects/Lissajous/trial/2018-01-05_visual_sensors.mat')
+load('/home/chris/Dropbox/PhD/Projects/Lissajous/trial/2018-03-14_visual_sensors_gamma.mat')
 
 %plot the TFR
 %TODO: find the IDX of all motor sensors, and use those to plot TFR.
@@ -82,7 +83,7 @@ hf=figure(1),clf
 ax2=subplot(1,1,1)
 % freq.powspctrm = switchTrial;
 cfg=[];
-cfg.zlim         = [-10 10];
+cfg.zlim         = [-5 5];
 %cfg.ylim         = [3 35];
 cfg.layout       = 'CTF275_helmet.lay';
 % cfg.xlim         = %[-0.25 0];%[2 2.25];%[0.5 4 ];%[2.1 2.4];%

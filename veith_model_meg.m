@@ -13,9 +13,10 @@ function [r,p] = veith_model_meg(parts,Model,trlTA_1,statout)
 model_dat=Model{2}.subject{str2num(parts)}.session.traj.daq(:,1);
 resp_mode=Model{2}.subject{str2num(parts)}.session.y;
 
-filenames = dir(sprintf('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/continous_self_freq/%sfreq_low_selfocclBlock*.mat',parts));
+filenames = dir(sprintf('/home/chris/Documents/lissajous/data/continous_self_freq/%sfreq_low_selfocclBlock*.mat',parts));
 for iblock = 1:length(filenames)
   disp(iblock)
+  cd('/home/chris/Documents/lissajous/data/continous_self_freq/')
   load(filenames(iblock).name)
 
   % TODO: remove artifacts, muscle and eye.
@@ -84,7 +85,10 @@ model_dat=model_dat(index_model);
 
 [r,p]     = corr((model_dat),nansum(mask_dat,2));
 figure
-scatter(abs(model_dat),nansum(mask_dat,2))
+hold on;
+plot(zscore(abs(model_dat)))
+plot(zscore(nansum(mask_dat,2)))
+% scatter(abs(model_dat),nansum(mask_dat,2))
 
 % TODO: Correlate that value with the prediction error
 % TODO:
