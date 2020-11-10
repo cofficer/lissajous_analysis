@@ -4,6 +4,13 @@ function trlT=check_lissajousCONT(numP)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Read events from the lissajous raw data, for continuous blocks.
 % Edits, 25/09/2020
+%TODO: clean up script. Make sure the identified button presses occur in
+%the correct time intervals. Try to match with the trialfun definitions. 
+%Trialfun only uses responses that are correctly timed and come from the script. 
+%The alternative us to use UPPT02 and then we get every single button
+%press. This I think is preferred. Some participant were bad at pressing
+%the precise timings, but their reponses are still important for the
+%modelling. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if numP<10
 % cd(sprintf('/mnt/homes/home024/chrisgahn/Documents/MATLAB/Lissajous/raw/P0%i',numP))
@@ -56,21 +63,30 @@ resp_rightL         = 45;   %3rd button from left
 resp_rightL2        = 228;  %3rd button from left
 resp_rightR         = 46;   %4th button from left
 resp_rightR2        = 232;  %4th button from left
+
+% 
+% resp_unknown1       = 233;  %
+% resp_unknown2       = 236;  %
 resp_bad            = 43;   %
 
 trial_end           = 61; %New block onset
 block_end           = 90; %Not currenlty in use. 
 
 %All triggers
-trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,232,225];
+% trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,232,225];
+trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,225,226,228,232,233,236];
 
-%Change the buttons used for P03:;;;
-if sum(numP==[3,4,5])
-
-    trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,226,228];
-
-
-end
+% %Change the buttons used for P03, consider also changing / adding for P16
+% if sum(numP==[3,4,5])
+% 
+%     trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,226,228];
+% 
+% elseif numP==16
+%     Seems this participants has many more responses than self-occlusions.
+%     
+%     trigAll     =[1,11,21,22,31,32,33,10,41,42,45,46,43,61,90,225,226,228,232,233,236];
+%     
+% end
 
 % start by selecting all events
 trgval = strcmp('UPPT001',{fullevent.type}); % this should be a row vector
@@ -105,6 +121,8 @@ go_cueN      = 1;
 responseN    = 1;
 responseScN  = 1;
 block_startN = 1;
+
+selfo_resp = [];
 
 for i=1:length(trgvalIndex)
     
@@ -150,17 +168,19 @@ for i=1:length(trgvalIndex)
 
         case {resp_leftL2,resp_leftR2,resp_rightL2,resp_rightR2}
             
-                 responseValue(responseN)  = fullevent(trgvalIndex(i)).value;
-                 responseSample(responseN) = fullevent(trgvalIndex(i)).sample;
-                 responseN      = responseN+1;       
-        
+            responseValue(responseN)  = fullevent(trgvalIndex(i)).value;
+            responseSample(responseN) = fullevent(trgvalIndex(i)).sample;
+            responseN      = responseN+1;
+            selfo_resp(selfN) = fullevent(trgvalIndex(i)).value;
+            
          case {resp_leftL,resp_leftR,resp_rightL,resp_rightR}
 %             
 
             responseScriptValue(responseScN)  = fullevent(trgvalIndex(i)).value;
             responseScriptSample(responseScN) = fullevent(trgvalIndex(i)).sample;
             responseScN = responseScN+1;
-
+            
+            selfo_resp(selfN) = fullevent(trgvalIndex(i)).value;
         
         case {off_cue}
             

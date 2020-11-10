@@ -26,7 +26,7 @@ for ipart =1:29
     % let's look at the prediction errors instead on different levels. 
     % mu = model prediction 
     % muhat = model prediction, one step ahead?
-    model_dat = Model{2}.subject{str2num(parts)}.session.traj.epsi(:,2);
+    model_dat = Model{2}.subject{str2num(parts)}.session.traj.muhat(:,2);
     resp_mode = Model{2}.subject{str2num(parts)}.session.y;
 
     filenames = dir(sprintf('/home/chris/Documents/lissajous/data/continous_self_freq/%sfreq_low_selfocclBlock*.mat',parts));
@@ -139,14 +139,14 @@ for ipart =1:29
 
         cd('/home/chris/Dropbox/PhD/Projects/Lissajous/results_plots/modelcorr')
         %New naming file standard. Apply to all projects.
-        namefigure = 'modeltraj_epsi2';
+        namefigure = 'modeltraj_muhat2';
         formatOut = 'yyyy-mm-dd';
         todaystr = datestr(now,formatOut);
         figurefreqname = sprintf('%s_part%s_%s_nobaselinetest.png',todaystr,parts,namefigure);
         saveas(gca,figurefreqname,'png')
     end
     
-    namefigure = 'lowfreq_model_epsi2';
+    namefigure = 'lowfreq_model_muhat2';
     cd('/home/chris/Dropbox/PhD/Projects/Lissajous/analysis')
     save(sprintf('%spart_%s_nobaselinetest.mat',parts,namefigure),'freq_corrmap')
 

@@ -12,8 +12,10 @@ function output = veith_model_test(cfgin)
 
 % 
 %   addpath(genpath('/Users/c.gahnstrohm/Dropbox/spiers07_desktop/lissajous_code/lissajous_analysis'))
-% 
-%   load('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo.mat')
+%   load('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/model_tapas_HGFv6_respUPPT02')
+%   load('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo.mat')
+%   load('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo_trlnumblock_v2.mat')
+% Table_continfo_trlnumblock_v2
 
   % select a participants data.
   % ipart       = 14;
@@ -64,14 +66,14 @@ function output = veith_model_test(cfgin)
 
       Model{2}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lissajous_config2', 'tapas_categorical_config')
 
-      Model{3}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lehky_config', 'tapas_categorical_Wilson_config')
-
-      % Error in Wilson model
-      % tried to fix by commenting out infStates(:,1,5) = traj.predicted;
-      Model{4}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Wilson_config_full', 'tapas_categorical_Wilson_config')
-
-      % Error in Moreno model - same as in Wilson.
-      Model{5}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Moreno_config', 'tapas_categorical_Moreno_config')
+%       Model{3}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Lehky_config', 'tapas_categorical_Wilson_config')
+% 
+%       % Error in Wilson model
+%       % tried to fix by commenting out infStates(:,1,5) = traj.predicted;
+%       Model{4}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Wilson_config_full', 'tapas_categorical_Wilson_config')
+% 
+%       % Error in Moreno model - same as in Wilson.
+%       Model{5}.subject{ipart}.session=tapas_fitModel(y,u,'tapas_hgf_binary_Moreno_config', 'tapas_categorical_Moreno_config')
 %     end
   end
 end
@@ -150,15 +152,15 @@ for ipart = 1:29
   if ~isempty(Model{1}.subject{ipart})
     modelfits_null(insert_negll)=Model{1}.subject{ipart}.session.optim.negLl;
     modelfits_alt(insert_negll)=Model{2}.subject{ipart}.session.optim.negLl;
-    modelfits_3(insert_negll)=Model{3}.subject{ipart}.session.optim.negLl;
-    modelfits_4(insert_negll)=Model{4}.subject{ipart}.session.optim.negLl;
-    modelfits_5(insert_negll)=6.negLl;
+%     modelfits_3(insert_negll)=Model{3}.subject{ipart}.session.optim.negLl;
+%     modelfits_4(insert_negll)=Model{4}.subject{ipart}.session.optim.negLl;
+%     modelfits_5(insert_negll)=Model{5}.subject{ipart}.session.optim.negLl.negLl;
     insert_negll=insert_negll+1;
   end
 end
 
-cd('/Users/c.gahnstrohm/Dropbox/PhD/Projects/Lissajous/behaviour')
-save('model_tapas.mat','Model')
+cd('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/')
+save('model_tapas_HGFv6_respUPPT02.mat','Model')
 
 figure(1),clf
 bar([mean(modelfits_null);mean(modelfits_alt);mean(modelfits_3);mean(modelfits_4);mean(modelfits_5)])

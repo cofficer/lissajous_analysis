@@ -21,6 +21,7 @@ function output = veith_model_withfreqresp(cfgin)
   % TODO: Fix Errors in these  
   %   find all participant id.
   % 
+  % load('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/model_tapas_HGFv6.mat')
   
 %   addpath('/home/chris/Documents/lissajous/code/lissajous_analysis/veith_model/TAPAS modifications/Old Scripts')
   addpath('/home/chris/Documents/lissajous/code/tapas')
@@ -187,6 +188,12 @@ function output = veith_model_withfreqresp(cfgin)
 %         est.traj.wt          full weights on prediction errors (at the first level,
 %                                  this is the learning rate) (rows: trials, columns: levels)
 
+%remove three outlier participants 
+Model{1}.subject{8}=[];
+Model{1}.subject{19}=[];
+Model{1}.subject{22}=[];
+
+
 insert_negll=1;
 for ipart = 1:29
   if ~isempty(Model{1}.subject{ipart})
@@ -209,6 +216,13 @@ addpath('/home/chris/Documents/lissajous/code/RainCloudPlots/tutorial_matlab')
 
 [cb] = cbrewer('qual', 'Set3', 12, 'pchip');
 
+close all;
+figure('Position', [10 10 1300 900])
+
+load('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/model_tapas_HGFv6.mat')
+
+subplot(1,2,1)
+
 h1 = raincloud_plot(modelfits_null, 'box_on', 1, 'color', cb(1,:), 'alpha', 0.5,...
      'box_dodge', 1, 'box_dodge_amount', .15, 'dot_dodge_amount', .15,...
      'box_col_match', 0);
@@ -217,18 +231,74 @@ h2 = raincloud_plot(modelfits_alt, 'box_on', 1, 'color', cb(4,:), 'alpha', 0.5,.
      'box_dodge', 1, 'box_dodge_amount', .35, 'dot_dodge_amount', .35, 'box_col_match', 0);
  
 legend([h1{1} h2{1}], {'Null model', 'PE Model'});
+% ylim([-700 -330])
+% yl = get(gca, 'YLim');
+set(gca, 'XLim', [-620 -350]);
+set(gca, 'YLim', [-0.01 0.02]);
+xlabel(['Log likelihood (more - better)'])
+
+set(gca,'ytick',[])
+set(gca,'yticklabel',[])
+title('LME - new model comparison')
+
+
+%%
+%plot the old model fits to compare. 
+load('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/model_tapas.mat')
+
+insert_negll=1;
+for ipart = 1:29
+  if ~isempty(Model{1}.subject{ipart})
+    modelfits_null2(insert_negll)=Model{1}.subject{ipart}.session.optim.LME;
+    modelfits_alt2(insert_negll)=Model{2}.subject{ipart}.session.optim.LME;
+%     modelfits_3(insert_negll)=Model{3}.subject{ipart}.session.optim.negLl;
+%     modelfits_4(insert_negll)=Model{4}.subject{ipart}.session.optim.negLl;
+%     modelfits_5(insert_negll)=6.negLl;
+    insert_negll=insert_negll+1;
+  end
+end
+
+subplot(1,2,2)
+
+h1 = raincloud_plot(modelfits_null2, 'box_on', 1, 'color', cb(1,:), 'alpha', 0.5,...
+     'box_dodge', 1, 'box_dodge_amount', .15, 'dot_dodge_amount', .15,...
+     'box_col_match', 0);
  
-title('LME - model comparison')
+h2 = raincloud_plot(modelfits_alt2, 'box_on', 1, 'color', cb(4,:), 'alpha', 0.5,...
+     'box_dodge', 1, 'box_dodge_amount', .35, 'dot_dodge_amount', .35, 'box_col_match', 0);
  
 
+legend([h1{1} h2{1}], {'Null model', 'PE Model'});
+set(gca, 'XLim', [-620 -350]);
+set(gca, 'YLim', [-0.007 0.012]);
+
+set(gca,'ytick',[])
+set(gca,'yticklabel',[])
+xlabel(['Log likelihood (more - better)'])
 
 
+title('LME - old model comparison')
+
+
+%%
+%Save figure
+
+cd('/home/chris/Dropbox/PhD/Projects/Lissajous/results_plots/compmodelling')
+
+%New naming file standard. Apply to all projects.
+namefigure = 'model_fits_old_new_raincloud_v2';
+formatOut = 'yyyy-mm-dd';
+todaystr = datestr(now,formatOut);
+figurefreqname = sprintf('%s_%s.png',todaystr,namefigure);
+saveas(gca,figurefreqname,'png')
+
+%%
 h3 = raincloud_plot(mnull, 'box_on', 1, 'color', cb(7,:), 'alpha', 0.5,...
      'box_dodge', 1, 'box_dodge_amount', .55, 'dot_dodge_amount', .55, 'box_col_match', 0);
  
 h4 = raincloud_plot(malt, 'box_on', 1, 'color', cb(10,:), 'alpha', 0.5,...
      'box_dodge', 1, 'box_dodge_amount', .75, 'dot_dodge_amount', .75, 'box_col_match', 0);
-
+ 
  
 legend([h1{1} h2{1}], {'Group 1', 'Group 2'});
 title(['Figure M7' newline 'A) Dodge Options Example 1']);
@@ -241,9 +311,8 @@ fits{2}=modelfits_alt;
 cd('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour')
 save('model_tapas_HGFv6.mat','Model')
 
-load('model_tapas_HGFv6.mat')
 
-
+%%
 figure(1),clf
 bar([mean(modelfits_null);mean(modelfits_alt);mean(modelfits_3);mean(modelfits_4);mean(modelfits_5)])
 hold on

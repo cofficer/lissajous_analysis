@@ -77,7 +77,7 @@ disp('Finished concatenating all trials')
 %Add together the 225/228 and the 226/232, issue is or 3 participants the
 %buttons were switched.
 
-%trlTA.responseValue(trlTA.responseValue==228)=225;
-%trlTA.responseValue(trlTA.responseValue==226)=232;
+trlTA.responseValue(trlTA.responseValue==228)=225;
+trlTA.responseValue(trlTA.responseValue==226)=232;
 
-save('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo_trlnumblock.mat','trlTA')
+save('/home/chris/Dropbox/PhD/Projects/Lissajous/behaviour/Table_continfo_trlnumblock_v2.mat','trlTA')
