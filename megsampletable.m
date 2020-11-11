@@ -53,6 +53,9 @@ trlN                  = zeros(1,length(StartTrial))';
 SelfOcclusionSample   = zeros(1,length(samples.selfocclusion1sample))';
 CueOnsetSample        = zeros(1,length(samples.selfocclusion1sample))';
 participant           = zeros(1,length(samples.selfocclusion1sample))';
+block         = zeros(1,length(samples.selfocclusion1sample))';
+          
+
 
 responseSample = zeros(1,length(trlN))';
 responseValue     = zeros(1,length(trlN))';
@@ -60,7 +63,7 @@ cueoffCellArray   = cell(1,length(trlN))';
 
 
 %Create the table
-trlT = table(StartTrial,EndTrial,SelfOcclusionSample,CueOnsetSample,responseSample,responseValue,cueoffCellArray,participant,trlN);
+trlT = table(StartTrial,EndTrial,SelfOcclusionSample,CueOnsetSample,responseSample,responseValue,cueoffCellArray,participant,trlN,block);
 
 
 
@@ -171,7 +174,7 @@ end
 
 trlT.SelfOcclusionSample = samples.selfocclusion1sample';
 trlT.participant         = repmat(samples.numP,1,length(samples.selfocclusion1sample))';
-
+trlT.block               = samples.blocknumbbers';
 
 %Create the table
 %trlT = table(StartTrial,EndTrial,SelfOcclusionSample,CueOnsetSample,responseCellArray,responseValue,cueoffCellArray,trlN);

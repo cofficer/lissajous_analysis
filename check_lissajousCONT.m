@@ -122,6 +122,7 @@ responseN    = 1;
 responseScN  = 1;
 block_startN = 1;
 
+blocknumbbers = [];
 selfo_resp = [];
 
 for i=1:length(trgvalIndex)
@@ -158,8 +159,12 @@ for i=1:length(trgvalIndex)
         case {self_occlusion}
 
             selfocclusion1sample(selfN) = fullevent(trgvalIndex(i)).sample;
+
+            blocknumbbers(selfN) = block_startN;
             selfN=selfN+1;
- 
+            
+            
+            
         case go_cue
  
             go_cuesample(go_cueN) = fullevent(trgvalIndex(i)).sample;
@@ -172,6 +177,7 @@ for i=1:length(trgvalIndex)
             responseSample(responseN) = fullevent(trgvalIndex(i)).sample;
             responseN      = responseN+1;
             selfo_resp(selfN) = fullevent(trgvalIndex(i)).value;
+            
             
          case {resp_leftL,resp_leftR,resp_rightL,resp_rightR}
 %             
@@ -216,6 +222,7 @@ samples.responseSample=responseSample;
 samples.off_cueSample=off_cueSample;
 samples.block_startSample=block_startSample; %Use to restrict button presses. 
 samples.selfocclusion1sample=selfocclusion1sample; %Use to restrict button presses. 
+samples.blocknumbbers = blocknumbbers;
 
 %collect all relevant values in one structure.
 values.response = responseValue;
