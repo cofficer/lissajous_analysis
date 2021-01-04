@@ -4,6 +4,8 @@ function output = plot_cluster_switchnoswitch(cfgin)
   %Correlate switch-related activity with
   %upcoming perceptual duration.
   %Created 17/11/2018.
+  %Updated 15/12/2020. Add analysis of comparing model prediction to
+  %strength of response in cluster region. 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
  
@@ -15,7 +17,7 @@ function output = plot_cluster_switchnoswitch(cfgin)
 
   % %Sum over time, and freq.
   data_comp = statout.stat;
-  data_comp(~statout.mask)=NaN
+  data_comp(~statout.mask)=NaN;
   %sum over channels...
   %time
   data_comp=nansum(data_comp(:,:,:),3);
@@ -23,7 +25,7 @@ function output = plot_cluster_switchnoswitch(cfgin)
   data_comp=nansum(data_comp(:,:,:),2);
   
   for in = 10:29
-      load(sprintf('/home/chris/Documents/lissajous/data/continous_self_freq/%dfreq_low_selfocclBlock4.mat',in))
+      load(sprintf('/media/chris/Elements/Projects/Lissajous/continous_self_freq/%dfreq_low_selfocclBlock4.mat',in))
       
       figure(in-9),clf
       freq2=freq;
